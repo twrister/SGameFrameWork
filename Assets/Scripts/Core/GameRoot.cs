@@ -63,6 +63,7 @@ namespace SthGame
 
             //GUIManager.Instance.Open<PacManFrontEndController>();
             GUIManager.Instance.Open<LoginController>();
+            //GUIManager.Instance.Open<FunctionListController>();
         }
 
         void Update()

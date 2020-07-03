@@ -53,7 +53,9 @@ namespace SthGame
 
         private void OnClickModeButton()
         {
-            GUIManager.Instance.Open<ExampleListShowController>();
+            //GUIManager.Instance.Open<ExampleListShowController>();
+
+            GUIManager.Instance.Open<FunctionListController>();
         }
 
         private void OnClickHeadFrame()
