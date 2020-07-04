@@ -13,6 +13,17 @@ namespace CircularScrollView
         public int Height { get; set; }
         public Vector3 Pos { get; set; }
         public CircularListItemController Controller { get; set; }
+
+        public ListItemData Clone()
+        {
+            ListItemData newData = new ListItemData();
+            newData.Data = this.Data;
+            newData.Width = this.Width;
+            newData.Height = this.Height;
+            newData.Pos = this.Pos;
+            newData.Controller = null;
+            return newData;
+        }
     }
     public class CircularListController : UIChildController
     {
@@ -35,7 +46,7 @@ namespace CircularScrollView
             base.ShutDown();
         }
 
-        private bool isInit = false;
+        //private bool isInit = false;
         private int columns = 1;
         private EDirection eDirection = EDirection.Horizontal;
         List<ListItemData> dataList;
@@ -58,13 +69,29 @@ namespace CircularScrollView
 
             scrollRect.onValueChanged.AddListener(delegate (Vector2 value) { ScrollRectListener(value); });
 
-            isInit = true;
+            //isInit = true;
         }
 
         public void SetListData(List<ListItemData> datas)
         //where T : UIChildController, new()
         {
-            dataList = datas;
+            //dataList = datas;
+            if (dataList == null)
+            {
+                dataList = new List<ListItemData>();
+            }
+            else
+            {
+                dataList.Clear();
+            }
+
+            if (dataList != null)
+            {
+                for (int i = 0; i < datas.Count; i++)
+                {
+                    dataList.Add(datas[i].Clone());
+                }
+            }
 
             // -> 计算content大小位置
             int totalSize = 0;      // content total size
@@ -271,7 +298,7 @@ namespace CircularScrollView
                 float contentMinPos = GetContentRect().yMin;
                 return itemPosMin > 0f || itemPosMax < contentMinPos;
             }
-            
+
         }
 
         private Rect GetContentRect()
