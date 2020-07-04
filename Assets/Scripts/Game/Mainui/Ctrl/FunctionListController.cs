@@ -25,16 +25,13 @@ namespace SthGame
             // Horizontal
             horizontalListCtrl = CreateChildController<CircularListController>(parent: view.horScrollRect.viewport.gameObject);
             horizontalListCtrl.InitList<FunctionListItemController>(view.horScrollRect, EDirection.Horizontal, 1);
-
             List<ListItemData> horDataList = new List<ListItemData>();
-            ListItemData data = new ListItemData() { Width = 380, Height = 400, Data = "listview示例" };
-            horDataList.Add(data);
-            //horDataList.Add(data);
-            //horDataList.Add(data);
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    horDataList.Add(data);
-            //}
+
+            var ExampleList = new ListItemData() { Width = 380, Height = 400, Data = new FunctionListItemData("listview示例", 10001)};
+
+            horDataList.Add(ExampleList);
+            horDataList.Add(ExampleList);
+
             horizontalListCtrl.SetListData(horDataList);
         }
 

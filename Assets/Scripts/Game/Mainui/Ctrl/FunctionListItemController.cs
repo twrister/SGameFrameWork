@@ -5,9 +5,21 @@ using CircularScrollView;
 
 namespace SthGame
 {
+    public class FunctionListItemData 
+    {
+        public string Desc { get; private set; }
+        public int GoPos { get; private set; }
+        public FunctionListItemData(string desc, int goPos)
+        {
+            Desc = desc;
+            GoPos = goPos;
+        }
+    }
+
     public class FunctionListItemController : CircularListItemController
     {
         FunctionListItemView view;
+        FunctionListItemData data;
 
         protected override string GetResourcePath()
         {
@@ -19,15 +31,22 @@ namespace SthGame
             base.Init();
             view = UINode as FunctionListItemView;
 
-            //view.button.onClick.AddListener(() => {
-            //    GUIManager.Instance.Open<ExampleListShowController>();
-            //});
+            view.button.onClick.AddListener(() =>
+            {
+                if (data != null)
+                { 
+                    GUIManager.Instance.GoToPos(data.GoPos);
+                }
+            });
         }
 
         public override void SetListData(System.Object inData)
         {
-            ListItemData data = inData as ListItemData;
-            view.text.text = data.Data.ToString();
+            ListItemData itemData = inData as ListItemData;
+            if (itemData.Data == null) return;
+            data = (inData as ListItemData).Data as FunctionListItemData;
+
+            view.text.text = data.Desc;
         }
     }
 }

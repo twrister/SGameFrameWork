@@ -30,19 +30,19 @@ namespace SthGame
             List<ListItemData> verDataList = new List<ListItemData>();
             for (int i = 0; i < 30; i++)
             {
-                ListItemData data = new ListItemData() { Width = 400, Height = Random.Range(60, 150), Data = i.ToString()};
+                ListItemData data = new ListItemData() { Width = 400, Height = Random.Range(60, 150), Data = i.ToString() };
                 verDataList.Add(data);
             }
             verticalListCtrl.SetListData(verDataList);
 
-            view.ver_ScrollToBtn.onClick.AddListener(() => 
-            { 
-                verticalListCtrl.ScrollTo(10); 
+            view.ver_ScrollToBtn.onClick.AddListener(() =>
+            {
+                verticalListCtrl.ScrollTo(10);
             });
-            view.ver_AddItemBtn.onClick.AddListener(() => 
+            view.ver_AddItemBtn.onClick.AddListener(() =>
             {
                 ListItemData data = new ListItemData() { Width = 400, Height = Random.Range(60, 150), Data = "new" };
-                verticalListCtrl.AddListItem(data, 10); 
+                verticalListCtrl.AddListItem(data, 10);
             });
             view.ver_AddItemEndBtn.onClick.AddListener(() =>
             {

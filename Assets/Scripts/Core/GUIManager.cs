@@ -136,5 +136,24 @@ namespace SthGame
         }
 
         #endregion
+
+        public void GoToPos(int goPos)
+        {
+            EGoToPosType eType = (EGoToPosType)goPos;
+            switch (eType)
+            {
+                case EGoToPosType.ExampleList:
+                    Instance.Open<ExampleListShowController>();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public enum EGoToPosType
+    {
+        None = 0,
+        ExampleList = 10001,
     }
 }
