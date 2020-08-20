@@ -7,3 +7,4 @@ Cache/*
 .vs/*
 *.csproj
 *.sln
+ProjectSettings/ProjectVersion.txt
