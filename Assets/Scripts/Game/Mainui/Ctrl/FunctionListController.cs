@@ -27,10 +27,24 @@ namespace SthGame
             horizontalListCtrl.InitList<FunctionListItemController>(view.horScrollRect, EDirection.Horizontal, 1);
             List<ListItemData> horDataList = new List<ListItemData>();
 
-            var ExampleList = new ListItemData() { Width = 380, Height = 400, Data = new FunctionListItemData("listview示例", 10001)};
+            var exampleList = new ListItemData() { Width = 380, Height = 400, Data = new FunctionListItemData("listview示例", () =>
+            {
+                //GUIManager.Instance.GoToPos(EGoToPosType.ExampleList);
+                GUIManager.Instance.Open<ExampleListShowController>();
+            }) };
 
-            horDataList.Add(ExampleList);
-            horDataList.Add(ExampleList);
+            var shaderSample = new ListItemData()
+            {
+                Width = 380,
+                Height = 400,
+                Data = new FunctionListItemData("shader示例", () =>
+                {
+                    GUIManager.Instance.Open<ShaderDemoController>();
+                })
+            };
+
+            horDataList.Add(exampleList);
+            horDataList.Add(shaderSample);
 
             horizontalListCtrl.SetListData(horDataList);
         }

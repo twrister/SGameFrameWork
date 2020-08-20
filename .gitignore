@@ -1,5 +1,9 @@
-Cache
-Library
-Logs
-Packages
-Temp
+Library/*
+Logs/*
+Packages/*
+Temp/*
+obj/*
+Cache/*
+.vs/*
+*.csproj
+*.sln

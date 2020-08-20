@@ -137,13 +137,12 @@ namespace SthGame
 
         #endregion
 
-        public void GoToPos(int goPos)
+        public void GoToPos(EGoToPosType goPos)
         {
-            EGoToPosType eType = (EGoToPosType)goPos;
-            switch (eType)
+            switch (goPos)
             {
                 case EGoToPosType.ExampleList:
-                    Instance.Open<ExampleListShowController>();
+                    Open<ExampleListShowController>();
                     break;
                 default:
                     break;
