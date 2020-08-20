@@ -6,5 +6,6 @@ Used to build some games
 2. GitHub Desktop中，Repository -> Repository Setting -> Ignored files
 ```
 Library/*   // 忽略文件夹
-log.txt     // 忽略问件
+log.txt     // 忽略文件
+*.csproj	// 忽略某类文件
 ```

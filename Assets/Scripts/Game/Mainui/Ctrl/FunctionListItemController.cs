@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CircularScrollView;
+using UnityEngine.Events;
 
 namespace SthGame
 {
     public class FunctionListItemData 
     {
         public string Desc { get; private set; }
-        public int GoPos { get; private set; }
-        public FunctionListItemData(string desc, int goPos)
+        public EGoToPosType GoPos { get; private set; }
+        public UnityAction Callback { get; private set; }
+        public FunctionListItemData(string desc, UnityAction callback = null)
         {
             Desc = desc;
-            GoPos = goPos;
+            Callback = callback;
         }
     }
 
@@ -33,9 +35,9 @@ namespace SthGame
 
             view.button.onClick.AddListener(() =>
             {
-                if (data != null)
-                { 
-                    GUIManager.Instance.GoToPos(data.GoPos);
+                if (data != null && data.Callback != null)
+                {
+                    data.Callback();
                 }
             });
         }

@@ -3,3 +3,7 @@ Logs/*
 Packages/*
 Temp/*
 obj/*
+Cache/*
+.vs/*
+*.csproj
+*.sln
