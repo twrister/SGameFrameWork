@@ -1,26 +1,4 @@
-1.消除效果
-
-UGUI中给Image赋予材质，需要shader中加入
-```
-Tags
-{ 
-	"Queue"="Transparent" 
-	"IgnoreProjector"="True" 
-	"RenderType"="Transparent" 
-	"PreviewType"="Plane"
-	"CanUseSpriteAtlas"="True"
-}
-
-Cull Off
-Lighting Off
-ZWrite Off
-ZTest [unity_GUIZTestMode]
-Fog { Mode Off }
-Blend SrcAlpha OneMinusSrcAlpha
-```
-基础材质如下
-```
-Shader "ShaderDemo/remove"
+﻿Shader "2D Shader/01_Remove"
 {
     Properties
     {
@@ -75,14 +53,24 @@ Shader "ShaderDemo/remove"
 
             sampler2D _MainTex;
 
+            static fixed3 grayRate = { 0.3, 0.6, 0.1 };
+
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
+
+                fixed gray = dot(grayRate, col);
+
+                // Sine of time: (t/8, t/4, t/2, t)
+                if ((_SinTime.w + 1) / 2.0 < gray )
+                {
+                    discard;
+                }
+
+                // return fixed4(gray, gray, gray, col.a);
                 return col;
             }
             ENDCG
         }
     }
 }
-
-```
