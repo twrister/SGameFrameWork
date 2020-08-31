@@ -6,16 +6,23 @@ using UnityEngine.UI;
 
 namespace SthGame
 {
-
-    public class UIEffect : UIBehaviour
+    [ExecuteInEditMode]
+    [RequireComponent(typeof(Graphic))]
+    [DisallowMultipleComponent]
+    public class UIEffect : UIBehaviour, IMaterialModifier
     {
+        //Graphic _graphic;
+        //public Graphic graphic
+        //{
+        //    get { return _graphic ? _graphic : _graphic = GetComponent<Graphic>(); }
+        //}
+
+        [SerializeField]
         EffectMode m_EffectMode = EffectMode.None;
 
         [SerializeField]
         [Range(0, 1)]
         float m_EffectFactor = 1;
-
-
 
         protected override void OnValidate()
         {
@@ -37,12 +44,24 @@ namespace SthGame
         {
             base.OnEnable();
 
+            //if (graphic) graphic.SetVerticesDirty();
+
             Initialize();
         }
 
         void Initialize()
         {
 
+        }
+
+        public Material GetModifiedMaterial(Material baseMaterial)
+        {
+            Logger.Log("GetModifiedMaterial");
+
+            if (!isActiveAndEnabled) return baseMaterial;
+
+            var modifiedMaterial = baseMaterial;
+            return modifiedMaterial;
         }
     }
 }
