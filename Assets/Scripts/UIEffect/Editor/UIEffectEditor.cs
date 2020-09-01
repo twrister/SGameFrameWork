@@ -20,7 +20,8 @@ namespace SthGame
 
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.PropertyField(_spEffectMode);
+            using (new MaterialDirtyScope(targets))
+                EditorGUILayout.PropertyField(_spEffectMode);
 
             if (_spEffectMode.intValue != (int)EffectMode.None)
             {

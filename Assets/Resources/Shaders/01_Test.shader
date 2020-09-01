@@ -1,55 +1,4 @@
-1.2D shader
-
-- 灰度 grayscale
-- 上色 sepia
-- 反色 nagate
-- 像素 pixel
-- 色相 hue
-- 颜色填充 color fill
-- 颜色叠加 color add
-- 颜色替换 color sub
-- 模糊 blur
-- 阴影 shadow
-- 渐变 gradient
-- 翻转 flip
-- 扫光 shiny
-- 消融 dissolve
-- 过渡 transition
-
-- 水波纹、旋涡
-- 扭曲
-- 2D雾效
-- 2D描边
-- 程序纹理
-- 序列帧
-- 顶点动画
-- Billboard
-
-
-UGUI中给Image赋予材质，需要shader中加入
-```
-Tags
-{ 
-	"Queue"="Transparent" 
-	"IgnoreProjector"="True" 
-	"RenderType"="Transparent" 
-	"PreviewType"="Plane"
-	"CanUseSpriteAtlas"="True"
-}
-
-Cull Off
-Lighting Off
-ZWrite Off
-ZTest [unity_GUIZTestMode]
-Fog { Mode Off }
-Blend SrcAlpha OneMinusSrcAlpha
-```
-
-[变体相关](https://docs.unity3d.com/Manual/SL-MultipleProgramVariants.html)
-
-基础材质如下
-```
-Shader "ShaderDemo/remove"
+﻿Shader "2D Shader/UIToneEffect"
 {
     Properties
     {
@@ -80,7 +29,10 @@ Shader "ShaderDemo/remove"
             #pragma vertex vert
             #pragma fragment frag
 
+            #pragma multi_compile __ GRAYSCALE SEPIA NEGA
+
             #include "UnityCG.cginc"
+            #include "UIEffect.cginc"
 
             struct appdata
             {
@@ -104,14 +56,19 @@ Shader "ShaderDemo/remove"
 
             sampler2D _MainTex;
 
+            static fixed3 grayRate = { 0.3, 0.6, 0.1 };
+
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
+
+                fixed gray = dot(grayRate, col);
+
+                col = ApplyToneEffect(col, 1);
+                // return fixed4(gray, gray, gray, col.a);
                 return col;
             }
             ENDCG
         }
     }
 }
-
-```
