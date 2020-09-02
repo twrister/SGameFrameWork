@@ -33,29 +33,20 @@ namespace SthGame
         {
             if (!isActiveAndEnabled) return;
 
-            Logger.Log("OnValidate");
-            //SetMaterialDirty();
-            SetParamsDirty();
+            SetParams();
         }
 
-        //public override ParameterTexture paramTex
-        //{
-        //    get { return paramTex; }
-        //}
-
-        protected void SetParamsDirty()
+        protected void SetParams()
         {
-
-            //paramTex.SetData(this, 0, m_EffectFactor); // param.x : effect factor
+            if (newMaterial)
+            {
+                newMaterial.SetFloat("_Factor", m_EffectFactor);
+            }
         }
 
         protected override void OnEnable()
         {
-            //base.OnEnable();
-
             SetMaterialDirty();
-
-            Initialize();
         }
 
         protected override void OnDisable()
@@ -65,39 +56,44 @@ namespace SthGame
             SetMaterialDirty();
         }
 
-        void Initialize()
+        public EffectMode effectMode
         {
+            get { return m_EffectMode; }
+            set
+            {
+                if (m_EffectMode == value) return;
+                m_EffectMode = value;
+                SetMaterialDirty();
+            }
+        }
 
+        public float effectFactor
+        {
+            get { return m_EffectFactor; }
+            set
+            {
+                value = Mathf.Clamp(value, 0, 1);
+                if (Mathf.Approximately(m_EffectFactor, value)) return;
+                m_EffectFactor = value;
+                SetParams();
+            }
         }
 
         public void SetMaterialDirty()
         {
-            Logger.Log("SetMaterialDirty");
             if (graphic) graphic.SetMaterialDirty();
         }
 
+        Material newMaterial;
         public Material GetModifiedMaterial(Material baseMaterial)
         {
             if (!isActiveAndEnabled) return baseMaterial;
 
-            var newMaterial = new Material(baseMaterial);
+            newMaterial = new Material(baseMaterial);
             newMaterial.shader = Shader.Find("2D Shader/UIToneEffect");
-            //newMaterial.name = "GRAYSCALE";
             SetShaderVariants(newMaterial, m_EffectMode);
-            //SetMaterialTexture(newMaterial);
-
+            SetParams();
             return newMaterial;
-        }
-
-        Texture2D texture;
-        string propertyName = "paranTex";
-        private void SetMaterialTexture(Material mat)
-        {
-            if (mat)
-            {
-                int propertyId = Shader.PropertyToID(propertyName);
-                mat.SetTexture(propertyId, texture);
-            }
         }
 
         protected void SetShaderVariants(Material newMaterial, params object[] variants)
@@ -112,13 +108,6 @@ namespace SthGame
                 }
             }
             newMaterial.shaderKeywords = variantList.ToArray();
-
-            //var keywords = variants.Where(x => 0 < (int)x)
-            //    .Select(x => x.ToString().ToUpper())
-            //    .Concat(newMaterial.shaderKeywords)
-            //    .Distinct()
-            //    .ToArray();
-            //newMaterial.shaderKeywords = keywords;
 
             // Add variant name
             s_StringBuilder.Length = 0;

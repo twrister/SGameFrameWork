@@ -3,6 +3,7 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Factor ("Factor", Float) = 0
     }
     SubShader
     {
@@ -55,6 +56,7 @@
             }
 
             sampler2D _MainTex;
+            fixed _Factor;
 
             static fixed3 grayRate = { 0.3, 0.6, 0.1 };
 
@@ -64,7 +66,8 @@
 
                 fixed gray = dot(grayRate, col);
 
-                col = ApplyToneEffect(col, 1);
+
+                col = ApplyToneEffect(col, _Factor);
                 // return fixed4(gray, gray, gray, col.a);
                 return col;
             }
