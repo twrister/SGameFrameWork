@@ -58,17 +58,12 @@
             sampler2D _MainTex;
             fixed _Factor;
 
-            static fixed3 grayRate = { 0.3, 0.6, 0.1 };
-
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                fixed gray = dot(grayRate, col);
-
-
                 col = ApplyToneEffect(col, _Factor);
-                // return fixed4(gray, gray, gray, col.a);
+
                 return col;
             }
             ENDCG
