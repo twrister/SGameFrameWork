@@ -1,5 +1,6 @@
+## Tone Effect
 #### 灰度 grayscale
-
+![](Pic/100_shanks.png)
 ![](Pic/101_grayscale.png)  
 实现
 ```
@@ -30,6 +31,7 @@ col.rgb = dot(col.rgb, half3(0.22, 0.707, 0.071));
 > dot(col.rgb, half3(0.22, 0.707, 0.071) 求出该片元的明度值，rgb通道都用明度值，视觉上就是置灰
 
 #### 上色 sepia
+![](Pic/100_shanks.png)
 ![](Pic/101_sepia.png)  
 在灰度的基础上，乘上一种颜色(这里是棕色)
 ```
@@ -37,6 +39,7 @@ col.rgb = dot(col.rgb, half3(0.22, 0.707, 0.071)) * half3(1.07, 0.74, 0.43);
 ```
 
 #### 反色 nagate
+![](Pic/100_shanks.png)
 ![](Pic/101_nagate.png)  
 反色就是每个通道都取反，1减通道本身可得反色。
 ```

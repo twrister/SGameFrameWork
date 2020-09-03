@@ -9,11 +9,12 @@ Used to build some games demo
 [RenderType](https://docs.unity3d.com/Manual/SL-ShaderReplacement.html)  
 
 ### 目录
-[GitHub如何忽略文件或者文件夹](Notes/401_GitHub如何忽略文件或者文件夹.md)  
+[GitHub如何忽略文件或者文件夹](ReadMe/401_GitHub如何忽略文件或者文件夹.md)  
 #### 2D shader
-[概括](Notes/100_2Dshader.md)  
-[灰度 上色 反色](Notes/UIShader/101_toneEffect.md)  
+[概括](ReadMe/100_2Dshader.md)  
+[灰度 上色 反色](ReadMe/101_toneEffect.md)  
+[马赛克](ReadMe/102_pixel.md)  
 #### Post Processing
-[Post Processing](Notes/200_PostProcessing.md)  
+[Post Processing](ReadMe/200_PostProcessing.md)  
 #### 3D shader
-[3D shader](Notes/300_3Dshader.md)  
+[3D shader](ReadMe/300_3Dshader.md)  

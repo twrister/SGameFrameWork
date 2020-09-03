@@ -30,7 +30,7 @@
             #pragma vertex vert
             #pragma fragment frag
 
-            #pragma multi_compile __ GRAYSCALE SEPIA NEGA
+            #pragma multi_compile __ GRAYSCALE SEPIA NEGA PIXEL
 
             #include "UnityCG.cginc"
             #include "UIEffect.cginc"
@@ -57,9 +57,15 @@
 
             sampler2D _MainTex;
             fixed _Factor;
+            float4 _MainTex_TexelSize;
 
             fixed4 frag (v2f i) : SV_Target
             {
+                #if PIXEL
+                half2 pixelSize = max(2, (1 - _Factor * 0.95) * _MainTex_TexelSize.zw);
+                i.uv = round(i.uv * pixelSize) / pixelSize;
+                #endif
+
                 fixed4 col = tex2D(_MainTex, i.uv);
 
                 col = ApplyToneEffect(col, _Factor);

@@ -6,6 +6,7 @@
         Grayscale = 1,
         Sepia = 2,
         Nega = 3,
+        PIXEL = 4,
     }
 }
 
