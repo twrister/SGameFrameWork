@@ -19,7 +19,7 @@ namespace SthGame
         {
             if (changed)
             {
-                foreach (var effect in targets.OfType<UIEffect>())
+                foreach (var effect in targets.OfType<UIToneEffect>())
                 {
                     effect.SetMaterialDirty();
                 }

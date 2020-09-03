@@ -12,7 +12,7 @@ namespace SthGame
 
         // tone
         public GameObject tone_Obj;
-        public UIEffect tone_Effect;
+        public UIToneEffect tone_Effect;
         public Dropdown tone_Dropdown;
         public Slider tone_Slider;
     }

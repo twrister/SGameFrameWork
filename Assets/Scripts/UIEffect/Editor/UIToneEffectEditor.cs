@@ -5,9 +5,10 @@ using UnityEditor;
 
 namespace SthGame
 {
-    [CustomEditor(typeof(UIEffect))]
+    [CustomEditor(typeof(UIToneEffect))]
+    //[CanEditMultipleObjects]告诉Unity你可以用这个编辑器选择多个对象并同时改变它们
     [CanEditMultipleObjects]
-    public class UIEffectEditor : Editor
+    public class UIToneEffectEditor : Editor
     {
         SerializedProperty _spEffectMode;
         SerializedProperty _spEffectFactor;

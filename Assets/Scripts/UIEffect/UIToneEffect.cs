@@ -12,7 +12,7 @@ namespace SthGame
     [ExecuteInEditMode]
     [RequireComponent(typeof(Graphic))]
     [DisallowMultipleComponent]
-    public class UIEffect : UIBehaviour, IMaterialModifier
+    public class UIToneEffect : UIBehaviour, IMaterialModifier
     {
         private static string shaderName = "UIToneEffect";
         private static readonly StringBuilder s_StringBuilder = new StringBuilder();
