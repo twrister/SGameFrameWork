@@ -5,7 +5,7 @@ using Protocol;
 
 namespace SthGame
 {
-    public class HeadFrameChooseController : UIBaseController
+    public class HeadFrameChooseController : UIBasePopupController
     {
         public delegate void ChoosedDelegate(int idx);
         ChoosedDelegate chooseDelegate;
@@ -27,8 +27,6 @@ namespace SthGame
             view = UINode as HeadFrameChooseView;
 
             view.confirmBtn.onClick.AddListener(OnClickConfirm);
-            view.bgBtn.onClick.AddListener(OnClickClose);
-            view.closeBtn.onClick.AddListener(OnClickClose);
             GlobalEventSystem.Instance.Bind(EventId.onClickHeadFrameChooseItem, OnClickHeadFrameChooseItem);
 
             InitView();
@@ -37,6 +35,8 @@ namespace SthGame
         public override void ShutDown()
         {
             base.ShutDown();
+
+            view.confirmBtn.onClick.RemoveListener(OnClickConfirm);
             GlobalEventSystem.Instance.UnBind(EventId.onClickHeadFrameChooseItem, OnClickHeadFrameChooseItem);
         }
 
@@ -53,11 +53,6 @@ namespace SthGame
             {
                 chooseDelegate(curIndex);
             }
-        }
-
-        private void OnClickClose()
-        {
-            Close();
         }
 
         public void SetData(int defaultIdx, ChoosedDelegate chooseDel = null)

@@ -6,18 +6,6 @@ using UnityEngine.Events;
 
 namespace SthGame
 {
-    public class FunctionListItemData 
-    {
-        public string Desc { get; private set; }
-        public EGoToPosType GoPos { get; private set; }
-        public UnityAction Callback { get; private set; }
-        public FunctionListItemData(string desc, UnityAction callback = null)
-        {
-            Desc = desc;
-            Callback = callback;
-        }
-    }
-
     public class FunctionListItemController : CircularListItemController
     {
         FunctionListItemView view;
@@ -35,9 +23,16 @@ namespace SthGame
 
             view.button.onClick.AddListener(() =>
             {
-                if (data != null && data.Callback != null)
+                if (data != null )
                 {
-                    data.Callback();
+                    if (data.eFunctionItemType == EFunctionItemType.colorPlate)
+                    {
+                        ColorPlateCallback();
+                    }
+                    if (data.Callback != null)
+                    {
+                        data.Callback();
+                    }
                 }
             });
         }
@@ -48,7 +43,48 @@ namespace SthGame
             if (itemData.Data == null) return;
             data = (inData as ListItemData).Data as FunctionListItemData;
 
-            view.text.text = data.Desc;
+            RefreshView();
+        }
+
+        private void RefreshView()
+        {
+            if (data == null) return;
+
+            view.titleTxt.text = "";
+            view.colorObj.SetActive(false);
+            switch (data.eFunctionItemType)
+            {
+                case EFunctionItemType.normal:
+                    RefreshNormalView();
+                    break;
+                case EFunctionItemType.colorPlate:
+                    RefreshColorView();
+                    break;
+            }
+        }
+
+        private void RefreshNormalView()
+        {
+            view.titleTxt.text = data.Desc;
+        }
+
+        private void RefreshColorView()
+        {
+            view.colorObj.SetActive(true);
+            view.colTitleTxt.text = data.Desc;
+            view.colorImg.color = Color.red;
+            view.valuesTxt.text = string.Format("{0}\n{1}\n{2}", Color.red.r * 255, Color.red.g * 255, Color.red.b * 255);
+        }
+
+        private void ColorPlateCallback()
+        {
+            GUIManager.Instance.OpenColorPlate(view.colorImg.color, (color) => 
+            {
+                if (view && view.colorImg)
+                {
+                    view.colorImg.color = color;
+                }
+            });
         }
     }
 }

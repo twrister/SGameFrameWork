@@ -6,11 +6,9 @@ using DG.Tweening;
 
 namespace SthGame
 {
-    public class HeadFrameChooseView : UIBaseView
+    public class HeadFrameChooseView : UIBasePopupView
     {
         public GridLayoutGroup headFrameGrid;
         public Button confirmBtn;
-        public Button bgBtn;
-        public Button closeBtn;
     }
 }

@@ -128,31 +128,23 @@ namespace SthGame
             noticeTipsCtrl.Open();
         }
 
-        public void OpenHeadFrameChoose(int defaultIdx = 0, HeadFrameChooseController.ChoosedDelegate choosedDel = null)
+        public void OpenHeadFrameChoose(
+            int defaultIdx = 0, 
+            HeadFrameChooseController.ChoosedDelegate choosedDel = null)
         {
             var headFrameCtrl = Open<HeadFrameChooseController>(uiLayer: UILayer.Popup, openImmediately: false);
             headFrameCtrl.SetData(defaultIdx, choosedDel);
             headFrameCtrl.Open();
         }
 
-        #endregion
-
-        public void GoToPos(EGoToPosType goPos)
+        public void OpenColorPlate(
+            Color inColor, UnityAction<Color> callback)
         {
-            switch (goPos)
-            {
-                case EGoToPosType.ExampleList:
-                    Open<ExampleListShowController>();
-                    break;
-                default:
-                    break;
-            }
+            var colorPlate = Open<ColorPlateController>(uiLayer: UILayer.Popup, openImmediately: false);
+            colorPlate.SetColor(inColor, callback);
+            colorPlate.Open();
         }
-    }
 
-    public enum EGoToPosType
-    {
-        None = 0,
-        ExampleList = 10001,
+        #endregion
     }
 }

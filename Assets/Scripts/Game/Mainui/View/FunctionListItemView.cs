@@ -8,6 +8,12 @@ namespace SthGame
     public class FunctionListItemView : UIBaseView
     {
         public Button button;
-        public Text text;
+        public Text titleTxt;
+
+        public GameObject colorObj;
+        public Text colTitleTxt;
+        public Button colorBtn;
+        public Image colorImg;
+        public Text valuesTxt;
     }
 }

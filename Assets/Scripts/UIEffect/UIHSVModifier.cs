@@ -13,7 +13,7 @@ namespace SthGame
         float m_Range = 0.1f;
 
         [SerializeField]
-        [ColorUsage(false)] // true:hdr false:ldr
+        [ColorUsage(false)] // false:不显示alpha通道
         Color m_TargetColor = Color.red;
 
         [SerializeField]

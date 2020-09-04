@@ -67,7 +67,7 @@ namespace CircularScrollView
             eDirection = eDir;
             ResetAnchor(view.contentRectRrans);
 
-            scrollRect.onValueChanged.AddListener(delegate (Vector2 value) { ScrollRectListener(value); });
+            scrollRect.onValueChanged.AddListener(value => { ScrollRectListener(value); });
 
             //isInit = true;
         }

@@ -21,17 +21,20 @@ namespace SthGame
 
             view.closeBtn.onClick.AddListener(OnClickClose);
 
-
             // Horizontal
             horizontalListCtrl = CreateChildController<CircularListController>(parent: view.horScrollRect.viewport.gameObject);
             horizontalListCtrl.InitList<FunctionListItemController>(view.horScrollRect, EDirection.Horizontal, 1);
             List<ListItemData> horDataList = new List<ListItemData>();
 
-            var exampleList = new ListItemData() { Width = 380, Height = 400, Data = new FunctionListItemData("listview示例", () =>
+            var exampleList = new ListItemData()
             {
-                //GUIManager.Instance.GoToPos(EGoToPosType.ExampleList);
-                GUIManager.Instance.Open<ExampleListShowController>();
-            }) };
+                Width = 380,
+                Height = 400,
+                Data = new FunctionListItemData("listview示例", () =>
+                {
+                    GUIManager.Instance.Open<ExampleListShowController>();
+                })
+            };
 
             var shaderSample = new ListItemData()
             {
@@ -43,8 +46,16 @@ namespace SthGame
                 })
             };
 
+            var colorPlate = new ListItemData()
+            {
+                Width = 380,
+                Height = 400,
+                Data = new FunctionListItemData("颜料板", null, EFunctionItemType.colorPlate)
+            };
+
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
+            horDataList.Add(colorPlate);
 
             horizontalListCtrl.SetListData(horDataList);
         }
@@ -52,11 +63,6 @@ namespace SthGame
         private void OnClickClose()
         {
             Close();
-        }
-
-        protected override void OpenCallBack()
-        {
-
         }
     }
 }

@@ -222,10 +222,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9512b8b908c64d245bec54808b4a5cba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  headFrameGrid: {fileID: 7860284534785891702}
-  confirmBtn: {fileID: 6735004423184597800}
   bgBtn: {fileID: 3617492534877352985}
   closeBtn: {fileID: 4510051023300237564}
+  headFrameGrid: {fileID: 7860284534785891702}
+  confirmBtn: {fileID: 6735004423184597800}
 --- !u!1 &3501931267803367982
 GameObject:
   m_ObjectHideFlags: 0

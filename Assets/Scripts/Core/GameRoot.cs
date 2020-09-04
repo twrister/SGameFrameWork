@@ -62,8 +62,8 @@ namespace SthGame
             //GUIManager.Instance.Open<ExampleListShowController>();
 
             //GUIManager.Instance.Open<PacManFrontEndController>();
-            //GUIManager.Instance.Open<LoginController>();
-            GUIManager.Instance.Open<ShaderDemoController>();
+            GUIManager.Instance.Open<LoginController>();
+            //GUIManager.Instance.Open<ShaderDemoController>();
         }
 
         void Update()
