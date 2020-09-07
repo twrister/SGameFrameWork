@@ -152,7 +152,7 @@ namespace CircularScrollView
                 {
                     if (tempData.Controller == null)
                     {
-                        Logger.Log("New {2}: \tx = {0}\ty = {1}\theight = {3}", tempData.Pos.x, tempData.Pos.y, i, tempData.Height);
+                        //Logger.Log("New {2}: \tx = {0}\ty = {1}\theight = {3}", tempData.Pos.x, tempData.Pos.y, i, tempData.Height);
                         tempData.Controller = GetPoolChildController();
                         ResetAnchor(tempData.Controller.Rect);
                         tempData.Controller.SetAnchoredPosition(tempData.Pos);

@@ -10,6 +10,7 @@ namespace SthGame
     {
         public RawImage rawImage;
         public Image nowColor;
+        public Slider slider_Alpha;
         public Slider hueSlider;
         public Slider slider_R;
         public Slider slider_G;
@@ -19,5 +20,11 @@ namespace SthGame
         public Text valueTxt_G;
         public Text valueTxt_B;
         public Text valueTxt_A;
+        public GameObject cursorObj;
+        public ColorPlateInput colorInput;
+
+        public RawImage hueRawImage;
+        public GameObject hueCursorObj;
+        public ColorPlateInput hueColorInput;
     }
 }
