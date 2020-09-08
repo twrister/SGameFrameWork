@@ -72,19 +72,21 @@ namespace SthGame
         {
             view.colorObj.SetActive(true);
             view.colTitleTxt.text = data.Desc;
-            view.colorImg.color = Color.red;
-            view.valuesTxt.text = string.Format("{0}\n{1}\n{2}", Color.red.r * 255, Color.red.g * 255, Color.red.b * 255);
+            SetColorPlate(Color.red);
         }
 
         private void ColorPlateCallback()
         {
-            GUIManager.Instance.OpenColorPlate(view.colorImg.color, (color) => 
+            GUIManager.Instance.OpenColorPlate(view.colorImg.color, SetColorPlate);
+        }
+
+        private void SetColorPlate(Color color)
+        {
+            if (view && view.colorImg)
             {
-                if (view && view.colorImg)
-                {
-                    view.colorImg.color = color;
-                }
-            });
+                view.colorImg.color = color;
+                view.valuesTxt.text = string.Format("{0:0}\n{1:0}\n{2:0}", color.r * 255, color.g * 255, color.b * 255);
+            }
         }
     }
 }
