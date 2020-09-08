@@ -20,7 +20,6 @@ namespace SthGame
             return "Prefabs/ColorPlateView";
         }
 
-        EventTrigger _rawImageTrigger;
         public override void Init()
         {
             base.Init();
@@ -32,7 +31,6 @@ namespace SthGame
             view.slider_B.onValueChanged.AddListener(OnSliderValueChanged_B);
             view.slider_A.onValueChanged.AddListener(OnSliderValueChanged_A);
 
-            _rawImageTrigger = view.rawImage.gameObject.AddComponent<EventTrigger>();
             view.colorInput.SetOnPointerEvent(OnPointerEvent);
             view.hueColorInput.SetOnPointerEvent(OnHuePointerEvent);
         }
@@ -202,8 +200,6 @@ namespace SthGame
 
             SyncSliders();
         }
-
-        
 
         private void OnHuePointerEvent(Vector2 localPos)
         {

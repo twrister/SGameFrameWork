@@ -10,6 +10,7 @@ Used to build some games demo
 
 ### 目录
 [GitHub如何忽略文件或者文件夹](ReadMe/401_GitHub如何忽略文件或者文件夹.md)  
+[unity中制作一个调色板](ReadMe/402_unity中制作一个调色板.md)  
 #### 2D shader
 [概括](ReadMe/100_2Dshader.md)  
 [灰度 上色 反色](ReadMe/101_toneEffect.md)  
