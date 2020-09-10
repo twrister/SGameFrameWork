@@ -32,13 +32,13 @@ half3 HsvToRgb(half3 c) {
 }
 
 // Apply Hsv effect.
-half4 ApplyHsvEffect(half4 color, half param)
+half4 ApplyHsvEffect(half4 color, fixed4 param1, fixed4 param2)
 {
-	fixed4 param1 = tex2D(_ParamTex, float2(0.25, param));
-	fixed4 param2 = tex2D(_ParamTex, float2(0.75, param));
+	// fixed4 param1 = tex2D(_ParamTex, float2(0.25, param));
+	// fixed4 param2 = tex2D(_ParamTex, float2(0.75, param));
     fixed3 targetHsv = param1.rgb;
-
     fixed3 targetRange = param1.w;
+    
     fixed3 hsvShift = param2.xyz - 0.5;
 	half3 hsv = RgbToHsv(color.rgb);
 	half3 range = abs(hsv - targetHsv);

@@ -77,7 +77,7 @@ namespace SthGame
 
         private void ColorPlateCallback()
         {
-            GUIManager.Instance.OpenColorPlate(view.colorImg.color, SetColorPlate);
+            GUIManager.Instance.OpenColorPlate(view.colorImg.color, SetColorPlate, view.button.transform);
         }
 
         private void SetColorPlate(Color color)

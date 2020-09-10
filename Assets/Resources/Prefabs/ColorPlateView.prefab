@@ -1244,6 +1244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgBtn: {fileID: 3617492534877352985}
   closeBtn: {fileID: 4510051023300237564}
+  rootTrans: {fileID: 5280793430333364126}
   rawImage: {fileID: 2497300411983489691}
   nowColor: {fileID: 3515697433694619250}
   slider_Alpha: {fileID: 7646599057942304730}
@@ -2737,7 +2738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

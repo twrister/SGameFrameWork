@@ -8,6 +8,7 @@ namespace SthGame
 {
     public class ColorPlateView : UIBasePopupView
     {
+        public Transform rootTrans;
         public RawImage rawImage;
         public Image nowColor;
         public Slider slider_Alpha;

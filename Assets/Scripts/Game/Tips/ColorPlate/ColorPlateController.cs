@@ -13,7 +13,8 @@ namespace SthGame
         ColorPlateView view;
         Color _Color;
         UnityAction<Color> callback;
-        
+        RectTransform _rt;
+
         bool isInit;
         protected override string GetResourcePath()
         {
@@ -35,8 +36,12 @@ namespace SthGame
             view.hueColorInput.SetOnPointerEvent(OnHuePointerEvent);
         }
 
-        public void SetColor(Color color, UnityAction<Color> cal)
+        public void SetColor(Color color, UnityAction<Color> cal, Transform attachTrans)
         {
+            Vector2 localPos = Vector2.zero;
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(Camera.main, attachTrans.position);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(view.transform as RectTransform, screenPos, Camera.main, out localPos);
+            view.rootTrans.localPosition = localPos;
             _Color = new Color(color.r, color.g, color.b, color.a);
             callback = cal;
             InitView();

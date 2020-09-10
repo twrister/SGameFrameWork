@@ -21,5 +21,6 @@ Used to build some games demo
 [3D shader](ReadMe/300_3Dshader.md)  
 
 ### TODO
-- 颜色版
+- 颜色版 实时换色 颜色版根据鼠标点击的位置，出现在鼠标旁边 底板无色处理
 - navigation导航
+- 高斯模糊

@@ -90,7 +90,7 @@ namespace SthGame
             if (!isActiveAndEnabled) return baseMaterial;
 
             newMaterial = new Material(baseMaterial);
-            newMaterial.shader = Shader.Find("2D Shader/UIToneEffect");
+            newMaterial.shader = Shader.Find("Hidden/UIToneEffect");
             SetShaderVariants(newMaterial, m_EffectMode);
             SetParams();
             return newMaterial;

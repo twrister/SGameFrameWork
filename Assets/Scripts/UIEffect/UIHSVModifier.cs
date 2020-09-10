@@ -34,9 +34,8 @@ namespace SthGame
             if (!isActiveAndEnabled) return baseMaterial;
 
             newMaterial = new Material(baseMaterial);
-            //newMaterial.shader = Shader.Find("2D Shader/UITkoneEffect");
-            //SetShaderVariants(newMaterial, m_EffectMode);
-            //SetParams();
+            newMaterial.shader = Shader.Find("Hidden/UIHSVModifier");
+            SetParams();
             return newMaterial;
         }
 
@@ -48,6 +47,16 @@ namespace SthGame
                 value = Mathf.Clamp(value, 0, 1);
                 if (Mathf.Approximately(m_Range, value)) return;
                 m_Range = value;
+                SetParams();
+            }
+        }
+
+        public Color targetColor
+        {
+            get { return m_TargetColor; }
+            set
+            {
+                m_TargetColor = value;
                 SetParams();
             }
         }
@@ -99,11 +108,17 @@ namespace SthGame
         {
             if (newMaterial)
             {
-                newMaterial.SetFloat("_Range", m_Range);
-                newMaterial.SetColor("_TargetColor", m_TargetColor);
-                newMaterial.SetFloat("_Hue", m_Range);
-                newMaterial.SetFloat("_Saturation", m_Range);
-                newMaterial.SetFloat("_Value", m_Range);
+                float h, s, v;
+                Color.RGBToHSV(m_TargetColor, out h, out s, out v);
+
+                newMaterial.SetVector("_Param1", new Vector4(m_TargetColor.r, m_TargetColor.g, m_TargetColor.b, m_Range));
+
+                //newMaterial.SetFloat("_Range", m_Range);
+                //newMaterial.SetColor("_TargetColor", m_TargetColor);
+
+                //newMaterial.SetFloat("_Hue", m_Range);
+                //newMaterial.SetFloat("_Saturation", m_Range);
+                //newMaterial.SetFloat("_Value", m_Range);
             }
         }
     }

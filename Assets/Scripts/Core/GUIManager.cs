@@ -138,10 +138,13 @@ namespace SthGame
         }
 
         public void OpenColorPlate(
-            Color inColor, UnityAction<Color> callback)
+            Color inColor, 
+            UnityAction<Color> callback,
+            Transform attachTrans)
         {
             var colorPlate = Open<ColorPlateController>(uiLayer: UILayer.Popup, openImmediately: false);
-            colorPlate.SetColor(inColor, callback);
+            
+            colorPlate.SetColor(inColor, callback, attachTrans);
             colorPlate.Open();
         }
 
