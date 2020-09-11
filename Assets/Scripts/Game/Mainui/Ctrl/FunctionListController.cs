@@ -26,17 +26,6 @@ namespace SthGame
             horizontalListCtrl.InitList<FunctionListItemController>(view.horScrollRect, EDirection.Horizontal, 1);
             List<ListItemData> horDataList = new List<ListItemData>();
 
-            var test = new ListItemData()
-            {
-                Width = 280,
-                Height = 400,
-                Data = new FunctionListItemData("test", () =>
-                {
-                    Logger.Log("width = {0}, height = {1}", Screen.width, Screen.height);
-                })
-            };
-            horDataList.Add(test);
-
             var exampleList = new ListItemData()
             {
                 Width = 380,

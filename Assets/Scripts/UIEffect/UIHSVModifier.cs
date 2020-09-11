@@ -111,9 +111,13 @@ namespace SthGame
                 float h, s, v;
                 Color.RGBToHSV(m_TargetColor, out h, out s, out v);
 
-                newMaterial.SetVector("_Param1", new Vector4(m_TargetColor.r, m_TargetColor.g, m_TargetColor.b, m_Range));
+                //var v4 = new Vector4(m_TargetColor.r, m_TargetColor.g, m_TargetColor.b, m_Range);
+                //newMaterial.SetVector("_P1", v4);
+                //Logger.Log(v4.ToString());
 
-                //newMaterial.SetFloat("_Range", m_Range);
+                newMaterial.SetColor("_C", m_TargetColor);
+
+                newMaterial.SetFloat("_Range", m_Range);
                 //newMaterial.SetColor("_TargetColor", m_TargetColor);
 
                 //newMaterial.SetFloat("_Hue", m_Range);

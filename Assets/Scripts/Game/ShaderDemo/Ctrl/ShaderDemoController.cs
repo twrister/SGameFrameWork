@@ -43,7 +43,7 @@ namespace SthGame
 
         protected override void OpenCallBack()
         {
-            OnClickMenuButton(EShaderDemoType.Tone);
+            OnClickMenuButton(EShaderDemoType.Hue);
         }
 
         private void OnClickMenuButton(EShaderDemoType type)

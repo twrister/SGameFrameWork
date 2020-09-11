@@ -41,7 +41,9 @@ namespace SthGame
             Vector2 localPos = Vector2.zero;
             Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(Camera.main, attachTrans.position);
             RectTransformUtility.ScreenPointToLocalPointInRectangle(view.transform as RectTransform, screenPos, Camera.main, out localPos);
-            view.rootTrans.localPosition = localPos;
+            bool isLeftSide = screenPos.x < Screen.width;
+            view.rootTrans.localPosition = Vector2.right * (localPos.x + (isLeftSide ? -300 : 300));
+
             _Color = new Color(color.r, color.g, color.b, color.a);
             callback = cal;
             InitView();
@@ -159,14 +161,13 @@ namespace SthGame
             view.valueTxt_A.text = (_Color.a * 255).ToString("0");
 
             RefreshRawImage();
+
+            if (callback != null) callback(_Color);
         }
 
         protected override void HideCallBack()
         {
-            if (callback != null)
-            {
-                callback(_Color);
-            }
+            if (callback != null) callback(_Color);
         }
 
         private void OnSliderValueChanged_R(float value)

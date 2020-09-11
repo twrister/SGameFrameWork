@@ -23,4 +23,4 @@ Used to build some games demo
 ### TODO
 - 颜色版 实时换色 颜色版根据鼠标点击的位置，出现在鼠标旁边 底板无色处理
 - navigation导航
-- 高斯模糊
+- 高斯模糊 弹窗的底
