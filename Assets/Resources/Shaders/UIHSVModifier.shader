@@ -59,9 +59,10 @@
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                return _Param1;
+                // return _Param1;
 
-                // return col;
+                
+                return col;
             }
             ENDCG
         }
