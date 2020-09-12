@@ -24,7 +24,7 @@ namespace SthGame
             using (new MaterialDirtyScope(targets))
                 EditorGUILayout.PropertyField(_spEffectMode);
 
-            if (_spEffectMode.intValue != (int)EffectMode.None)
+            if (_spEffectMode.intValue != (int)UIToneEffectMode.None)
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(_spEffectFactor);

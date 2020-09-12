@@ -1,11 +1,13 @@
 ## 2D shader
 
-#### todo
 - 灰度 grayscale
 - 上色 sepia
 - 反色 nagate
 - 像素 pixel
 - 色相 hue
+
+#### todo
+- 边缘检测
 - 颜色填充 color fill
 - 颜色叠加 color add
 - 颜色替换 color sub

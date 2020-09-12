@@ -23,7 +23,7 @@ namespace SthGame
         }
 
         [SerializeField]
-        EffectMode m_EffectMode = EffectMode.None;
+        UIToneEffectMode m_EffectMode = UIToneEffectMode.None;
 
         [SerializeField]
         [Range(0, 1)]
@@ -56,7 +56,7 @@ namespace SthGame
             SetMaterialDirty();
         }
 
-        public EffectMode effectMode
+        public UIToneEffectMode effectMode
         {
             get { return m_EffectMode; }
             set

@@ -54,13 +54,13 @@
 
             sampler2D _MainTex;
             fixed4 _Param1;
+            fixed4 _Param2;
 
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                // return _Param1;
-
+                col = ApplyHsvEffect(col, _Param1, _Param2);
                 
                 return col;
             }

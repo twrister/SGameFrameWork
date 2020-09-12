@@ -66,7 +66,7 @@ namespace SthGame
             get { return m_Hue; }
             set
             {
-                value = Mathf.Clamp(value, 0, 1);
+                value = Mathf.Clamp(value, -0.5f, 0.5f);
                 if (Mathf.Approximately(m_Hue, value)) return;
                 m_Hue = value;
                 SetParams();
@@ -78,7 +78,7 @@ namespace SthGame
             get { return m_Saturation; }
             set
             {
-                value = Mathf.Clamp(value, 0, 1);
+                value = Mathf.Clamp(value, -0.5f, 0.5f);
                 if (Mathf.Approximately(m_Saturation, value)) return;
                 m_Saturation = value;
                 SetParams();
@@ -90,7 +90,7 @@ namespace SthGame
             get { return m_Value; }
             set
             {
-                value = Mathf.Clamp(value, 0, 1);
+                value = Mathf.Clamp(value, -0.5f, 0.5f);
                 if (Mathf.Approximately(m_Value, value)) return;
                 m_Value = value;
                 SetParams();
@@ -111,18 +111,12 @@ namespace SthGame
                 float h, s, v;
                 Color.RGBToHSV(m_TargetColor, out h, out s, out v);
 
-                //var v4 = new Vector4(m_TargetColor.r, m_TargetColor.g, m_TargetColor.b, m_Range);
-                //newMaterial.SetVector("_P1", v4);
-                //Logger.Log(v4.ToString());
+                var param1 = new Vector4(h, s, v, m_Range);
+                newMaterial.SetVector("_Param1", param1);
 
-                newMaterial.SetColor("_C", m_TargetColor);
-
-                newMaterial.SetFloat("_Range", m_Range);
-                //newMaterial.SetColor("_TargetColor", m_TargetColor);
-
-                //newMaterial.SetFloat("_Hue", m_Range);
-                //newMaterial.SetFloat("_Saturation", m_Range);
-                //newMaterial.SetFloat("_Value", m_Range);
+                // 传入的范围必须是0~1，所以右移0.5
+                var param2 = new Vector4(m_Hue + 0.5f, m_Saturation + 0.5f, m_Value + 0.5f, 0);
+                newMaterial.SetVector("_Param2", param2);
             }
         }
     }

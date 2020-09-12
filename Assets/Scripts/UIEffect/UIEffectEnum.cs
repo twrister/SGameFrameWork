@@ -1,12 +1,20 @@
 ﻿namespace SthGame
 {
-    public enum EffectMode
+    public enum UIToneEffectMode
     {
-        None = 0,
-        Grayscale = 1,
-        Sepia = 2,
-        Nega = 3,
-        PIXEL = 4,
+        None,
+        Grayscale,
+        Sepia,
+        Nega,
+        PIXEL,
+    }
+
+    public enum UIEdgeDetectionMode
+    {
+        None,
+        Sobel,
+        Roberts,
+        Scharr,
     }
 }
 

@@ -34,18 +34,44 @@ half3 HsvToRgb(half3 c) {
 // Apply Hsv effect.
 half4 ApplyHsvEffect(half4 color, fixed4 param1, fixed4 param2)
 {
-	// fixed4 param1 = tex2D(_ParamTex, float2(0.25, param));
-	// fixed4 param2 = tex2D(_ParamTex, float2(0.75, param));
-    fixed3 targetHsv = param1.rgb;
-    fixed3 targetRange = param1.w;
+    fixed3 targetHsv = param1.rgb;			// 目标颜色的HSV值
+    fixed targetRange = param1.w;			// 与目标颜色的偏差范围,(0~1),越小越接近目标颜色
     
-    fixed3 hsvShift = param2.xyz - 0.5;
-	half3 hsv = RgbToHsv(color.rgb);
-	half3 range = abs(hsv - targetHsv);
+    fixed3 hsvShift = param2.xyz - 0.5;		// HSV偏移(-0.5~0.5)
+	half3 hsv = RgbToHsv(color.rgb);		// 源颜色的HSV值
+	half3 range = abs(hsv - targetHsv);		// 源颜色与目标颜色，HSV各值的绝对值偏差
+
+	// 求出偏差值H,S,V中最最大的，作为源颜色与目标色的偏差值，其中S,V要缩小10倍
 	half diff = max(max(min(1-range.x, range.x), min(1-range.y, range.y)/10), min(1-range.z, range.z)/10);
 
+	// 目标偏差比实际偏差大的，加上HSV偏移
 	fixed masked = step(diff, targetRange);
 	color.rgb = HsvToRgb(hsv + hsvShift * masked);
 
 	return color;
 }
+
+// half Sobel (v2f i)
+// {
+// 	const half Gx[9] = {
+// 		-1, -2, -1,
+// 		 0,  0,  0,
+// 		 1,  2,  1
+// 	};
+// 	const half Gy[9] = {
+// 		-1,  0,  1,
+// 		-2,  0,  2,
+// 		-1,  0,  1
+// 	};
+
+// 	half texColor;
+// 	half edgeX = 0;
+// 	half edgeY = 0;
+// 	for (int i = 0; i < 9; ++i)
+// 	{
+// 		texColor = Luminance(tex2D());
+// 	}
+
+// 	half edge = 0;
+// 	return edge;
+// }

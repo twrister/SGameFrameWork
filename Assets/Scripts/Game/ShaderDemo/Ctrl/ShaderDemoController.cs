@@ -77,7 +77,7 @@ namespace SthGame
         }
         private void Tone_OnDropDownValueChanged(int index)
         {
-            view.tone_Effect.effectMode = (EffectMode)index;
+            view.tone_Effect.effectMode = (UIToneEffectMode)index;
         }
 
         private void Tone_OnSliderValueChanged(float value)
@@ -90,11 +90,11 @@ namespace SthGame
         private void Hue_InitEffect()
         {
             view.hue_ColorImg.color = view.hue_Effect.targetColor;
-
             view.hue_RangeSlider.value = view.hue_Effect.range;
-            view.hue_HueSlider.value = view.hue_Effect.hue;
-            view.hue_SaturationSlider.value = view.hue_Effect.saturation;
-            view.hue_ValueSlider.value = view.hue_Effect.value;
+
+            view.hue_HueSlider.value = view.hue_Effect.hue + 0.5f;
+            view.hue_SaturationSlider.value = view.hue_Effect.saturation + 0.5f;
+            view.hue_ValueSlider.value = view.hue_Effect.value + 0.5f;
 
             view.hue_RangeTxt.text = view.hue_RangeSlider.value.ToString("0.000");
             view.hue_HueTxt.text = view.hue_HueSlider.value.ToString("0.000");
@@ -124,20 +124,20 @@ namespace SthGame
 
         private void Hue_OnHueSliderChanged(float value)
         {
-            //view.hue_HueSlider.value = value;
-            view.hue_HueTxt.text = value.ToString("0.000");
+            view.hue_Effect.hue = value - 0.5f;
+            view.hue_HueTxt.text = view.hue_HueSlider.value.ToString("0.000");
         }
 
         private void Hue_OnSaturationSliderChanged(float value)
         {
-            //view.hue_SaturationSlider.value = value;
-            view.hue_SaturationTxt.text = value.ToString("0.000");
+            view.hue_Effect.saturation = value - 0.5f;
+            view.hue_SaturationTxt.text = view.hue_SaturationSlider.value.ToString("0.000");
         }
 
         private void Hue_OnValueSliderChanged(float value)
         {
-            //view.hue_ValueSlider.value = value;
-            view.hue_ValueTxt.text = value.ToString("0.000");
+            view.hue_Effect.value = value - 0.5f;
+            view.hue_ValueTxt.text = view.hue_ValueSlider.value.ToString("0.000");
         }
         #endregion
     }
