@@ -104,7 +104,6 @@
                 fixed4 black = fixed4(0, 0, 0, 1);
                 fixed4 empty = fixed4(0, 0, 0, 0);
 
-
                 col = lerp(empty, black, min(col.a, edge));
 
                 #endif

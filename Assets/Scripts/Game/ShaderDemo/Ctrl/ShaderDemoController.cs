@@ -23,6 +23,7 @@ namespace SthGame
             // menu
             view.menuBtn_Tone.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Tone));
             view.menuBtn_Hue.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Hue));
+            view.menuBtn_EdgeDetection.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.EdgeDetection));
 
             // tone
             view.tone_Dropdown.onValueChanged.AddListener(Tone_OnDropDownValueChanged);
@@ -34,6 +35,9 @@ namespace SthGame
             view.hue_HueSlider.onValueChanged.AddListener(Hue_OnHueSliderChanged);
             view.hue_SaturationSlider.onValueChanged.AddListener(Hue_OnSaturationSliderChanged);
             view.hue_ValueSlider.onValueChanged.AddListener(Hue_OnValueSliderChanged);
+
+            // edgeDetection
+            view.edgeDetection_Dropdown.onValueChanged.AddListener(EdgeDetection_OnDropDownValueChanged);
         }
 
         private void OnClickClose()
@@ -52,6 +56,7 @@ namespace SthGame
 
             view.demoObj_Tone.SetActive(type == EShaderDemoType.Tone);
             view.demoObj_Hue.SetActive(type == EShaderDemoType.Hue);
+            view.demoObj_EdgeDetection.SetActive(type == EShaderDemoType.EdgeDetection);
 
             switch (type)
             {
@@ -60,6 +65,9 @@ namespace SthGame
                     break;
                 case EShaderDemoType.Hue:
                     Hue_InitEffect();
+                    break;
+                case EShaderDemoType.EdgeDetection:
+                    EdgeDetection_InitEffect();
                     break;
             }
         }
@@ -140,11 +148,24 @@ namespace SthGame
             view.hue_ValueTxt.text = view.hue_ValueSlider.value.ToString("0.000");
         }
         #endregion
+
+        #region Edge Detection
+        private void EdgeDetection_InitEffect()
+        {
+            view.edgeDetection_Dropdown.value = (int)view.edgeDetection_Effect.edgeDetectionMode;
+        }
+
+        private void EdgeDetection_OnDropDownValueChanged(int index)
+        {
+            view.edgeDetection_Effect.edgeDetectionMode = (UIEdgeDetectionMode)index;
+        }
+        #endregion
     }
 
     public enum EShaderDemoType
     {
         Tone,
         Hue,
+        EdgeDetection,
     }
 }

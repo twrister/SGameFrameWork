@@ -13,9 +13,11 @@ namespace SthGame
         // menu
         public Button menuBtn_Tone;
         public Button menuBtn_Hue;
+        public Button menuBtn_EdgeDetection;
         // demo obj
         public GameObject demoObj_Tone;
         public GameObject demoObj_Hue;
+        public GameObject demoObj_EdgeDetection;
 
         // tone
         public UIToneEffect tone_Effect;
@@ -34,5 +36,10 @@ namespace SthGame
         public Text hue_HueTxt;
         public Text hue_SaturationTxt;
         public Text hue_ValueTxt;
+
+        // edge detection
+        public UIEdgeDetection edgeDetection_Effect;
+        public Dropdown edgeDetection_Dropdown;
+
     }
 }
