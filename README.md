@@ -11,16 +11,21 @@ Used to build some games demo
 ### 目录
 [GitHub如何忽略文件或者文件夹](ReadMe/401_GitHub如何忽略文件或者文件夹.md)  
 [unity中制作一个调色板](ReadMe/402_unity中制作一个调色板.md)  
+
 #### 2D shader
 [概括](ReadMe/100_2Dshader.md)  
 [灰度 上色 反色](ReadMe/101_toneEffect.md)  
 [马赛克](ReadMe/102_pixel.md)  
+[hsv修改](ReadMe/103_hsvModifier.md)  
+[边缘检测](ReadMe/104_edgeDetection.md)  
+
 #### Post Processing
 [Post Processing](ReadMe/200_PostProcessing.md)  
+
 #### 3D shader
 [3D shader](ReadMe/300_3Dshader.md)  
 
 ### TODO
-- 颜色版 实时换色 颜色版根据鼠标点击的位置，出现在鼠标旁边 底板无色处理
+- 抽象出脚本中的属性，自动添加属性修改的UI
 - navigation导航
 - 高斯模糊 弹窗的底
