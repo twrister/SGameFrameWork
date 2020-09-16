@@ -40,6 +40,12 @@ namespace SthGame
         // edge detection
         public UIEdgeDetection edgeDetection_Effect;
         public Dropdown edgeDetection_Dropdown;
-
+        public Button edgeDetection_EdgeColBtn;
+        public Image edgeDetection_EdgeColImg;
+        public Slider edgeDetection_EdgeWidthSlider;
+        public Text edgeDetection_EdgeWidthTxt;
+        public Toggle edgeDetection_BgToggle;
+        public Slider edgeDetection_BgAlphaSlider;
+        public Text edgeDetection_BgFadeTxt;
     }
 }

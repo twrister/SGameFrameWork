@@ -38,6 +38,10 @@ namespace SthGame
 
             // edgeDetection
             view.edgeDetection_Dropdown.onValueChanged.AddListener(EdgeDetection_OnDropDownValueChanged);
+            view.edgeDetection_EdgeColBtn.onClick.AddListener(EdgeDetection_OnClickEdgeColorBtn);
+            view.edgeDetection_EdgeWidthSlider.onValueChanged.AddListener(EdgeDetection_OnEdgeWidthSliderChanged);
+            view.edgeDetection_BgToggle.onValueChanged.AddListener(EdgeDetection_OnBgToggleChanged);
+            view.edgeDetection_BgAlphaSlider.onValueChanged.AddListener(EdgeDetection_OnBgAlphaSliderChanged);
         }
 
         private void OnClickClose()
@@ -47,7 +51,7 @@ namespace SthGame
 
         protected override void OpenCallBack()
         {
-            OnClickMenuButton(EShaderDemoType.Hue);
+            OnClickMenuButton(EShaderDemoType.EdgeDetection);
         }
 
         private void OnClickMenuButton(EShaderDemoType type)
@@ -112,10 +116,10 @@ namespace SthGame
 
         private void Hue_OnClickHueColorBtn()
         {
-            GUIManager.Instance.OpenColorPlate(view.hue_ColorImg.color, Hue_OnColorPlateClose, view.hue_ColorImg.transform);
+            GUIManager.Instance.OpenColorPlate(view.hue_ColorImg.color, Hue_OnColorChanged, view.hue_ColorImg.transform);
         }
 
-        private void Hue_OnColorPlateClose(Color color)
+        private void Hue_OnColorChanged(Color color)
         {
             if (view && view.hue_ColorImg)
             {
@@ -133,19 +137,19 @@ namespace SthGame
         private void Hue_OnHueSliderChanged(float value)
         {
             view.hue_Effect.hue = value - 0.5f;
-            view.hue_HueTxt.text = view.hue_HueSlider.value.ToString("0.000");
+            view.hue_HueTxt.text = view.hue_Effect.hue.ToString("0.000");
         }
 
         private void Hue_OnSaturationSliderChanged(float value)
         {
             view.hue_Effect.saturation = value - 0.5f;
-            view.hue_SaturationTxt.text = view.hue_SaturationSlider.value.ToString("0.000");
+            view.hue_SaturationTxt.text = view.hue_Effect.saturation.ToString("0.000");
         }
 
         private void Hue_OnValueSliderChanged(float value)
         {
             view.hue_Effect.value = value - 0.5f;
-            view.hue_ValueTxt.text = view.hue_ValueSlider.value.ToString("0.000");
+            view.hue_ValueTxt.text = view.hue_Effect.value.ToString("0.000");
         }
         #endregion
 
@@ -153,11 +157,50 @@ namespace SthGame
         private void EdgeDetection_InitEffect()
         {
             view.edgeDetection_Dropdown.value = (int)view.edgeDetection_Effect.edgeDetectionMode;
+            view.edgeDetection_EdgeColImg.color = view.edgeDetection_Effect.edgeColor;
+            view.edgeDetection_BgToggle.isOn = view.edgeDetection_Effect.bgToggle == 1;
+            view.edgeDetection_BgAlphaSlider.gameObject.SetActive(view.edgeDetection_BgToggle.isOn);
+
+            view.edgeDetection_EdgeWidthSlider.value = view.edgeDetection_Effect.edgeWidth / 2;
+            view.edgeDetection_BgAlphaSlider.value = view.edgeDetection_Effect.bgAlpha;
+
+            view.edgeDetection_EdgeWidthTxt.text = view.edgeDetection_Effect.edgeWidth.ToString("0.000");
+            view.edgeDetection_BgFadeTxt.text = view.edgeDetection_Effect.bgAlpha.ToString("0.000");
         }
 
         private void EdgeDetection_OnDropDownValueChanged(int index)
         {
             view.edgeDetection_Effect.edgeDetectionMode = (UIEdgeDetectionMode)index;
+        }
+
+        private void EdgeDetection_OnClickEdgeColorBtn()
+        {
+            GUIManager.Instance.OpenColorPlate(view.edgeDetection_EdgeColImg.color, (color) =>
+            {
+                if (view && view.edgeDetection_EdgeColImg)
+                {
+                    view.edgeDetection_EdgeColImg.color = color;
+                    view.edgeDetection_Effect.edgeColor = color;
+                }
+            }, view.edgeDetection_EdgeColImg.transform);
+        }
+
+        private void EdgeDetection_OnEdgeWidthSliderChanged(float value)
+        {
+            view.edgeDetection_Effect.edgeWidth = value * 2;
+            view.edgeDetection_EdgeWidthTxt.text = view.edgeDetection_Effect.edgeWidth.ToString("0.000");
+        }
+
+        private void EdgeDetection_OnBgToggleChanged(bool isOn)
+        {
+            view.edgeDetection_Effect.bgToggle = isOn ? 1 : 0;
+            view.edgeDetection_BgAlphaSlider.gameObject.SetActive(isOn);
+        }
+
+        private void EdgeDetection_OnBgAlphaSliderChanged(float value)
+        {
+            view.edgeDetection_Effect.bgAlpha = value;
+            view.edgeDetection_BgFadeTxt.text = view.edgeDetection_Effect.bgAlpha.ToString("0.000");
         }
         #endregion
     }

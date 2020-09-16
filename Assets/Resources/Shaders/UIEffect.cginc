@@ -50,28 +50,3 @@ half4 ApplyHsvEffect(half4 color, fixed4 param1, fixed4 param2)
 
 	return color;
 }
-
-// half Sobel (v2f i)
-// {
-// 	const half Gx[9] = {
-// 		-1, -2, -1,
-// 		 0,  0,  0,
-// 		 1,  2,  1
-// 	};
-// 	const half Gy[9] = {
-// 		-1,  0,  1,
-// 		-2,  0,  2,
-// 		-1,  0,  1
-// 	};
-
-// 	half texColor;
-// 	half edgeX = 0;
-// 	half edgeY = 0;
-// 	for (int i = 0; i < 9; ++i)
-// 	{
-// 		texColor = Luminance(tex2D());
-// 	}
-
-// 	half edge = 0;
-// 	return edge;
-// }

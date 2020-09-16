@@ -3,7 +3,10 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _EdgeWidth ("Edge Width", Float) = 0
+        _EdgeColor ("Edge Color", Color) = (0, 0, 0, 1)
+        _EdgeWidth ("Edge Width", Range(0, 2)) = 0
+        [Toggle] _BgToggle ("Bg Toggle", Float) = 0
+        _BgAlpha ("Bg Alpha", Range(0, 1)) = 1
     }
     SubShader
     {
@@ -36,8 +39,11 @@
             #include "UIEffect.cginc"
 
             sampler2D _MainTex;
-            fixed _EdgeWidth;
-            float4 _MainTex_TexelSize;
+            half4 _MainTex_TexelSize;
+            half4 _EdgeColor;
+            half _EdgeWidth;
+            fixed _BgToggle;
+            half _BgAlpha;
 
             struct appdata
             {
@@ -47,7 +53,7 @@
 
             struct v2f
             {
-                float2 uv[9] : TEXCOORD0;
+                float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
             };
 
@@ -56,55 +62,97 @@
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
 
-                o.uv[0] = v.uv + _MainTex_TexelSize.xy * half2(-1, -1);
-                o.uv[1] = v.uv + _MainTex_TexelSize.xy * half2(0, 1);
-                o.uv[2] = v.uv + _MainTex_TexelSize.xy * half2(1, -1);
-                o.uv[3] = v.uv + _MainTex_TexelSize.xy * half2(-1, 0);
-                o.uv[4] = v.uv + _MainTex_TexelSize.xy * half2(0, 0);
-                o.uv[5] = v.uv + _MainTex_TexelSize.xy * half2(1, 0);
-                o.uv[6] = v.uv + _MainTex_TexelSize.xy * half2(-1, 1);
-                o.uv[7] = v.uv + _MainTex_TexelSize.xy * half2(0, 1);
-                o.uv[8] = v.uv + _MainTex_TexelSize.xy * half2(1, 1);
+                o.uv = v.uv;
 
                 return o;
             }
 
+            // Sobel masks (see http://en.wikipedia.org/wiki/Sobel_operator)
+            //        1  0 -1     -1 -2 -1
+            //    X = 2  0 -2  Y = 0  0  0
+            //        1  0 -1      1  2  1
+            half sobel(half2 center, half2 step)
+            {
+                half bottomLeft = Luminance(tex2D(_MainTex, center + half2(-step.x, -step.y)));
+                half midBottom = Luminance(tex2D(_MainTex, center + half2(0, step.y)));
+                half bottomRight = Luminance(tex2D(_MainTex, center + half2(step.x, -step.y)));
+                half midLeft = Luminance(tex2D(_MainTex, center + half2(-step.x, 0)));
+                half midRight = Luminance(tex2D(_MainTex, center + half2(step.x, 0)));
+                half topLeft = Luminance(tex2D(_MainTex, center + half2(-step.x, step.y)));
+                half midTop = Luminance(tex2D(_MainTex, center + half2(0, step.y)));
+                half topRight = Luminance(tex2D(_MainTex, center + half2(step.x, step.y)));
+
+                half Gx = topLeft + 2.0 * midLeft + bottomLeft - topRight - 2.0 * midRight - bottomRight;
+                half Gy = -topLeft - 2.0 * midTop - topRight + bottomLeft + 2.0 * midBottom + bottomRight;
+
+                half edge = sqrt((Gx * Gx) + (Gy * Gy));
+                // half edge = abs(Gx) + abs(Gy);          // 用绝对值操作代替开根号，可优化性能 
+
+                return edge;
+            }
+
+            // Roberts Operator
+            //X = -1   0      Y = 0  -1
+            //     0   1          1   0
+            half roberts(half2 center, half2 step)
+            {
+                // get samples around pixel
+                half topLeft = Luminance(tex2D(_MainTex, center + half2(-step.x, step.y)));
+                half bottomLeft = Luminance(tex2D(_MainTex, center + half2(-step.x, -step.y)));
+                half topRight = Luminance(tex2D(_MainTex, center + half2(step.x, step.y)));
+                half bottomRight = Luminance(tex2D(_MainTex, center + half2(step.x, -step.y)));
+
+                half Gx = -1.0 * topLeft + 1.0 * bottomRight;
+                half Gy = -1.0 * topRight + 1.0 * bottomLeft;
+                
+                half edge = sqrt((Gx * Gx) + (Gy * Gy));
+                return edge;
+            }
+
+            // scharr masks ( http://en.wikipedia.org/wiki/Sobel_operator#Alternative_operators)
+            //        3  0 -3        -3 -10 -3
+            //    X = 10 0 -10   Y =  0  0   0
+            //        3  0 -3         3  10  3
+            half scharr(half2 center, half2 step)
+            {
+                half bottomLeft = Luminance(tex2D(_MainTex, center + half2(-step.x, -step.y)));
+                half midBottom = Luminance(tex2D(_MainTex, center + half2(0, step.y)));
+                half bottomRight = Luminance(tex2D(_MainTex, center + half2(step.x, -step.y)));
+                half midLeft = Luminance(tex2D(_MainTex, center + half2(-step.x, 0)));
+                half midRight = Luminance(tex2D(_MainTex, center + half2(step.x, 0)));
+                half topLeft = Luminance(tex2D(_MainTex, center + half2(-step.x, step.y)));
+                half midTop = Luminance(tex2D(_MainTex, center + half2(0, step.y)));
+                half topRight = Luminance(tex2D(_MainTex, center + half2(step.x, step.y)));
+
+                half Gx = 3.0 * topLeft + 10.0 * midLeft + 3.0 * bottomLeft - 3.0 * topRight - 10.0 * midRight - 3.0 * bottomRight;
+                half Gy = -3.0 * topLeft - 10.0 * midTop - 3.0 * topRight + 3.0 * bottomLeft + 10.0 * midBottom + 3.0 * bottomRight;
+
+                half edge = sqrt((Gx * Gx) + (Gy * Gy));
+                // half edge = abs(Gx) + abs(Gy);          // 用绝对值操作代替开根号，可优化性能 
+
+                return edge;
+            }
             
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv[4]);
-
+                fixed4 col = tex2D(_MainTex, i.uv);
 
                 #if SOBEL
+                half edge = sobel(i.uv, _MainTex_TexelSize.xy * _EdgeWidth);
 
-                const fixed Gx[9] = {
-                    -1, -2, -1,
-                     0,  0,  0,
-                     1,  2,  1
-                };
-                const fixed Gy[9] = {
-                    -1,  0,  1,
-                    -2,  0,  2,
-                    -1,  0,  1
-                };
+                #elif ROBERTS
+                half edge = roberts(i.uv, _MainTex_TexelSize.xy * _EdgeWidth);
 
-                half texColor;
-                half edgeX = 0;
-                half edgeY = 0;
-                for (int idx = 0; idx < 9; ++idx)
-                {
-                    texColor = Luminance(tex2D(_MainTex, i.uv[idx]));
-                    edgeX += texColor * Gx[idx];
-                    edgeY += texColor * Gy[idx];
-                }
+                #elif SCHARR
+                half edge = scharr(i.uv, _MainTex_TexelSize.xy * _EdgeWidth);
 
-                half edge = abs(edgeX) + abs(edgeY);
+                #endif
 
-                fixed4 black = fixed4(0, 0, 0, 1);
-                fixed4 empty = fixed4(0, 0, 0, 0);
+                #if SOBEL | ROBERTS | SCHARR
 
-                col = lerp(empty, black, min(col.a, edge));
+                fixed4 bg = lerp(fixed4(0,0,0,0), lerp(fixed4(col.rgb, 0), col, _BgAlpha), _BgToggle);
+                col = lerp(bg, _EdgeColor, min(col.a, edge));
 
                 #endif
 
