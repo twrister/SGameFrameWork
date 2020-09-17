@@ -345,8 +345,8 @@ namespace CircularScrollView
         {
             if (childController != null)
             {
-                childPool.Push(childController);
                 childController.SetActive(false);
+                childPool.Push(childController);
             }
         }
         #endregion

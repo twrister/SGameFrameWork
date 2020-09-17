@@ -37,11 +37,11 @@ namespace SthGame
             view.hue_ValueSlider.onValueChanged.AddListener(Hue_OnValueSliderChanged);
 
             // edgeDetection
-            view.edgeDetection_Dropdown.onValueChanged.AddListener(EdgeDetection_OnDropDownValueChanged);
-            view.edgeDetection_EdgeColBtn.onClick.AddListener(EdgeDetection_OnClickEdgeColorBtn);
-            view.edgeDetection_EdgeWidthSlider.onValueChanged.AddListener(EdgeDetection_OnEdgeWidthSliderChanged);
-            view.edgeDetection_BgToggle.onValueChanged.AddListener(EdgeDetection_OnBgToggleChanged);
-            view.edgeDetection_BgAlphaSlider.onValueChanged.AddListener(EdgeDetection_OnBgAlphaSliderChanged);
+            //view.edgeDetection_Dropdown.onValueChanged.AddListener(EdgeDetection_OnDropDownValueChanged);
+            //view.edgeDetection_EdgeColBtn.onClick.AddListener(EdgeDetection_OnClickEdgeColorBtn);
+            //view.edgeDetection_EdgeWidthSlider.onValueChanged.AddListener(EdgeDetection_OnEdgeWidthSliderChanged);
+            //view.edgeDetection_BgToggle.onValueChanged.AddListener(EdgeDetection_OnBgToggleChanged);
+            //view.edgeDetection_BgAlphaSlider.onValueChanged.AddListener(EdgeDetection_OnBgAlphaSliderChanged);
         }
 
         private void OnClickClose()
@@ -61,6 +61,8 @@ namespace SthGame
             view.demoObj_Tone.SetActive(type == EShaderDemoType.Tone);
             view.demoObj_Hue.SetActive(type == EShaderDemoType.Hue);
             view.demoObj_EdgeDetection.SetActive(type == EShaderDemoType.EdgeDetection);
+
+            HideAllUISliders();
 
             switch (type)
             {
@@ -156,16 +158,20 @@ namespace SthGame
         #region Edge Detection
         private void EdgeDetection_InitEffect()
         {
-            view.edgeDetection_Dropdown.value = (int)view.edgeDetection_Effect.edgeDetectionMode;
-            view.edgeDetection_EdgeColImg.color = view.edgeDetection_Effect.edgeColor;
-            view.edgeDetection_BgToggle.isOn = view.edgeDetection_Effect.bgToggle == 1;
-            view.edgeDetection_BgAlphaSlider.gameObject.SetActive(view.edgeDetection_BgToggle.isOn);
+            //view.edgeDetection_Dropdown.value = (int)view.edgeDetection_Effect.edgeDetectionMode;
+            //view.edgeDetection_EdgeColImg.color = view.edgeDetection_Effect.edgeColor;
+            //view.edgeDetection_BgToggle.isOn = view.edgeDetection_Effect.bgToggle == 1;
+            //view.edgeDetection_BgAlphaSlider.gameObject.SetActive(view.edgeDetection_BgToggle.isOn);
 
-            view.edgeDetection_EdgeWidthSlider.value = view.edgeDetection_Effect.edgeWidth / 2;
-            view.edgeDetection_BgAlphaSlider.value = view.edgeDetection_Effect.bgAlpha;
+            //view.edgeDetection_EdgeWidthSlider.value = view.edgeDetection_Effect.edgeWidth / 2;
+            //view.edgeDetection_BgAlphaSlider.value = view.edgeDetection_Effect.bgAlpha;
 
-            view.edgeDetection_EdgeWidthTxt.text = view.edgeDetection_Effect.edgeWidth.ToString("0.000");
-            view.edgeDetection_BgFadeTxt.text = view.edgeDetection_Effect.bgAlpha.ToString("0.000");
+            //view.edgeDetection_EdgeWidthTxt.text = view.edgeDetection_Effect.edgeWidth.ToString("0.000");
+            //view.edgeDetection_BgFadeTxt.text = view.edgeDetection_Effect.bgAlpha.ToString("0.000");
+
+            ShowUISlider().SetListener((value) => {
+                view.edgeDetection_Effect.edgeWidth = value;
+            });
         }
 
         private void EdgeDetection_OnDropDownValueChanged(int index)
@@ -201,6 +207,48 @@ namespace SthGame
         {
             view.edgeDetection_Effect.bgAlpha = value;
             view.edgeDetection_BgFadeTxt.text = view.edgeDetection_Effect.bgAlpha.ToString("0.000");
+        }
+        #endregion
+
+        #region pool
+        List<UIElementSliderController> uiSliderList = new List<UIElementSliderController>();
+        Stack<UIElementSliderController> uiSliderPool = new Stack<UIElementSliderController>();
+        private UIElementSliderController GetUISlider()
+        {
+            UIElementSliderController slider = null;
+            if (uiSliderPool.Count > 0)
+            {
+                slider = uiSliderPool.Pop();
+            }
+            if (slider == null)
+            {
+                slider = CreateChildController<UIElementSliderController>(uiSliderPool.Count - 1, view.uiElementParent);
+            }
+            return slider;
+        }
+        private void RecycleUISlider(UIElementSliderController slider)
+        {
+            if (slider != null)
+            {
+                slider.SetActive(false);
+                uiSliderPool.Push(slider);
+            }
+        }
+
+        private UIElementSliderController ShowUISlider()
+        {
+            var slider = GetUISlider();
+            slider.SetActive(true);
+            uiSliderList.Add(slider);
+            return slider;
+        }
+
+        private void HideAllUISliders()
+        {
+            for (int i = 0; i < uiSliderList.Count; i++)
+            {
+                RecycleUISlider(uiSliderList[i]);
+            }
         }
         #endregion
     }

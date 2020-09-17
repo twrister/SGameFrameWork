@@ -10,6 +10,8 @@ namespace SthGame
         public Button closeBtn;
         public Text titleTxt;
 
+        public GameObject uiElementParent;
+
         // menu
         public Button menuBtn_Tone;
         public Button menuBtn_Hue;
