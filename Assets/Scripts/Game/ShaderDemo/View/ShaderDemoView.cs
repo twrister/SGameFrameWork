@@ -17,13 +17,12 @@ namespace SthGame
         public Button menuBtn_Tone;
         public Button menuBtn_Hue;
         public Button menuBtn_EdgeDetection;
+        public Button menuBtn_Blur;
+
         // tone
         public UIToneEffect tone_Effect;
-
-        // hue
         public UIHSVModifier hue_Effect;
-
-        // edge detection
         public UIEdgeDetection edgeDetection_Effect;
+        public UIBlur blur_Effect;
     }
 }

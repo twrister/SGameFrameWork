@@ -16,5 +16,11 @@
         Roberts,
         Scharr,
     }
+
+    public enum UIBlurMode
+    {
+        None,
+        Gaussian,
+    }
 }
 

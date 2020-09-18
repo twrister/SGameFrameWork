@@ -25,6 +25,7 @@ namespace SthGame
             view.menuBtn_Tone.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Tone));
             view.menuBtn_Hue.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Hue));
             view.menuBtn_EdgeDetection.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.EdgeDetection));
+            view.menuBtn_Blur.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Blur));
         }
 
         private void OnClickClose()
@@ -44,6 +45,7 @@ namespace SthGame
             view.tone_Effect.gameObject.SetActive(type == EShaderDemoType.Tone);
             view.hue_Effect.gameObject.SetActive(type == EShaderDemoType.Hue);
             view.edgeDetection_Effect.gameObject.SetActive(type == EShaderDemoType.EdgeDetection);
+            view.blur_Effect.gameObject.SetActive(type == EShaderDemoType.Blur);
 
             HideAllUIElements();
 
@@ -58,6 +60,9 @@ namespace SthGame
                 case EShaderDemoType.EdgeDetection:
                     EdgeDetection_InitEffect();
                     break;
+                case EShaderDemoType.Blur:
+                    Blur_InitEffect();
+                    break;
             }
         }
 
@@ -70,11 +75,13 @@ namespace SthGame
         private void Tone_InitEffect()
         {
             ShowUIElementDropdown("Tone选项", typeof(UIToneEffectMode),
-                (int)view.tone_Effect.effectMode).SetListener((index) => {
+                (int)view.tone_Effect.effectMode).SetListener((index) =>
+                {
                     view.tone_Effect.effectMode = (UIToneEffectMode)index;
                 });
 
-            ShowUIElementSlider("Factor", 0, 2, view.tone_Effect.effectFactor).SetListener((value) => {
+            ShowUIElementSlider("Factor", 0, 2, view.tone_Effect.effectFactor).SetListener((value) =>
+            {
                 view.tone_Effect.effectFactor = value;
             });
         }
@@ -83,19 +90,24 @@ namespace SthGame
         #region Hue
         private void Hue_InitEffect()
         {
-            ShowUIElementColorSet("边缘颜色", view.hue_Effect.targetColor).SetListener((color) => {
+            ShowUIElementColorSet("边缘颜色", view.hue_Effect.targetColor).SetListener((color) =>
+            {
                 view.hue_Effect.targetColor = color;
             });
-            ShowUIElementSlider("范围", 0, 1, view.hue_Effect.range).SetListener((value) => {
+            ShowUIElementSlider("范围", 0, 1, view.hue_Effect.range).SetListener((value) =>
+            {
                 view.hue_Effect.range = value;
             });
-            ShowUIElementSlider("Hue", 0, 1, view.hue_Effect.hue).SetListener((value) => {
+            ShowUIElementSlider("Hue", 0, 1, view.hue_Effect.hue).SetListener((value) =>
+            {
                 view.hue_Effect.hue = value;
             });
-            ShowUIElementSlider("Saturation", 0, 1, view.hue_Effect.saturation).SetListener((value) => {
+            ShowUIElementSlider("Saturation", 0, 1, view.hue_Effect.saturation).SetListener((value) =>
+            {
                 view.hue_Effect.saturation = value;
             });
-            ShowUIElementSlider("Value", 0, 1, view.hue_Effect.value).SetListener((value) => {
+            ShowUIElementSlider("Value", 0, 1, view.hue_Effect.value).SetListener((value) =>
+            {
                 view.hue_Effect.value = value;
             });
         }
@@ -104,25 +116,37 @@ namespace SthGame
         #region Edge Detection
         private void EdgeDetection_InitEffect()
         {
-            ShowUIElementDropdown("选项", typeof(UIEdgeDetectionMode), 
-                (int)view.edgeDetection_Effect.edgeDetectionMode).SetListener((index) => {
-                view.edgeDetection_Effect.edgeDetectionMode = (UIEdgeDetectionMode)index;
-            });
-
-            ShowUIElementSlider("边缘宽度", 0, 2, view.edgeDetection_Effect.edgeWidth).SetListener((value) => {
+            ShowUIElementDropdown("选项", typeof(UIEdgeDetectionMode),
+                (int)view.edgeDetection_Effect.edgeDetectionMode).SetListener((index) =>
+                {
+                    view.edgeDetection_Effect.edgeDetectionMode = (UIEdgeDetectionMode)index;
+                });
+            ShowUIElementSlider("边缘宽度", 0, 2, view.edgeDetection_Effect.edgeWidth).SetListener((value) =>
+            {
                 view.edgeDetection_Effect.edgeWidth = value;
             });
-
-            ShowUIElementColorSet("边缘颜色", view.edgeDetection_Effect.edgeColor).SetListener((color) => {
+            ShowUIElementColorSet("边缘颜色", view.edgeDetection_Effect.edgeColor).SetListener((color) =>
+            {
                 view.edgeDetection_Effect.edgeColor = color;
             });
-
-            ShowUIElementDropdown("显示背景", view.edgeDetection_Effect.bgToggle == 1).SetListener((isOn) => {
+            ShowUIElementDropdown("显示背景", view.edgeDetection_Effect.bgToggle == 1).SetListener((isOn) =>
+            {
                 view.edgeDetection_Effect.bgToggle = isOn ? 1 : 0;
             });
-            ShowUIElementSlider("背景透明度", 0, 1, view.edgeDetection_Effect.bgAlpha).SetListener((value) => {
+            ShowUIElementSlider("背景透明度", 0, 1, view.edgeDetection_Effect.bgAlpha).SetListener((value) =>
+            {
                 view.edgeDetection_Effect.bgAlpha = value;
             });
+        }
+        #endregion
+
+        #region Blur
+        private void Blur_InitEffect()
+        {
+            ShowUIElementDropdown("模糊算法", typeof(UIBlurMode), (int)view.blur_Effect.blurMode).SetListener((index) =>
+                {
+                    view.blur_Effect.blurMode = (UIBlurMode)index;
+                });
         }
         #endregion
 
@@ -156,7 +180,7 @@ namespace SthGame
         {
             T element = null;
 
-            Stack<UIElementBaseCtrl> stack; 
+            Stack<UIElementBaseCtrl> stack;
 
             if (elementPoolDict.ContainsKey(typeof(T)))
             {
@@ -241,5 +265,6 @@ namespace SthGame
         Tone,
         Hue,
         EdgeDetection,
+        Blur,
     }
 }
