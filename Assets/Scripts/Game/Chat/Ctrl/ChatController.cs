@@ -56,7 +56,7 @@ namespace SthGame
 
         private void InitView()
         {
-            worldSessionCtrl = CreateChildController<WorldSessionController>(0, view.chatSessionsRoot, Vector3.zero);
+            worldSessionCtrl = CreateChildController<WorldSessionController>(view.chatSessionsRoot, Vector3.zero);
 
             InitEmojiPanel();
         }

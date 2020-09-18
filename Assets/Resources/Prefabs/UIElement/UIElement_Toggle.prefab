@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1674686961642665399}
   - component: {fileID: 8540943853751488233}
-  - component: {fileID: 2905659317324887308}
+  - component: {fileID: 5324856032924390261}
   m_Layer: 5
   m_Name: UIElement_Toggle
   m_TagString: Untagged
@@ -34,10 +34,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -568, y: -320}
+  m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8540943853751488233
 CanvasRenderer:
@@ -47,7 +47,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3839407189028596617}
   m_CullTransparentMesh: 0
---- !u!114 &2905659317324887308
+--- !u!114 &5324856032924390261
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,12 +56,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3839407189028596617}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95c984ce5b02ec342bcdf4abd95933dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b689f375547a6843aa15fe212070799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 0}
   descText: {fileID: 1115791474655937282}
-  valueText: {fileID: 0}
+  toggle: {fileID: 4576637954748804975}
 --- !u!1 &4939489757370777012
 GameObject:
   m_ObjectHideFlags: 0

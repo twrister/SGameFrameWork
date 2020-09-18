@@ -28,5 +28,10 @@ namespace SthGame
         {
             GameObject.Destroy(gameObject);
         }
+
+        public void SetParent(Transform parent)
+        {
+            chcheTransform.SetParent(parent, false);
+        }
     }
 }

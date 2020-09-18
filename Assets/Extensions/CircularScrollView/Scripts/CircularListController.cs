@@ -334,7 +334,7 @@ namespace CircularScrollView
 
             if (controller == null)
             {
-                controller = CreateChildController(childType, childControllerList.Count - 1) as CircularListItemController;
+                controller = CreateChildController(childType) as CircularListItemController;
             }
             controller.SetActive(true);
 

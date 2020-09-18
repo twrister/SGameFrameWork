@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace SthGame
 {
@@ -24,24 +25,6 @@ namespace SthGame
             view.menuBtn_Tone.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Tone));
             view.menuBtn_Hue.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Hue));
             view.menuBtn_EdgeDetection.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.EdgeDetection));
-
-            // tone
-            view.tone_Dropdown.onValueChanged.AddListener(Tone_OnDropDownValueChanged);
-            view.tone_Slider.onValueChanged.AddListener(Tone_OnSliderValueChanged);
-
-            // hue
-            view.hue_ColorBtn.onClick.AddListener(Hue_OnClickHueColorBtn);
-            view.hue_RangeSlider.onValueChanged.AddListener(Hue_OnRangeSliderChanged);
-            view.hue_HueSlider.onValueChanged.AddListener(Hue_OnHueSliderChanged);
-            view.hue_SaturationSlider.onValueChanged.AddListener(Hue_OnSaturationSliderChanged);
-            view.hue_ValueSlider.onValueChanged.AddListener(Hue_OnValueSliderChanged);
-
-            // edgeDetection
-            //view.edgeDetection_Dropdown.onValueChanged.AddListener(EdgeDetection_OnDropDownValueChanged);
-            //view.edgeDetection_EdgeColBtn.onClick.AddListener(EdgeDetection_OnClickEdgeColorBtn);
-            //view.edgeDetection_EdgeWidthSlider.onValueChanged.AddListener(EdgeDetection_OnEdgeWidthSliderChanged);
-            //view.edgeDetection_BgToggle.onValueChanged.AddListener(EdgeDetection_OnBgToggleChanged);
-            //view.edgeDetection_BgAlphaSlider.onValueChanged.AddListener(EdgeDetection_OnBgAlphaSliderChanged);
         }
 
         private void OnClickClose()
@@ -51,18 +34,18 @@ namespace SthGame
 
         protected override void OpenCallBack()
         {
-            OnClickMenuButton(EShaderDemoType.EdgeDetection);
+            OnClickMenuButton(EShaderDemoType.Tone);
         }
 
         private void OnClickMenuButton(EShaderDemoType type)
         {
             view.titleTxt.text = GetTitleTxt(type);
 
-            view.demoObj_Tone.SetActive(type == EShaderDemoType.Tone);
-            view.demoObj_Hue.SetActive(type == EShaderDemoType.Hue);
-            view.demoObj_EdgeDetection.SetActive(type == EShaderDemoType.EdgeDetection);
+            view.tone_Effect.gameObject.SetActive(type == EShaderDemoType.Tone);
+            view.hue_Effect.gameObject.SetActive(type == EShaderDemoType.Hue);
+            view.edgeDetection_Effect.gameObject.SetActive(type == EShaderDemoType.EdgeDetection);
 
-            HideAllUISliders();
+            HideAllUIElements();
 
             switch (type)
             {
@@ -86,169 +69,169 @@ namespace SthGame
         #region Tone
         private void Tone_InitEffect()
         {
-            view.tone_Dropdown.value = (int)view.tone_Effect.effectMode;
-            view.tone_Slider.value = view.tone_Effect.effectFactor;
-        }
-        private void Tone_OnDropDownValueChanged(int index)
-        {
-            view.tone_Effect.effectMode = (UIToneEffectMode)index;
-        }
+            ShowUIElementDropdown("Tone选项", typeof(UIToneEffectMode),
+                (int)view.tone_Effect.effectMode).SetListener((index) => {
+                    view.tone_Effect.effectMode = (UIToneEffectMode)index;
+                });
 
-        private void Tone_OnSliderValueChanged(float value)
-        {
-            view.tone_Effect.effectFactor = value;
+            ShowUIElementSlider("Factor", 0, 2, view.tone_Effect.effectFactor).SetListener((value) => {
+                view.tone_Effect.effectFactor = value;
+            });
         }
         #endregion
 
         #region Hue
         private void Hue_InitEffect()
         {
-            view.hue_ColorImg.color = view.hue_Effect.targetColor;
-            view.hue_RangeSlider.value = view.hue_Effect.range;
-
-            view.hue_HueSlider.value = view.hue_Effect.hue + 0.5f;
-            view.hue_SaturationSlider.value = view.hue_Effect.saturation + 0.5f;
-            view.hue_ValueSlider.value = view.hue_Effect.value + 0.5f;
-
-            view.hue_RangeTxt.text = view.hue_RangeSlider.value.ToString("0.000");
-            view.hue_HueTxt.text = view.hue_HueSlider.value.ToString("0.000");
-            view.hue_SaturationTxt.text = view.hue_SaturationSlider.value.ToString("0.000");
-            view.hue_ValueTxt.text = view.hue_ValueSlider.value.ToString("0.000");
-        }
-
-        private void Hue_OnClickHueColorBtn()
-        {
-            GUIManager.Instance.OpenColorPlate(view.hue_ColorImg.color, Hue_OnColorChanged, view.hue_ColorImg.transform);
-        }
-
-        private void Hue_OnColorChanged(Color color)
-        {
-            if (view && view.hue_ColorImg)
-            {
-                view.hue_ColorImg.color = color;
+            ShowUIElementColorSet("边缘颜色", view.hue_Effect.targetColor).SetListener((color) => {
                 view.hue_Effect.targetColor = color;
-            }
-        }
-
-        private void Hue_OnRangeSliderChanged(float value)
-        {
-            view.hue_Effect.range = value;
-            view.hue_RangeTxt.text = value.ToString("0.000");
-        }
-
-        private void Hue_OnHueSliderChanged(float value)
-        {
-            view.hue_Effect.hue = value - 0.5f;
-            view.hue_HueTxt.text = view.hue_Effect.hue.ToString("0.000");
-        }
-
-        private void Hue_OnSaturationSliderChanged(float value)
-        {
-            view.hue_Effect.saturation = value - 0.5f;
-            view.hue_SaturationTxt.text = view.hue_Effect.saturation.ToString("0.000");
-        }
-
-        private void Hue_OnValueSliderChanged(float value)
-        {
-            view.hue_Effect.value = value - 0.5f;
-            view.hue_ValueTxt.text = view.hue_Effect.value.ToString("0.000");
+            });
+            ShowUIElementSlider("范围", 0, 1, view.hue_Effect.range).SetListener((value) => {
+                view.hue_Effect.range = value;
+            });
+            ShowUIElementSlider("Hue", 0, 1, view.hue_Effect.hue).SetListener((value) => {
+                view.hue_Effect.hue = value;
+            });
+            ShowUIElementSlider("Saturation", 0, 1, view.hue_Effect.saturation).SetListener((value) => {
+                view.hue_Effect.saturation = value;
+            });
+            ShowUIElementSlider("Value", 0, 1, view.hue_Effect.value).SetListener((value) => {
+                view.hue_Effect.value = value;
+            });
         }
         #endregion
 
         #region Edge Detection
         private void EdgeDetection_InitEffect()
         {
-            //view.edgeDetection_Dropdown.value = (int)view.edgeDetection_Effect.edgeDetectionMode;
-            //view.edgeDetection_EdgeColImg.color = view.edgeDetection_Effect.edgeColor;
-            //view.edgeDetection_BgToggle.isOn = view.edgeDetection_Effect.bgToggle == 1;
-            //view.edgeDetection_BgAlphaSlider.gameObject.SetActive(view.edgeDetection_BgToggle.isOn);
+            ShowUIElementDropdown("选项", typeof(UIEdgeDetectionMode), 
+                (int)view.edgeDetection_Effect.edgeDetectionMode).SetListener((index) => {
+                view.edgeDetection_Effect.edgeDetectionMode = (UIEdgeDetectionMode)index;
+            });
 
-            //view.edgeDetection_EdgeWidthSlider.value = view.edgeDetection_Effect.edgeWidth / 2;
-            //view.edgeDetection_BgAlphaSlider.value = view.edgeDetection_Effect.bgAlpha;
-
-            //view.edgeDetection_EdgeWidthTxt.text = view.edgeDetection_Effect.edgeWidth.ToString("0.000");
-            //view.edgeDetection_BgFadeTxt.text = view.edgeDetection_Effect.bgAlpha.ToString("0.000");
-
-            ShowUISlider().SetListener((value) => {
+            ShowUIElementSlider("边缘宽度", 0, 2, view.edgeDetection_Effect.edgeWidth).SetListener((value) => {
                 view.edgeDetection_Effect.edgeWidth = value;
             });
-        }
 
-        private void EdgeDetection_OnDropDownValueChanged(int index)
-        {
-            view.edgeDetection_Effect.edgeDetectionMode = (UIEdgeDetectionMode)index;
-        }
+            ShowUIElementColorSet("边缘颜色", view.edgeDetection_Effect.edgeColor).SetListener((color) => {
+                view.edgeDetection_Effect.edgeColor = color;
+            });
 
-        private void EdgeDetection_OnClickEdgeColorBtn()
-        {
-            GUIManager.Instance.OpenColorPlate(view.edgeDetection_EdgeColImg.color, (color) =>
-            {
-                if (view && view.edgeDetection_EdgeColImg)
-                {
-                    view.edgeDetection_EdgeColImg.color = color;
-                    view.edgeDetection_Effect.edgeColor = color;
-                }
-            }, view.edgeDetection_EdgeColImg.transform);
-        }
-
-        private void EdgeDetection_OnEdgeWidthSliderChanged(float value)
-        {
-            view.edgeDetection_Effect.edgeWidth = value * 2;
-            view.edgeDetection_EdgeWidthTxt.text = view.edgeDetection_Effect.edgeWidth.ToString("0.000");
-        }
-
-        private void EdgeDetection_OnBgToggleChanged(bool isOn)
-        {
-            view.edgeDetection_Effect.bgToggle = isOn ? 1 : 0;
-            view.edgeDetection_BgAlphaSlider.gameObject.SetActive(isOn);
-        }
-
-        private void EdgeDetection_OnBgAlphaSliderChanged(float value)
-        {
-            view.edgeDetection_Effect.bgAlpha = value;
-            view.edgeDetection_BgFadeTxt.text = view.edgeDetection_Effect.bgAlpha.ToString("0.000");
+            ShowUIElementDropdown("显示背景", view.edgeDetection_Effect.bgToggle == 1).SetListener((isOn) => {
+                view.edgeDetection_Effect.bgToggle = isOn ? 1 : 0;
+            });
+            ShowUIElementSlider("背景透明度", 0, 1, view.edgeDetection_Effect.bgAlpha).SetListener((value) => {
+                view.edgeDetection_Effect.bgAlpha = value;
+            });
         }
         #endregion
 
         #region pool
+        Dictionary<Type, Stack<UIElementBaseCtrl>> elementPoolDict = new Dictionary<Type, Stack<UIElementBaseCtrl>>();
         List<UIElementSliderController> uiSliderList = new List<UIElementSliderController>();
-        Stack<UIElementSliderController> uiSliderPool = new Stack<UIElementSliderController>();
-        private UIElementSliderController GetUISlider()
+        List<UIElementDropdownController> uiDropdownList = new List<UIElementDropdownController>();
+        List<UIElementColorSetController> uiColorSetList = new List<UIElementColorSetController>();
+        List<UIElementToggleController> uiToggleList = new List<UIElementToggleController>();
+        private void RecycleUIElement<T>(T element) where T : UIElementBaseCtrl
         {
-            UIElementSliderController slider = null;
-            if (uiSliderPool.Count > 0)
+            if (element != null)
             {
-                slider = uiSliderPool.Pop();
-            }
-            if (slider == null)
-            {
-                slider = CreateChildController<UIElementSliderController>(uiSliderPool.Count - 1, view.uiElementParent);
-            }
-            return slider;
-        }
-        private void RecycleUISlider(UIElementSliderController slider)
-        {
-            if (slider != null)
-            {
-                slider.SetActive(false);
-                uiSliderPool.Push(slider);
+                element.UINode.SetParent(view.uiElementTempParent.transform);
+                element.Reset();
+
+                if (elementPoolDict.ContainsKey(typeof(T)))
+                {
+                    elementPoolDict[typeof(T)].Push(element);
+                }
+                else
+                {
+                    var stack = new Stack<UIElementBaseCtrl>();
+                    stack.Push(element);
+                    elementPoolDict.Add(typeof(T), stack);
+                }
             }
         }
 
-        private UIElementSliderController ShowUISlider()
+        private T GetUIElement<T>() where T : UIElementBaseCtrl
         {
-            var slider = GetUISlider();
-            slider.SetActive(true);
+            T element = null;
+
+            Stack<UIElementBaseCtrl> stack; 
+
+            if (elementPoolDict.ContainsKey(typeof(T)))
+            {
+                stack = elementPoolDict[typeof(T)];
+            }
+            else
+            {
+                stack = new Stack<UIElementBaseCtrl>();
+                elementPoolDict.Add(typeof(T), stack);
+            }
+
+            if (stack.Count == 0)
+            {
+                element = CreateChildController(typeof(T), view.uiElementParent) as T;
+            }
+            else
+            {
+                element = stack.Pop() as T;
+                element.UINode.SetParent(view.uiElementParent.transform);
+            }
+
+            element.SetActive(true);
+            return element;
+        }
+
+        private UIElementSliderController ShowUIElementSlider(string desc, float from, float to, float value)
+        {
+            var slider = GetUIElement<UIElementSliderController>();
+            slider.InitBaseValue(desc, from, to, value);
             uiSliderList.Add(slider);
             return slider;
         }
 
-        private void HideAllUISliders()
+        private UIElementDropdownController ShowUIElementDropdown(string desc, Type enumType, int index)
+        {
+            var dropdown = GetUIElement<UIElementDropdownController>();
+            dropdown.InitBaseValue(desc, enumType, index);
+            uiDropdownList.Add(dropdown);
+            return dropdown;
+        }
+
+        private UIElementColorSetController ShowUIElementColorSet(string desc, Color defaultColor)
+        {
+            var colorSet = GetUIElement<UIElementColorSetController>();
+            colorSet.InitBaseValue(desc, defaultColor);
+            uiColorSetList.Add(colorSet);
+            return colorSet;
+        }
+
+        private UIElementToggleController ShowUIElementDropdown(string desc, bool isOn)
+        {
+            var toggle = GetUIElement<UIElementToggleController>();
+            toggle.InitBaseValue(desc, isOn);
+            uiToggleList.Add(toggle);
+            return toggle;
+        }
+
+        private void HideAllUIElements()
         {
             for (int i = 0; i < uiSliderList.Count; i++)
-            {
-                RecycleUISlider(uiSliderList[i]);
-            }
+                RecycleUIElement<UIElementSliderController>(uiSliderList[i]);
+
+            for (int i = 0; i < uiDropdownList.Count; i++)
+                RecycleUIElement<UIElementDropdownController>(uiDropdownList[i]);
+
+            for (int i = 0; i < uiColorSetList.Count; i++)
+                RecycleUIElement<UIElementColorSetController>(uiColorSetList[i]);
+
+            for (int i = 0; i < uiToggleList.Count; i++)
+                RecycleUIElement<UIElementToggleController>(uiToggleList[i]);
+
+            uiSliderList.Clear();
+            uiDropdownList.Clear();
+            uiColorSetList.Clear();
+            uiToggleList.Clear();
         }
         #endregion
     }

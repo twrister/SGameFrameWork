@@ -5,10 +5,9 @@ using UnityEngine.UI;
 
 namespace SthGame
 {
-    public class UIElementSliderView : UIBaseView
+    public class UIElementDropdownView : UIElementBaseView
     {
-        public Slider slider;
-        public Text valueText;
+        public Dropdown dropdown;
     }
 }
 

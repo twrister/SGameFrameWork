@@ -38,7 +38,7 @@ namespace SthGame
 
             while (memberItemContollerList.Count < worldSessionData.PlayerList.Count)
             {
-                var item = CreateChildController<ChatMemberItemController>(memberItemContollerList.Count, view.chatMemberGrid.gameObject);
+                var item = CreateChildController<ChatMemberItemController>(view.chatMemberGrid.gameObject);
                 memberItemContollerList.Add(item);
             }
 
@@ -67,7 +67,7 @@ namespace SthGame
             
             while (messageItemControllerList.Count < worldSessionData.ChatMsgList.Count)
             {
-                var item = CreateChildController<ChatMessageItemController>(messageItemControllerList.Count, view.chatMessageGroup.gameObject);
+                var item = CreateChildController<ChatMessageItemController>(view.chatMessageGroup.gameObject);
                 messageItemControllerList.Add(item);
             }
 

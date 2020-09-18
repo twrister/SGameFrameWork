@@ -66,7 +66,7 @@ namespace SthGame
             itemList = new List<HeadFrameItemController>();
             for (int i = 0; i < headFrameCount; i++)
             {
-                var item = CreateChildController<HeadFrameItemController>(i, view.headFrameGrid.gameObject);
+                var item = CreateChildController<HeadFrameItemController>(view.headFrameGrid.gameObject);
                 itemList.Add(item);
             }
         }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 namespace SthGame
 {
     public abstract class UIBaseContainer
@@ -11,6 +11,7 @@ namespace SthGame
         public virtual void Init() { }
         public virtual void ShutDown()
         {
+            childControllerCountDict.Clear();
             for (int i = 0; i < childControllerList.Count; i++)
             {
                 childControllerList[i].ShutDown();
@@ -25,6 +26,30 @@ namespace SthGame
 
         public string ControllerId { get; protected set; }
         public void SetControllerID(string id) { ControllerId = id; }
+
+        Dictionary<Type, int> childControllerCountDict = new Dictionary<Type, int>();
+        protected void AddElementCount<T>()
+        {
+            AddElementCount(typeof(T));
+        }
+        protected void AddElementCount(Type type)
+        {
+            if (childControllerCountDict.ContainsKey(type))
+                childControllerCountDict[type]++;
+            else
+                childControllerCountDict.Add(type, 1);
+        }
+        protected int GetElementCount<T>()
+        {
+            return GetElementCount(typeof(T));
+        }
+
+        protected int GetElementCount(Type type)
+        {
+            if (childControllerCountDict.ContainsKey(type))
+                return childControllerCountDict[type];
+            return 0;
+        }
 
         public GameObject CreateUIView(
             int context = 0,
@@ -48,11 +73,11 @@ namespace SthGame
         }
 
         public T CreateChildController<T>(
-            int context = 0,
             GameObject parent = null,
             Vector3 localPosition = new Vector3()
             ) where T : UIChildController, new()
         {
+            int context = GetElementCount<T>();
             T childController = UITools.CreateUIChildController<T>(context);
             if (childController != null)
             {
@@ -70,7 +95,7 @@ namespace SthGame
                 {
                     childController.Init();
                 }
-
+                AddElementCount<T>();
                 childControllerList.Add(childController);
             }
             return childController;
@@ -78,10 +103,10 @@ namespace SthGame
 
         public UIChildController CreateChildController(
             System.Type controllerType,
-            int context = 0,
             GameObject parent = null,
             Vector3 localPosition = new Vector3())
         {
+            int context = GetElementCount(controllerType);
             UIChildController childController = UITools.CreateUIChildController(controllerType, context);
             if (childController != null)
             {
@@ -98,6 +123,7 @@ namespace SthGame
                 {
                     childController.Init();
                 }
+                AddElementCount(controllerType);
                 childControllerList.Add(childController);
             }
             return childController;

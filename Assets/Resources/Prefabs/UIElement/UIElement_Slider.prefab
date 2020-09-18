@@ -477,6 +477,7 @@ GameObject:
   - component: {fileID: 2267006077803434714}
   - component: {fileID: 5944056892037569976}
   - component: {fileID: 6863888173943899900}
+  - component: {fileID: 4206004713403500233}
   m_Layer: 5
   m_Name: UIElement_Slider
   m_TagString: Untagged
@@ -526,9 +527,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95c984ce5b02ec342bcdf4abd95933dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 4840264853826341825}
   descText: {fileID: 2633896653467598199}
+  slider: {fileID: 4840264853826341825}
   valueText: {fileID: 6420885853780484993}
+--- !u!114 &4206004713403500233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8710831202478582210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &8975395024728463150
 GameObject:
   m_ObjectHideFlags: 0

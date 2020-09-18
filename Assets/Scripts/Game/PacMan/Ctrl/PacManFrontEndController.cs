@@ -68,7 +68,7 @@ namespace SthGame
             gridControllerList = new List<PacManGridController>();
             for (int i = 0; i < 100; i++)
             {
-                PacManGridController grid = CreateChildController<PacManGridController>(i, view.gridRootObj);
+                PacManGridController grid = CreateChildController<PacManGridController>(view.gridRootObj);
                 gridControllerList.Add(grid);
             }
         }
