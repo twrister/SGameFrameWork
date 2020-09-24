@@ -80,7 +80,7 @@ namespace SthGame
                     view.tone_Effect.effectMode = (UIToneEffectMode)index;
                 });
 
-            ShowUIElementSlider("Factor", 0, 2, view.tone_Effect.effectFactor).SetListener((value) =>
+            ShowUIElementSlider("Factor", 0, 1, view.tone_Effect.effectFactor).SetListener((value) =>
             {
                 view.tone_Effect.effectFactor = value;
             });
@@ -147,6 +147,11 @@ namespace SthGame
                 {
                     view.blur_Effect.blurMode = (UIBlurMode)index;
                 });
+
+            ShowUIElementSlider("Factor", 0, 1, view.blur_Effect.factor).SetListener((value) =>
+            {
+                view.blur_Effect.factor = value;
+            });
         }
         #endregion
 

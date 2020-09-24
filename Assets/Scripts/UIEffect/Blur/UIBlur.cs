@@ -10,7 +10,7 @@ namespace SthGame
         UIBlurMode _blurMode = UIBlurMode.None;
 
         [SerializeField]
-        [Range(0, 2)]
+        [Range(0, 1)]
         float _factor = 1;
 
         public UIBlurMode blurMode
@@ -29,7 +29,7 @@ namespace SthGame
             get { return _factor; }
             set
             {
-                value = Mathf.Clamp(value, 0, 2);
+                value = Mathf.Clamp(value, 0, 1);
                 if (Mathf.Approximately(_factor, value)) return;
                 _factor = value;
                 UpdateParams();
