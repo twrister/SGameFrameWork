@@ -26,6 +26,7 @@ namespace SthGame
             view.menuBtn_Hue.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Hue));
             view.menuBtn_EdgeDetection.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.EdgeDetection));
             view.menuBtn_Blur.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Blur));
+            view.menuBtn_Flip.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Flip));
         }
 
         private void OnClickClose()
@@ -46,6 +47,7 @@ namespace SthGame
             view.hue_Effect.gameObject.SetActive(type == EShaderDemoType.Hue);
             view.edgeDetection_Effect.gameObject.SetActive(type == EShaderDemoType.EdgeDetection);
             view.blur_Effect.gameObject.SetActive(type == EShaderDemoType.Blur);
+            view.flip_Effect.gameObject.SetActive(type == EShaderDemoType.Flip);
 
             HideAllUIElements();
 
@@ -63,6 +65,9 @@ namespace SthGame
                 case EShaderDemoType.Blur:
                     Blur_InitEffect();
                     break;
+                case EShaderDemoType.Flip:
+                    Flip_InitEffect();
+                    break;
             }
         }
 
@@ -71,7 +76,6 @@ namespace SthGame
             return type.ToString();
         }
 
-        #region Tone
         private void Tone_InitEffect()
         {
             ShowUIElementDropdown("Tone选项", typeof(UIToneEffectMode),
@@ -85,9 +89,7 @@ namespace SthGame
                 view.tone_Effect.effectFactor = value;
             });
         }
-        #endregion
 
-        #region Hue
         private void Hue_InitEffect()
         {
             ShowUIElementColorSet("边缘颜色", view.hue_Effect.targetColor).SetListener((color) =>
@@ -111,9 +113,7 @@ namespace SthGame
                 view.hue_Effect.value = value;
             });
         }
-        #endregion
 
-        #region Edge Detection
         private void EdgeDetection_InitEffect()
         {
             ShowUIElementDropdown("选项", typeof(UIEdgeDetectionMode),
@@ -129,7 +129,7 @@ namespace SthGame
             {
                 view.edgeDetection_Effect.edgeColor = color;
             });
-            ShowUIElementDropdown("显示背景", view.edgeDetection_Effect.bgToggle == 1).SetListener((isOn) =>
+            ShowUIElementToggle("显示背景", view.edgeDetection_Effect.bgToggle == 1).SetListener((isOn) =>
             {
                 view.edgeDetection_Effect.bgToggle = isOn ? 1 : 0;
             });
@@ -138,22 +138,32 @@ namespace SthGame
                 view.edgeDetection_Effect.bgAlpha = value;
             });
         }
-        #endregion
 
-        #region Blur
         private void Blur_InitEffect()
         {
-            ShowUIElementDropdown("模糊算法", typeof(UIBlurMode), (int)view.blur_Effect.blurMode).SetListener((index) =>
-                {
-                    view.blur_Effect.blurMode = (UIBlurMode)index;
-                });
+            ShowUIElementDropdown("模糊算法", typeof(UIBlurMode), (int)view.blur_Effect.blurMode).SetListener(index =>
+            {
+                view.blur_Effect.blurMode = (UIBlurMode)index;
+            });
 
             ShowUIElementSlider("Factor", 0, 1, view.blur_Effect.factor).SetListener((value) =>
             {
                 view.blur_Effect.factor = value;
             });
         }
-        #endregion
+
+        private void Flip_InitEffect()
+        {
+            ShowUIElementToggle("Horizontal", view.flip_Effect.horizontal).SetListener(isOn =>
+            {
+                view.flip_Effect.horizontal = isOn;
+            });
+
+            ShowUIElementToggle("Vertical", view.flip_Effect.vertical).SetListener(isOn =>
+            {
+                view.flip_Effect.vertical = isOn;
+            });
+        }
 
         #region pool
         Dictionary<Type, Stack<UIElementBaseCtrl>> elementPoolDict = new Dictionary<Type, Stack<UIElementBaseCtrl>>();
@@ -235,7 +245,7 @@ namespace SthGame
             return colorSet;
         }
 
-        private UIElementToggleController ShowUIElementDropdown(string desc, bool isOn)
+        private UIElementToggleController ShowUIElementToggle(string desc, bool isOn)
         {
             var toggle = GetUIElement<UIElementToggleController>();
             toggle.InitBaseValue(desc, isOn);
@@ -271,5 +281,6 @@ namespace SthGame
         Hue,
         EdgeDetection,
         Blur,
+        Flip,
     }
 }

@@ -18,11 +18,12 @@ namespace SthGame
         public Button menuBtn_Hue;
         public Button menuBtn_EdgeDetection;
         public Button menuBtn_Blur;
+        public Button menuBtn_Flip;
 
-        // tone
         public UIToneEffect tone_Effect;
         public UIHSVModifier hue_Effect;
         public UIEdgeDetection edgeDetection_Effect;
         public UIBlur blur_Effect;
+        public UIFlip flip_Effect;
     }
 }

@@ -12,7 +12,7 @@ namespace SthGame
     [ExecuteInEditMode]
     [RequireComponent(typeof(Graphic))]
     [DisallowMultipleComponent]
-    public abstract class UIBaseEffect : UIBehaviour, IMaterialModifier
+    public abstract class UIBaseEffect : UIBehaviour, IMaterialModifier, IMeshModifier
     {
         private static readonly StringBuilder _StringBuilder = new StringBuilder();
         Graphic _graphic;
@@ -40,11 +40,13 @@ namespace SthGame
         protected override void OnEnable()
         {
             SetMaterialDirty();
+            SetVerticesDirty();
         }
 
         protected override void OnDisable()
         {
             SetMaterialDirty();
+            SetVerticesDirty();
         }
 
         protected override void OnValidate()
@@ -59,7 +61,12 @@ namespace SthGame
             if (graphic) graphic.SetMaterialDirty();
         }
 
-        public abstract string ShaderPath();
+        protected void SetVerticesDirty()
+        {
+            if (graphic) graphic.SetVerticesDirty();
+        }
+
+        public virtual string ShaderPath() { return ""; }
 
         protected virtual void UpdateParams()
         {
@@ -92,6 +99,19 @@ namespace SthGame
             }
 
             newMaterial.name = _StringBuilder.ToString();
+        }
+
+        public void ModifyMesh(Mesh mesh)
+        {
+        }
+
+        public void ModifyMesh(VertexHelper verts)
+        {
+            ModifyMesh(verts, graphic);
+        }
+
+        protected virtual void ModifyMesh(VertexHelper verts, Graphic g)
+        {
         }
     }
 }
