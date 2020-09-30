@@ -27,6 +27,8 @@ namespace SthGame
             view.menuBtn_EdgeDetection.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.EdgeDetection));
             view.menuBtn_Blur.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Blur));
             view.menuBtn_Flip.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Flip));
+            view.menuBtn_Shiny.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Shiny));
+            view.menuBtn_Transform.onClick.AddListener(() => OnClickMenuButton(EShaderDemoType.Transfrom));
         }
 
         private void OnClickClose()
@@ -48,25 +50,33 @@ namespace SthGame
             view.edgeDetection_Effect.gameObject.SetActive(type == EShaderDemoType.EdgeDetection);
             view.blur_Effect.gameObject.SetActive(type == EShaderDemoType.Blur);
             view.flip_Effect.gameObject.SetActive(type == EShaderDemoType.Flip);
+            view.shiny_Effect.gameObject.SetActive(type == EShaderDemoType.Shiny);
+            view.transform_Effect.gameObject.SetActive(type == EShaderDemoType.Transfrom);
 
             HideAllUIElements();
 
             switch (type)
             {
                 case EShaderDemoType.Tone:
-                    Tone_InitEffect();
+                    InitEffect_Tone();
                     break;
                 case EShaderDemoType.Hue:
-                    Hue_InitEffect();
+                    InitEffect_Hue();
                     break;
                 case EShaderDemoType.EdgeDetection:
-                    EdgeDetection_InitEffect();
+                    InitEffect_EdgeDetection();
                     break;
                 case EShaderDemoType.Blur:
-                    Blur_InitEffect();
+                    InitEffect_Blur();
                     break;
                 case EShaderDemoType.Flip:
-                    Flip_InitEffect();
+                    InitEffect_Flip();
+                    break;
+                case EShaderDemoType.Shiny:
+                    InitEffect_Shiny();
+                    break;
+                case EShaderDemoType.Transfrom:
+                    InitEffect_Transform();
                     break;
             }
         }
@@ -76,7 +86,7 @@ namespace SthGame
             return type.ToString();
         }
 
-        private void Tone_InitEffect()
+        private void InitEffect_Tone()
         {
             ShowUIElementDropdown("Tone选项", typeof(UIToneEffectMode),
                 (int)view.tone_Effect.effectMode).SetListener((index) =>
@@ -90,7 +100,7 @@ namespace SthGame
             });
         }
 
-        private void Hue_InitEffect()
+        private void InitEffect_Hue()
         {
             ShowUIElementColorSet("边缘颜色", view.hue_Effect.targetColor).SetListener((color) =>
             {
@@ -114,7 +124,7 @@ namespace SthGame
             });
         }
 
-        private void EdgeDetection_InitEffect()
+        private void InitEffect_EdgeDetection()
         {
             ShowUIElementDropdown("选项", typeof(UIEdgeDetectionMode),
                 (int)view.edgeDetection_Effect.edgeDetectionMode).SetListener((index) =>
@@ -139,7 +149,7 @@ namespace SthGame
             });
         }
 
-        private void Blur_InitEffect()
+        private void InitEffect_Blur()
         {
             ShowUIElementDropdown("模糊算法", typeof(UIBlurMode), (int)view.blur_Effect.blurMode).SetListener(index =>
             {
@@ -152,7 +162,7 @@ namespace SthGame
             });
         }
 
-        private void Flip_InitEffect()
+        private void InitEffect_Flip()
         {
             ShowUIElementToggle("Horizontal", view.flip_Effect.horizontal).SetListener(isOn =>
             {
@@ -163,6 +173,16 @@ namespace SthGame
             {
                 view.flip_Effect.vertical = isOn;
             });
+        }
+
+        private void InitEffect_Shiny()
+        {
+
+        }
+
+        private void InitEffect_Transform()
+        {
+
         }
 
         #region pool
@@ -282,5 +302,7 @@ namespace SthGame
         EdgeDetection,
         Blur,
         Flip,
+        Shiny,
+        Transfrom,
     }
 }
