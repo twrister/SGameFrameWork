@@ -53,9 +53,20 @@ namespace SthGame
                 Data = new FunctionListItemData("颜料板", null, EFunctionItemType.colorPlate)
             };
 
+            var aStarItem = new ListItemData()
+            {
+                Width = 380,
+                Height = 400,
+                Data = new FunctionListItemData("AStar", () =>
+                {
+                    GUIManager.Instance.Open<ShaderDemoController>();
+                })
+            };
+
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
             horDataList.Add(colorPlate);
+            horDataList.Add(aStarItem);
 
             horizontalListCtrl.SetListData(horDataList);
         }
