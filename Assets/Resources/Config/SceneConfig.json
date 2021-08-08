@@ -2,6 +2,7 @@
 	"GameScenes":[
 		{"SceneId" : 101, "SceneName" : "Login"},
 		{"SceneId" : 102, "SceneName" : "Main"},
+		{"SceneId" : 103, "SceneName" : "AStarDemo"},
 		{"SceneId" : 201, "SceneName" : "Level1"},
 		{"SceneId" : 202, "SceneName" : "Level2"},
 		{"SceneId" : 203, "SceneName" : "Level3"}

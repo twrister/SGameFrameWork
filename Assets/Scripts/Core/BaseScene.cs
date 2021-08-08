@@ -10,6 +10,7 @@ namespace SthGame
         private SceneInfo sceneInfo;
         public virtual void Init()
         {
+            GUIManager.Instance.Open<MainuiController>();
         }
 
         public virtual void ShutDown()
@@ -19,6 +20,7 @@ namespace SthGame
         public BaseScene(SceneInfo info)
         {
             sceneInfo = info;
+            Init();
         }
 
         public string SceneName { get { return sceneInfo.SceneName; } }

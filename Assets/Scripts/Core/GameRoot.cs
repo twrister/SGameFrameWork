@@ -59,10 +59,10 @@ namespace SthGame
 
             //NetworkSystem.Instance.InitClientPeer();
 
-            GUIManager.Instance.Open<FunctionListController>();
+            //GUIManager.Instance.Open<FunctionListController>();
 
             //GUIManager.Instance.Open<PacManFrontEndController>();
-            //GUIManager.Instance.Open<LoginController>();
+            GUIManager.Instance.Open<MainuiController>();
             //GUIManager.Instance.Open<ShaderDemoController>();
         }
 

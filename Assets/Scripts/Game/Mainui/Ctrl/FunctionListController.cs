@@ -59,7 +59,10 @@ namespace SthGame
                 Height = 400,
                 Data = new FunctionListItemData("AStar", () =>
                 {
-                    GUIManager.Instance.Open<ShaderDemoController>();
+                    //GUIManager.Instance.Open<ShaderDemoController>();
+                    //UnityEngine.SceneManagement.SceneManager.LoadScene("AStarDemo");
+                    GameSceneManager.Instance.LoadScene("AStarDemo");
+                    GUIManager.Instance.CloseAllUI();
                 })
             };
 
@@ -74,6 +77,12 @@ namespace SthGame
         private void OnClickClose()
         {
             Close();
+        }
+
+        public override void ShutDown()
+        {
+            base.ShutDown();
+
         }
     }
 }

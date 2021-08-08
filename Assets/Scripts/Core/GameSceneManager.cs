@@ -76,7 +76,7 @@ namespace SthGame
             LoadScene("Main");
         }
 
-        private void LoadScene(string sceneName)
+        public void LoadScene(string sceneName)
         {
             if (string.IsNullOrEmpty(sceneName)) return;
             if (sceneInfoDict.ContainsKey(sceneName))

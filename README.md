@@ -26,6 +26,7 @@ Used to build some games demo
 [3D shader](ReadMe/300_3Dshader.md)  
 
 ### TODO
-- 抽象出脚本中的属性，自动添加属性修改的UI
+- 弹上漂提示 dotween插件
+- 场景切换 重复的场景弹提示
 - navigation导航
 - 高斯模糊 弹窗的底
