@@ -23,13 +23,13 @@ namespace SthGame
 
             // Horizontal
             horizontalListCtrl = CreateChildController<CircularListController>(parent: view.horScrollRect.viewport.gameObject);
-            horizontalListCtrl.InitList<FunctionListItemController>(view.horScrollRect, EDirection.Horizontal, 1);
+            horizontalListCtrl.InitList<FunctionListItemController>(view.horScrollRect, EDirection.Horizontal, 2);
             List<ListItemData> horDataList = new List<ListItemData>();
 
             var exampleList = new ListItemData()
             {
-                Width = 380,
-                Height = 400,
+                Width = 250,
+                Height = 300,
                 Data = new FunctionListItemData("listview示例", () =>
                 {
                     GUIManager.Instance.Open<ExampleListShowController>();
@@ -38,8 +38,8 @@ namespace SthGame
 
             var shaderSample = new ListItemData()
             {
-                Width = 380,
-                Height = 400,
+                Width = 250,
+                Height = 300,
                 Data = new FunctionListItemData("shader示例", () =>
                 {
                     GUIManager.Instance.Open<ShaderDemoController>();
@@ -48,15 +48,15 @@ namespace SthGame
 
             var colorPlate = new ListItemData()
             {
-                Width = 380,
-                Height = 400,
+                Width = 250,
+                Height = 300,
                 Data = new FunctionListItemData("颜料板", null, EFunctionItemType.colorPlate)
             };
 
             var aStarItem = new ListItemData()
             {
-                Width = 380,
-                Height = 400,
+                Width = 250,
+                Height = 300,
                 Data = new FunctionListItemData("AStar", () =>
                 {
                     //GUIManager.Instance.Open<ShaderDemoController>();
@@ -66,10 +66,32 @@ namespace SthGame
                 })
             };
 
+            var noticeTipsItem = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("普通弹窗", () =>
+                {
+                    GUIManager.Instance.OpenTipsView("普通弹窗的文字");
+                })
+            };
+
+            var floatTipsItem = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("上漂提示", () =>
+                {
+                    GUIManager.Instance.OpenTipsView("上漂提示的文字");
+                })
+            };
+
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
             horDataList.Add(colorPlate);
             horDataList.Add(aStarItem);
+            horDataList.Add(noticeTipsItem);
+            horDataList.Add(floatTipsItem);
 
             horizontalListCtrl.SetListData(horDataList);
         }

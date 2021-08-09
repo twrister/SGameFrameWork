@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace SthGame
 {
-    public class NoticeTipsController : UIBaseController
+    public class NoticeTipsController : UIBasePopupController
     {
         UnityAction btnDelegate1;
         UnityAction btnDelegate2;
@@ -33,6 +33,8 @@ namespace SthGame
 
         protected override void OpenCallBack()
         {
+            base.OpenCallBack();
+
             FlushView();
         }
 

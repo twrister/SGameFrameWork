@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace SthGame
 {
-    public class NoticeTipsView : UIBaseView
+    public class NoticeTipsView : UIBasePopupView
     {
         public Button button1;
         public Button button2;

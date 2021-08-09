@@ -118,10 +118,9 @@ namespace CircularScrollView
                 if (i % columns == 0)       // 首item
                     itemPosX = 0;
 
-                dataList[i].Pos = IsHorizontal ?
-                    new Vector3(itemPosY, itemPosX) : new Vector3(itemPosX, -itemPosY);
+                dataList[i].Pos = IsHorizontal ? new Vector3(itemPosY, -itemPosX) : new Vector3(itemPosX, -itemPosY);
 
-                itemPosX += IsHorizontal ? dataList[i].Width : dataList[i].Height;
+                itemPosX += IsHorizontal ? dataList[i].Height : dataList[i].Width;
                 itemPosY = totalSize;
             }
 
