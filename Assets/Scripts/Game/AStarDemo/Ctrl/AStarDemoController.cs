@@ -8,6 +8,7 @@ namespace SthGame
     public class AStarDemoController : UIBaseController
     {
         AStarDemoView view;
+        List<AStarGridView> grigList = new List<AStarGridView>();
 
         protected override string GetResourcePath()
         {
@@ -24,12 +25,23 @@ namespace SthGame
         {
             base.OpenCallBack();
 
-            InitGrids();
+            InitGrids(10, 10);
         }
 
-        private void InitGrids()
+        private void InitGrids(int width, int height)
         {
+            grigList.Clear();
             //view
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    AStarGridView grid = GameObject.Instantiate<AStarGridView>(view.gridPrefab, view.gridPrefab.transform);
+                    //grid.posX = i;
+                    //grid.posY = j;
+                }
+            }
         }
     }
 }

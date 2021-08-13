@@ -59,6 +59,11 @@ namespace SthGame
             {
                 currentScene = new BaseScene(sceneInfoDict[scene.name]);
             }
+
+            if (currentScene != null)
+            {
+                currentScene.OnEnterScene();
+            }
         }
 
         public BaseScene GetCurrentScene()

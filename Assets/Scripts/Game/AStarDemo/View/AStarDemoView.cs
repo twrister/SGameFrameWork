@@ -8,6 +8,7 @@ namespace SthGame
     public class AStarDemoView : UIBaseView
     {
         public GameObject gridParent;
-        public GameObject gridPrefab;
+        //public GameObject gridPrefab;
+        public AStarGridView gridPrefab;
     }
 }

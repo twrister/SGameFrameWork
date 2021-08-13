@@ -61,8 +61,8 @@ namespace SthGame
                 {
                     //GUIManager.Instance.Open<ShaderDemoController>();
                     //UnityEngine.SceneManagement.SceneManager.LoadScene("AStarDemo");
-                    GameSceneManager.Instance.LoadScene("AStarDemo");
                     GUIManager.Instance.CloseAllUI();
+                    GameSceneManager.Instance.LoadScene("AStarDemo");
                 })
             };
 

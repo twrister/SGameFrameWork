@@ -10,7 +10,7 @@ namespace SthGame
         private SceneInfo sceneInfo;
         public virtual void Init()
         {
-            GUIManager.Instance.Open<MainuiController>();
+            
         }
 
         public virtual void ShutDown()
@@ -24,5 +24,10 @@ namespace SthGame
         }
 
         public string SceneName { get { return sceneInfo.SceneName; } }
+
+        public virtual void OnEnterScene()
+        {
+
+        }
     }
 }
