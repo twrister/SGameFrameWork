@@ -13,6 +13,9 @@ namespace SthGame
         public Text contentText;
         public CanvasGroup canvasGroup;
 
+        Tweener moveTweener;
+        Tweener fadeTweener;
+
         UnityAction fadeStartAction;                // 此回调用于触发下一个Tips
         UnityAction<SingleFloatTips> fadeEndAction; // 此回调用于回收Tips
 
@@ -35,19 +38,19 @@ namespace SthGame
             fadeEndAction = endaction;
             duration = inDuration;
             this.transform.localPosition = Vector3.down * moveDistance;
-            canvasGroup.DOFade(0f, 0f);
-            canvasGroup.DOFade(1f, animationDuration).SetEase(Ease.OutQuad);
-            this.transform.DOLocalMoveY(0, animationDuration).SetEase(Ease.InOutQuad).OnComplete(OnMoveComplete);
+            fadeTweener = canvasGroup.DOFade(0f, 0f);
+            fadeTweener = canvasGroup.DOFade(1f, animationDuration).SetEase(Ease.OutQuad);
+            moveTweener = this.transform.DOLocalMoveY(0, animationDuration).SetEase(Ease.InOutQuad).OnComplete(OnMoveComplete);
         }
 
         void OnMoveComplete()
         {
-            this.transform.DOLocalMoveY(moveDistance, animationDuration).
+            moveTweener = this.transform.DOLocalMoveY(moveDistance, animationDuration).
                 SetEase(Ease.InOutQuad).
                 OnStart(OnFadeStart).
                 OnComplete(OnFadeComplete).
                 SetDelay(duration);
-            canvasGroup.DOFade(0, animationDuration).SetEase(Ease.InQuad).SetDelay(duration);
+            fadeTweener = canvasGroup.DOFade(0, animationDuration).SetEase(Ease.InQuad).SetDelay(duration);
         }
 
         void OnFadeStart()
@@ -64,6 +67,14 @@ namespace SthGame
             {
                 fadeEndAction(this);
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (moveTweener != null) moveTweener.Kill();
+            if (fadeTweener != null) fadeTweener.Kill();
+
+            Debug.Log("ondes");
         }
     }
 }
