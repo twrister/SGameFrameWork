@@ -10,6 +10,7 @@ namespace SthGame
         public static GUIManager Instance { get; private set; }
 
         private List<UIBaseController> uiControllerList = new List<UIBaseController>();
+        FloatTipsController floatTipsController;
 
         public override void Init()
         {
@@ -44,7 +45,7 @@ namespace SthGame
         }
 
         private T CreateUIController<T>(
-            int context = 0, 
+            int context = 0,
             GameObject parent = null,
             UILayer uiLayer = UILayer.Common,
             Vector3 localPosition = new Vector3(),
@@ -116,9 +117,9 @@ namespace SthGame
         #region Tips View
 
         public void OpenTipsView(
-            string tipsContext = "notice", 
-            string confirmText = "确定", 
-            UnityAction btnDelegate1 = null, 
+            string tipsContext = "notice",
+            string confirmText = "确定",
+            UnityAction btnDelegate1 = null,
             string btnText2 = "",
             UnityAction btnDelegate2 = null)
         {
@@ -129,7 +130,7 @@ namespace SthGame
         }
 
         public void OpenHeadFrameChoose(
-            int defaultIdx = 0, 
+            int defaultIdx = 0,
             HeadFrameChooseController.ChoosedDelegate choosedDel = null)
         {
             var headFrameCtrl = Open<HeadFrameChooseController>(uiLayer: UILayer.Popup, openImmediately: false);
@@ -138,14 +139,27 @@ namespace SthGame
         }
 
         public void OpenColorPlate(
-            Color inColor, 
+            Color inColor,
             UnityAction<Color> callback,
             Transform attachTrans)
         {
             var colorPlate = Open<ColorPlateController>(uiLayer: UILayer.Popup, openImmediately: false);
-            
+
             colorPlate.SetColor(inColor, callback, attachTrans);
             colorPlate.Open();
+        }
+
+        public void ShowFloatTips(string content, float duration = 1.5f)
+        {
+            if (floatTipsController == null)
+            {
+                floatTipsController = Open<FloatTipsController>(uiLayer: UILayer.Notice);
+            }
+
+            if (floatTipsController != null)
+            {
+                floatTipsController.ShowFloatTips(content, duration);
+            }
         }
 
         #endregion

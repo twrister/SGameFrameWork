@@ -39,7 +39,7 @@ namespace SthGame
         }
 
         public void SetData(
-            string tips, 
+            string tips,
             string btnText1, UnityAction btnDel1 = null,
             string btnText2 = "", UnityAction btnDel2 = null)
         {

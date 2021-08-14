@@ -61,8 +61,8 @@ namespace SthGame
                 {
                     //GUIManager.Instance.Open<ShaderDemoController>();
                     //UnityEngine.SceneManagement.SceneManager.LoadScene("AStarDemo");
-                    GUIManager.Instance.CloseAllUI();
-                    GameSceneManager.Instance.LoadScene("AStarDemo");
+                    //GUIManager.Instance.CloseAllUI();
+                    //GameSceneManager.Instance.LoadScene("AStarDemo");
                 })
             };
 
@@ -82,7 +82,9 @@ namespace SthGame
                 Height = 300,
                 Data = new FunctionListItemData("上漂提示", () =>
                 {
-                    GUIManager.Instance.OpenTipsView("上漂提示的文字");
+                    float duration = Random.Range(1f, 3f);
+                    string content = string.Format("上漂提示文字,持续{0:0.00}秒", duration);
+                    GUIManager.Instance.ShowFloatTips(content, duration);
                 })
             };
 
