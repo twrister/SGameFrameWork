@@ -1,0 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace SthGame
+{
+    public class {name}Controller : UIBaseController
+    {
+        {name}View view;
+
+        protected override string GetResourcePath()
+        {
+            return "Prefabs/{name}";
+        }
+
+        public override void Init()
+        {
+            base.Init();
+            view = UINode as {name}View;
+        }
+
+        protected override void OpenCallBack()
+        {
+            base.OpenCallBack();
+
+        }
+    }
+}

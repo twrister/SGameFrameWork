@@ -7,7 +7,6 @@ namespace EmojiText.Taurus
 {
     public class DrawSpriteAsset
     {
-        private string _assetPath = "配置文件暂未保存";
         private Vector2 _spritesScrollView = Vector2.zero;
         private int _showIndex = -1;
         private SpriteAsset _spriteAsset;
