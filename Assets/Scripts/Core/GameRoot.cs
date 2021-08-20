@@ -39,6 +39,7 @@ namespace SthGame
 
             systemList.Clear();
             systemList.Add(new GlobalEventSystem());
+            systemList.Add(new GlobalTimerManager());
             systemList.Add(new NetworkSystem());
             systemList.Add(new DataStoreManager());
             systemList.Add(new GameSceneManager());

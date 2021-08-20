@@ -88,14 +88,39 @@ namespace SthGame
                 })
             };
 
+
+            var timerItem = new ListItemData()
+            {
+                Width = 250, Height = 300,
+                Data = new FunctionListItemData("Start Timer", OnClickTimerDemo)
+            };
+
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
             horDataList.Add(colorPlate);
             horDataList.Add(aStarItem);
             horDataList.Add(noticeTipsItem);
             horDataList.Add(floatTipsItem);
+            horDataList.Add(timerItem);
 
             horizontalListCtrl.SetListData(horDataList);
+        }
+
+        Timer timer = null;
+        private void OnClickTimerDemo()
+        {
+            if (timer != null)
+            {
+                GlobalTimerManager.Instance.ClearTimer(timer);
+                Logger.Log("clear timer : {0}", timer.ToString());
+            }
+            else
+            {
+                Logger.Log("start timer");
+                timer = GlobalTimerManager.Instance.StartTimer(1, true, () => {
+                    Logger.Log("timer : {0}", timer.ToString());
+                });
+            }
         }
 
         private void OnClickClose()
