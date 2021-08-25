@@ -15,5 +15,7 @@ namespace SthGame
         public Button colorBtn;
         public Image colorImg;
         public Text valuesTxt;
+
+        public RedPointView redPoint;
     }
 }

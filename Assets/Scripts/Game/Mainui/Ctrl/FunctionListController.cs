@@ -95,6 +95,16 @@ namespace SthGame
                 Data = new FunctionListItemData("Start Timer", OnClickTimerDemo)
             };
 
+            var redDotDemo = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("红点", () => {
+                    GUIManager.Instance.Open<RedPointDemoController>();
+                },
+                redPoint: ERedPointType.RedPointDemo)
+            };
+
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
             horDataList.Add(colorPlate);
@@ -102,6 +112,7 @@ namespace SthGame
             horDataList.Add(noticeTipsItem);
             horDataList.Add(floatTipsItem);
             horDataList.Add(timerItem);
+            horDataList.Add(redDotDemo);
 
             horizontalListCtrl.SetListData(horDataList);
         }

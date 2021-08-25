@@ -94,5 +94,6 @@ namespace SthGame
         UserInfo,
         Chat,
         PacMan,
+        RedPoint,
     }
 }

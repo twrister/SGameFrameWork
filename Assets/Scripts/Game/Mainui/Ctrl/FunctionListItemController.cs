@@ -61,6 +61,11 @@ namespace SthGame
                     RefreshColorView();
                     break;
             }
+
+            if (view.redPoint != null)
+            {
+                view.redPoint.InitRedPointType(data.redPointType);
+            }
         }
 
         private void RefreshNormalView()

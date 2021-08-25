@@ -44,6 +44,7 @@ namespace SthGame
             systemList.Add(new DataStoreManager());
             systemList.Add(new GameSceneManager());
             systemList.Add(new GUIManager());
+            systemList.Add(new RedPointManager());
 
             // Game Logic Module
             systemList.Add(new UserInfoSystem()); 
@@ -60,11 +61,10 @@ namespace SthGame
 
             //NetworkSystem.Instance.InitClientPeer();
 
-            //GUIManager.Instance.Open<FunctionListController>();
-
-            //GUIManager.Instance.Open<PacManFrontEndController>();
+            RedPointManager.Instance.SetRedPointNum(ERedPointType.RedPointDemoSub1, 1);
+            RedPointManager.Instance.SetRedPointNum(ERedPointType.RedPointDemoSub2, 1);
+            RedPointManager.Instance.SetRedPointNum(ERedPointType.RedPointDemoSub3, 1);
             GUIManager.Instance.Open<MainuiController>();
-            //GUIManager.Instance.Open<ShaderDemoController>();
         }
 
         void Update()
