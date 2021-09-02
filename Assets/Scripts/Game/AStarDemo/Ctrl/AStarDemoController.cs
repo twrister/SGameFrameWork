@@ -22,6 +22,7 @@ namespace SthGame
             view = UINode as AStarDemoView;
 
             view.closeButton.onClick.AddListener(Close);
+            view.stepSlider.maxValue = 100f;
             view.stepSlider.onValueChanged.AddListener(OnStepSliderValueChanged);
             view.stepSlider.value = 5f;
 
@@ -56,15 +57,15 @@ namespace SthGame
             set
             {
                 _step = value;
-                //DoBFS();
+                DoBFS();
             }
         }
 
         AStarMapData curMapData;
-        int gridEdge { get { return curMapData.edgeLen; } }
-        int mapWidth { get { return curMapData.mapWidth; } }
-        int mapHeight { get { return curMapData.mapHeight; } }
-        int gridCount { get { return curMapData.mapWidth * curMapData.mapHeight; } }
+        int gridEdge { get { return curMapData == null ? 0 : curMapData.EdgeLen; } }
+        int mapWidth { get { return curMapData == null ? 0 : curMapData.MapWidth; } }
+        int mapHeight { get { return curMapData == null ? 0 : curMapData.MapHeight; } }
+        int gridCount { get { return curMapData == null ? 0 : curMapData.GridCount; } }
 
         private void InitGrids()
         {
@@ -95,31 +96,21 @@ namespace SthGame
 
             view.player.InitMovableItem(new Vector2Int(0, 0), gridEdge, mapWidth, mapHeight, view.gridParent.transform, OnPlayerPosChanged);
             view.target.InitMovableItem(new Vector2Int(mapWidth - 1, mapHeight - 1), gridEdge, mapWidth, mapHeight, view.gridParent.transform);
+
+            UpdateGrids();
         }
 
         void UpdateGrids()
         {
             for (int i = 0; i < gridList.Count; i++)
             {
-                int tag = gridTagArray[i];
-                if (tag == 0)
-                {
-                    gridList[i].gridImage.color = Color.white;
-                }
-                else if (tag == 1)
-                {
-                    gridList[i].gridImage.color = Color.gray;
-                }
-                else if (tag == 2)
-                {
-                    gridList[i].gridImage.color = Color.blue;
-                }
+                gridList[i].SetGridState(curMapData.showArray[i], curMapData.IsBlock(i));
             }
         }
 
         void OnPlayerPosChanged()
         {
-            //DoBFS();
+            DoBFS();
         }
 
         void OnTargetPosChanged()
@@ -136,10 +127,11 @@ namespace SthGame
         private void AStarOnClickGrid(object[] ps)
         {
             int index = (int)ps[0];
-            if (index < gridList.Count)
+            if (index < gridCount)
             {
-                int preGridType = (int)gridList[index].GridType;
-                gridList[index].GridType = (EWayFindingGridType)((preGridType + 1) % (int)EWayFindingGridType.__Count);
+                int state = curMapData[index];
+                curMapData[index] = 1 - state;  // 目前只有墙跟普通格子
+                DoBFS();
             }
         }
 
@@ -199,130 +191,115 @@ namespace SthGame
             return gridPos;
         }
 
-        bool IsBlock(int index)
-        {
-            var grid = GetGridByIndex(index);
-            if (grid == null) return true;
-            return grid.GridType == EWayFindingGridType.Block;
-        }
+        //bool IsBlock(int index)
+        //{
+        //    var grid = GetGridByIndex(index);
+        //    if (grid == null) return true;
+        //    return grid.GridType == EWayFindingGridType.Block;
+        //}
 
-        AStarGridView GetGridByIndex(int index)
-        {
-            if (gridList.Count == 0 || index < 0 || index >= gridList.Count) return null;
-            return gridList[index];
-        }
-
-        AStarGridView GetUpwardGrid(AStarGridView grid)
-        {
-            if (grid == null || grid.posY == mapHeight - 1) return null;
-            int index = grid.Index + 1;
-            return GetGridByIndex(index);
-        }
-
-        AStarGridView GetDownwardGrid(AStarGridView grid)
-        {
-            if (grid == null || grid.posY == 0) return null;
-            int index = grid.Index - 1;
-            return GetGridByIndex(index);
-        }
-
-        AStarGridView GetLeftwardGrid(AStarGridView grid)
-        {
-            if (grid == null || grid.posX == 0) return null;
-            int index = grid.Index - grid.MapHeight;
-            return GetGridByIndex(index);
-        }
-
-        AStarGridView GetRightwardGrid(AStarGridView grid)
-        {
-            if (grid == null || grid.posY == mapHeight - 1) return null;
-            int index = grid.Index + grid.MapHeight;
-            return GetGridByIndex(index);
-        }
+        //AStarGridView GetGridByIndex(int index)
+        //{
+        //    if (gridList.Count == 0 || index < 0 || index >= gridList.Count) return null;
+        //    return gridList[index];
+        //}
 
         int GetRightwardGridIndex(int index)
         {
-            if (index < 0 || index >= mapWidth * mapHeight) return -1;
+            if (index < 0 || index >= (mapWidth - 1) * mapHeight) return -1;
             return index + mapHeight;
         }
 
-        void SetGridColor(int index)
+        int GetDownwardGridIndex(int index)
         {
-            var grid = GetGridByIndex(index);
-            grid.gridImage.color = Color.blue;
+            if (index < 0 || index >= mapWidth * mapHeight || mapHeight == 0 || index % mapHeight == 0) return -1;
+            return index - 1;
         }
+
+        int GetLefttwardGridIndex(int index)
+        {
+            if (index < mapHeight || index >= mapWidth * mapHeight) return -1;
+            return index - mapHeight;
+        }
+
+        int GetUpwardGridIndex(int index)
+        {
+            if (index < 0 || index >= mapWidth * mapHeight || mapHeight == 0 || index % mapHeight == (mapHeight - 1)) return -1;
+            return index + 1;
+        }
+
+        //void SetGridColor(int index)
+        //{
+        //    var grid = GetGridByIndex(index);
+        //    grid.gridImage.color = Color.blue;
+        //}
 
         #endregion
 
         #region BFS
-        //List<int> frontierList = new List<int>();
-        int[] gridTagArray;
-        Queue<int> frontierQueue;
-        //List<int> reachedList = new List<int>();
-        //WaitForSeconds wait1s = new WaitForSeconds(1);
+        Queue<int> frontierQueue = new Queue<int>();
+        int[] neighborArray = new int[4];
         bool[] reachedArray;
 
         void DoBFS()
         {
             if (mapWidth == 0 || mapHeight == 0) return;
+            if (view.player.Index >= gridCount) return; 
 
-            frontierQueue = new Queue<int>();
-
+            frontierQueue.Clear();
             frontierQueue.Enqueue(view.player.Index);
-            List<int> neighbors = new List<int>();
 
-            gridTagArray = new int[mapWidth * mapHeight];
             reachedArray = new bool[mapWidth * mapHeight];
-
             reachedArray[view.player.Index] = true;
 
-            for (int i = 0; i < Step; i++)
+            int curStep = 0;
+            while (curStep < Step)
             {
                 if (frontierQueue.Count > 0)
                 {
                     int curIndex = frontierQueue.Dequeue();
-                    neighbors = GetNeighborIndexs(curIndex);
-
-                    foreach (var nei in neighbors)
+                    //neighbors = GetNeighborIndexs(curIndex);
+                    CalcNeighborIndexs(ref neighborArray, curIndex);
+                    for (int i = 0; i < neighborArray.Length; i++)
                     {
-                        if (!reachedArray[nei])
+                        if (neighborArray[i] >= 0 && !reachedArray[neighborArray[i]])
                         {
-                            frontierQueue.Enqueue(nei);
-                            reachedArray[nei] = true;
+                            if (curMapData.IsBlock(neighborArray[i]))
+                            {
+                                reachedArray[neighborArray[i]] = true;
+                            }
+                            else
+                            {
+                                frontierQueue.Enqueue(neighborArray[i]);
+                                reachedArray[neighborArray[i]] = true;
+                            }
                         }
                     }
                 }
+                curStep++;
             }
 
-            for (int i = 0; i < gridTagArray.Length; i++)
+            curMapData.ClearShowArray();
+            for (int i = 0; i < reachedArray.Length; i++)
             {
-                if (reachedArray[i])
-                {
-                    gridTagArray[i] = 1;
-                }
+                curMapData.showArray[i] = reachedArray[i] ? AStarGridView.REACHED : curMapData.showArray[i];
             }
 
-            for (int i = 0; i < neighbors.Count; i++)
+            while (frontierQueue.Count > 0)
             {
-                gridTagArray[neighbors[i]] = 2;
+                int index = frontierQueue.Dequeue();
+                curMapData.showArray[index] = AStarGridView.FRONTIER;
             }
 
             UpdateGrids();
         }
 
-        List<int> GetNeighborIndexs(int curIndex)
+        void CalcNeighborIndexs(ref int[] neighbors, int curIndex)
         {
-            var result = new List<int>();
-            var cur = GetGridByIndex(curIndex);
-            var right = GetRightwardGrid(cur);
-            if (right != null) result.Add(right.Index);
-            var down = GetDownwardGrid(cur);
-            if (down != null) result.Add(down.Index);
-            var left = GetLeftwardGrid(cur);
-            if (left != null) result.Add(left.Index);
-            var up = GetUpwardGrid(cur);
-            if (up != null) result.Add(up.Index);
-            return result;
+            neighbors[0] = GetRightwardGridIndex(curIndex);
+            neighbors[1] = GetDownwardGridIndex(curIndex);
+            neighbors[2] = GetLefttwardGridIndex(curIndex);
+            neighbors[3] = GetUpwardGridIndex(curIndex);
         }
 
         #endregion

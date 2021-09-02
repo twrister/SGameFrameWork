@@ -14,11 +14,18 @@ namespace SthGame
 
     public class AStarGridView : MonoBehaviour
     {
+        public const int NORMAL = 0;
+        public const int BLOCK = 1;
+        public const int REACHED = 2;
+        public const int FRONTIER = 3;
+
         public Button gridButton;
         public Image gridImage;
         public Text indexText;
 
-        static Color blockColor = new Color(0.4f, 0.4f, 0.4f);
+        static Color block_Color = new Color(0.4f, 0.4f, 0.4f);
+        static Color reached_Color = new Color(0.8f, 0.8f, 0.8f);
+        static Color frontier_Color = new Color(0.9f, 0.6f, 0.6f);
 
         public int posX { get; private set; }
         public int posY { get; private set; }
@@ -27,22 +34,41 @@ namespace SthGame
             get { return posX * MapHeight + posY; }
         }
 
-        EWayFindingGridType _gridType;
-        public EWayFindingGridType GridType
+        //EWayFindingGridType _gridType;
+        //public EWayFindingGridType GridType
+        //{
+        //    get { return _gridType; }
+        //    set
+        //    {
+        //        _gridType = value;
+        //        switch (_gridType)
+        //        {
+        //            case EWayFindingGridType.Normal:
+        //                gridImage.color = Color.white;
+        //                break;
+        //            case EWayFindingGridType.Block:
+        //                gridImage.color = blockColor;
+        //                break;
+        //        }
+        //    }
+        //}
+        public void SetGridState(int state, bool isBlock)
         {
-            get { return _gridType; }
-            set
+            state = isBlock ? BLOCK : state;
+            switch (state)
             {
-                _gridType = value;
-                switch (_gridType)
-                {
-                    case EWayFindingGridType.Normal:
-                        gridImage.color = Color.white;
-                        break;
-                    case EWayFindingGridType.Block:
-                        gridImage.color = blockColor;
-                        break;
-                }
+                case NORMAL:
+                    gridImage.color = Color.white;
+                    break;
+                case BLOCK:
+                    gridImage.color = block_Color;
+                    break;
+                case REACHED:
+                    gridImage.color = reached_Color;
+                    break;
+                case FRONTIER:
+                    gridImage.color = frontier_Color;
+                    break;
             }
         }
 
@@ -57,14 +83,13 @@ namespace SthGame
         public int MapWidth { get; private set; }
         public int MapHeight { get; private set; }
 
-        public void InitPos(int x, int y, int inEdge, int tX, int tY, EWayFindingGridType type = EWayFindingGridType.Normal)
+        public void InitPos(int x, int y, int inEdge, int tX, int tY)
         {
             posX = x;
             posY = y;
             GridEdge = inEdge;
             MapWidth = tX;
             MapHeight = tY;
-            GridType = type;
             indexText.text = Index.ToString();
             CalcPos();
         }
