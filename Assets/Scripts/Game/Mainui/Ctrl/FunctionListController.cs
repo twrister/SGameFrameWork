@@ -82,7 +82,7 @@ namespace SthGame
                 Height = 300,
                 Data = new FunctionListItemData("上漂提示", () =>
                 {
-                    float duration = Random.Range(1f, 3f);
+                    float duration = Random.Range(0.5f, 1.5f);
                     string content = string.Format("上漂提示文字,持续{0:0.00}秒", duration);
                     GUIManager.Instance.ShowFloatTips(content, duration);
                 })

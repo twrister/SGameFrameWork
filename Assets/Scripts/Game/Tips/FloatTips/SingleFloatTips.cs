@@ -40,13 +40,15 @@ namespace SthGame
             this.transform.localPosition = Vector3.down * moveDistance;
             fadeTweener = canvasGroup.DOFade(0f, 0f);
             fadeTweener = canvasGroup.DOFade(1f, animationDuration).SetEase(Ease.OutQuad);
-            moveTweener = this.transform.DOLocalMoveY(0, animationDuration).SetEase(Ease.InOutQuad).OnComplete(OnMoveComplete);
+            moveTweener = this.transform.DOLocalMoveY(0, animationDuration).
+                SetEase(Ease.OutQuad).
+                OnComplete(OnMoveComplete);
         }
 
         void OnMoveComplete()
         {
             moveTweener = this.transform.DOLocalMoveY(moveDistance, animationDuration).
-                SetEase(Ease.InOutQuad).
+                SetEase(Ease.OutQuad).
                 OnStart(OnFadeStart).
                 OnComplete(OnFadeComplete).
                 SetDelay(duration);
