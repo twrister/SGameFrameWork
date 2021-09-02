@@ -51,5 +51,20 @@ namespace SthGame
                 }
             }
         }
+
+        protected Coroutine StartCoroutine(IEnumerator routine)
+        {
+            return GameRoot.Instance.StartCoroutine(routine);
+        }
+
+        protected void StopCoroutine(Coroutine coroutine)
+        {
+            GameRoot.Instance.StopCoroutine(coroutine);
+        }
+
+        protected void StopCoroutine(string coroutineName)
+        {
+            GameRoot.Instance.StopCoroutine(coroutineName);
+        }
     }
 }

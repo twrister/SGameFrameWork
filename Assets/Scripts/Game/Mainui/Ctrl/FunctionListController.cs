@@ -59,7 +59,7 @@ namespace SthGame
                 Height = 300,
                 Data = new FunctionListItemData("AStar", () =>
                 {
-                    //GUIManager.Instance.Open<ShaderDemoController>();
+                    GUIManager.Instance.Open<AStarDemoController>();
                     //UnityEngine.SceneManagement.SceneManager.LoadScene("AStarDemo");
                     //GUIManager.Instance.CloseAllUI();
                     //GameSceneManager.Instance.LoadScene("AStarDemo");

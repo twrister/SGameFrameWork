@@ -7,8 +7,14 @@ namespace SthGame
 {
     public class AStarDemoView : UIBaseView
     {
+        public Button closeButton;
+
         public GameObject gridParent;
-        //public GameObject gridPrefab;
         public AStarGridView gridPrefab;
+
+        public AStarMovableItem player;
+        public AStarMovableItem target;
+
+        public Slider stepSlider;
     }
 }
