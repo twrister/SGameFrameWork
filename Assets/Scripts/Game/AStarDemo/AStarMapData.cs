@@ -29,11 +29,6 @@ namespace SthGame
             showArray = new int[MapWidth * MapHeight];
         }
 
-        //public void CopyBlockArrayToShowArray()
-        //{
-        //    Array.Copy(blockArray, showArray, blockArray.Length);
-        //}
-
         public int this[int index]
         {
             get

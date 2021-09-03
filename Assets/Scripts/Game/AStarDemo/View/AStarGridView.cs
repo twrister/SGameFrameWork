@@ -18,14 +18,20 @@ namespace SthGame
         public const int BLOCK = 1;
         public const int REACHED = 2;
         public const int FRONTIER = 3;
+        public const int PATH = 4;
 
         public Button gridButton;
         public Image gridImage;
         public Text indexText;
 
-        static Color block_Color = new Color(0.4f, 0.4f, 0.4f);
-        static Color reached_Color = new Color(0.8f, 0.8f, 0.8f);
-        static Color frontier_Color = new Color(0.9f, 0.6f, 0.6f);
+        static Dictionary<int, Color> GRID_COLOR_DICT = new Dictionary<int, Color>()
+        {
+            { NORMAL,   Color.white},
+            { BLOCK,    new Color(0.4f, 0.4f, 0.4f)},
+            { REACHED,  new Color(0.8f, 0.8f, 0.8f)},
+            { FRONTIER, new Color(0.9f, 0.6f, 0.6f)},
+            { PATH,     new Color(0.2f, 0.9f, 0.7f)},
+        };
 
         public int posX { get; private set; }
         public int posY { get; private set; }
@@ -34,42 +40,10 @@ namespace SthGame
             get { return posX * MapHeight + posY; }
         }
 
-        //EWayFindingGridType _gridType;
-        //public EWayFindingGridType GridType
-        //{
-        //    get { return _gridType; }
-        //    set
-        //    {
-        //        _gridType = value;
-        //        switch (_gridType)
-        //        {
-        //            case EWayFindingGridType.Normal:
-        //                gridImage.color = Color.white;
-        //                break;
-        //            case EWayFindingGridType.Block:
-        //                gridImage.color = blockColor;
-        //                break;
-        //        }
-        //    }
-        //}
         public void SetGridState(int state, bool isBlock)
         {
             state = isBlock ? BLOCK : state;
-            switch (state)
-            {
-                case NORMAL:
-                    gridImage.color = Color.white;
-                    break;
-                case BLOCK:
-                    gridImage.color = block_Color;
-                    break;
-                case REACHED:
-                    gridImage.color = reached_Color;
-                    break;
-                case FRONTIER:
-                    gridImage.color = frontier_Color;
-                    break;
-            }
+            gridImage.color = GRID_COLOR_DICT.ContainsKey(state) ? GRID_COLOR_DICT[state] : Color.white;
         }
 
         public void Reset()
@@ -109,13 +83,7 @@ namespace SthGame
 
         void OnClickGrid()
         {
-            //GridType = (EGridType)(((int)GridType + 1) % (int)EGridType.__Count);
-
             GlobalEventSystem.Instance.Fire(EventId.aStarOnClickGrid, Index);
-
-            //Logger.Log("grid's local pos = {0}", transform.localPosition.ToString());
         }
-
-        //public 
     }
 }

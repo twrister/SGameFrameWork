@@ -9,7 +9,7 @@ namespace SthGame
     public class FloatTipsController : UIBaseController
     {
         FloatTipsView view;
-        Stack<Tuple<string, float>> contentStack = new Stack<Tuple<string, float>>();
+        Queue<Tuple<string, float>> contentQueue = new Queue<Tuple<string, float>>();
         
 
         bool isPlaying = false;
@@ -35,7 +35,7 @@ namespace SthGame
         {
             if (string.IsNullOrEmpty(content)) return;
 
-            contentStack.Push(new Tuple<string, float>(content, duration));
+            contentQueue.Enqueue(new Tuple<string, float>(content, duration));
             TryPopOneTips();
         }
 
@@ -48,14 +48,14 @@ namespace SthGame
 
         private void PopOneTips()
         {
-            if (contentStack.Count == 0)
+            if (contentQueue.Count == 0)
             {
                 isPlaying = false;
                 return;
             }
 
             isPlaying = true;
-            var tuple = contentStack.Pop();
+            var tuple = contentQueue.Dequeue();
             string content = tuple.Item1;
             float duration = tuple.Item2;
             var Tips = GetOneFloatTips();
