@@ -125,7 +125,7 @@ namespace SthGame
                             arrowList.Add(GetOneArrow());
                         }
                         arrowList[arrowCount - 1].transform.position = gridList[i].transform.position;
-                        float angle = GetArrowAngle(i, cameFromArray[i]);
+                        float angle = GetArrowAngle(i, cameFromArray[i] - 1);   // came from 赋值时+1了，读取时-1
                         arrowList[arrowCount - 1].transform.localRotation = Quaternion.Euler(0, 0, angle);
                     }
                 }
@@ -393,8 +393,8 @@ namespace SthGame
                     CalcNeighborIndexs(ref neighborArray, curIndex);
                     for (int i = 0; i < neighborArray.Length; i++)
                     {
-                        // 找到邻边有效的grid，并且没被标记从哪来的
-                        if (neighborArray[i] > 0 && cameFromArray[neighborArray[i]] == 0)
+                        // 找到邻边有效的,并且没被标记的grid
+                        if (neighborArray[i] >= 0 && cameFromArray[neighborArray[i]] == 0)
                         {
                             if (curMapData.IsBlock(neighborArray[i]))
                             {
@@ -403,7 +403,7 @@ namespace SthGame
                             else
                             {
                                 frontierQueue.Enqueue(neighborArray[i]);
-                                cameFromArray[neighborArray[i]] = curIndex;         // 标记来自哪个grid
+                                cameFromArray[neighborArray[i]] = curIndex + 1;         // 标记来自哪个grid，记录Index +1，避免默认指向第一个格子的情况
                             }
                         }
                     }
@@ -423,7 +423,7 @@ namespace SthGame
                 while (current != view.player.Index)
                 {
                     pathList.Add(current);
-                    current = cameFromArray[current];
+                    current = cameFromArray[current] - 1;   // 前面记录的时候 +1了，这里读取时 -1
                 }
             }
 
