@@ -23,5 +23,8 @@ namespace SthGame
         public Toggle arrowToggle;
 
         public Toggle earlyExitToggle;
+
+        public Toggle bfsToggle;
+        public Toggle aStarToggle;
     }
 }

@@ -5,6 +5,12 @@ using System;
 
 namespace SthGame
 {
+    public enum ESearchMode
+    {
+        BFS,
+        AStar,
+    }
+
     public class AStarDemoController : UIBaseController
     {
         AStarDemoView view;
@@ -29,6 +35,9 @@ namespace SthGame
             view.stepToggle.onValueChanged.AddListener(OnStepToggleChanged);
             view.earlyExitToggle.onValueChanged.AddListener(OnEarlyExitToggleChanged);
 
+            view.bfsToggle.onValueChanged.AddListener(OnBFSToggleChanged);
+            view.aStarToggle.onValueChanged.AddListener(OnAStarToggleChanged);
+
             GlobalEventSystem.Instance.Bind(EventId.aStarOnClickGrid, AStarOnClickGrid);
         }
 
@@ -50,7 +59,6 @@ namespace SthGame
         protected override void HideCallBack()
         {
             base.HideCallBack();
-
         }
 
         AStarMapData curMapData;
@@ -94,7 +102,7 @@ namespace SthGame
 
             view.stepSlider.maxValue = (float)gridCount;
 
-            DoBFS();
+            DoSearch();
         }
 
         #region display
@@ -156,12 +164,12 @@ namespace SthGame
         #region UI Logic
         void OnPlayerPosChanged()
         {
-            DoBFS();
+            DoSearch();
         }
 
         void OnTargetPosChanged()
         {
-            DoBFS();
+            DoSearch();
         }
 
         int _step;
@@ -171,7 +179,7 @@ namespace SthGame
             set
             {
                 _step = value;
-                DoBFS();
+                DoSearch();
             }
         }
 
@@ -193,7 +201,7 @@ namespace SthGame
             set
             {
                 _showStep = value;
-                DoBFS();
+                DoSearch();
             }
         }
 
@@ -204,7 +212,7 @@ namespace SthGame
             set
             {
                 _earlyExit = value;
-                DoBFS();
+                DoSearch();
             }
         }
 
@@ -228,6 +236,30 @@ namespace SthGame
             EarlyExit = isOn;
         }
 
+        ESearchMode _searchMode = ESearchMode.BFS;
+        ESearchMode SearchMode
+        {
+            get { return _searchMode; }
+            set
+            {
+                if (_searchMode != value)
+                {
+                    _searchMode = value;
+                    DoSearch();
+                }
+            }
+        }
+
+        void OnBFSToggleChanged(bool isOn)
+        {
+            if (isOn) SearchMode = ESearchMode.BFS;
+        }
+
+        void OnAStarToggleChanged(bool isOn)
+        {
+            if (isOn) SearchMode = ESearchMode.AStar;
+        }
+
         private void AStarOnClickGrid(object[] ps)
         {
             int index = (int)ps[0];
@@ -235,7 +267,7 @@ namespace SthGame
             {
                 int state = curMapData[index];
                 curMapData[index] = 1 - state;  // 目前只有墙跟普通格子
-                DoBFS();
+                DoSearch();
             }
         } 
         #endregion
@@ -360,6 +392,21 @@ namespace SthGame
 
         #endregion
 
+        void DoSearch()
+        {
+            switch (SearchMode)
+            {
+                case ESearchMode.BFS:
+                    DoBFS();
+                    break;
+                case ESearchMode.AStar:
+                    DoAStar();
+                    break;
+            }
+
+            UpdateGrids();
+        }
+
         #region BFS
         Queue<int> frontierQueue = new Queue<int>();
         int[] neighborArray = new int[4];       // 储存临时的探索边界
@@ -444,8 +491,6 @@ namespace SthGame
             {
                 curMapData.showArray[pathList[i]] = AStarGridView.PATH;
             }
-
-            UpdateGrids();
         }
 
         void CalcNeighborIndexs(ref int[] neighbors, int curIndex)
@@ -458,6 +503,14 @@ namespace SthGame
             neighbors[single ? 1 : 2] = GetDownwardGridIndex(curIndex);
             neighbors[single ? 2 : 1] = GetLefttwardGridIndex(curIndex);
             neighbors[single ? 3 : 0] = GetUpwardGridIndex(curIndex);
+        }
+        #endregion
+
+        #region AStar
+
+        void DoAStar()
+        {
+
         }
         #endregion
     }
