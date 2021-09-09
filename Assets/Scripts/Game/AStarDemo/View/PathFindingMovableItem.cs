@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace SthGame
 {
-    public class AStarMovableItem : MonoBehaviour, IDragHandler
+    public class PathFindingMovableItem : MonoBehaviour, IDragHandler
     {
         int gridEdge = 0;
         int mapWidth = 0;
@@ -18,8 +18,15 @@ namespace SthGame
         {
             set
             {
-                _gridPos = value;
-                AStarDemoController.SetLocalPosByGridPos(this.transform, _gridPos.x, _gridPos.y, gridEdge, mapWidth, mapHeight);
+                if (_gridPos != value)
+                {
+                    _gridPos = value;
+                    PathFindingBaseController.SetLocalPosByGridPos(this.transform, _gridPos.x, _gridPos.y, gridEdge, mapWidth, mapHeight);
+                    if (onPosChanged != null)
+                    {
+                        onPosChanged();
+                    }
+                }
             }
             get { return _gridPos; }
         }
@@ -60,17 +67,7 @@ namespace SthGame
             if (RectTransformUtility.ScreenPointToWorldPointInRectangle(Rect, eventData.position, eventData.pressEventCamera, out worldMousePos))
             {
                 var localPos = gridParent.InverseTransformVector(worldMousePos);
-                Vector2Int gridPos = AStarDemoController.GetGridPosByLocalPos(localPos.x, localPos.y, gridEdge, mapWidth, mapHeight);
-                if (gridPos != GridPos)
-                {
-                    GridPos = gridPos;
-                    //Debug.Log("gridPos = " + gridPos.ToString());
-
-                    if (onPosChanged != null)
-                    {
-                        onPosChanged();
-                    }
-                }
+                GridPos = PathFindingBaseController.GetGridPosByLocalPos(localPos.x, localPos.y, gridEdge, mapWidth, mapHeight);
             }
         }
     }

@@ -62,7 +62,7 @@ namespace SthGame
             {
                 if (delegateInfo == null)
                 {
-                    delegateInfo = Pool<RedPointDelegateInfo>.Get();
+                    delegateInfo = SimplePool<RedPointDelegateInfo>.Get();
                     delegateInfo.redPointType = redPointType;
                     redPointDelegateDict[redPointType] = delegateInfo;
                 }
@@ -105,7 +105,7 @@ namespace SthGame
             {
                 result = redPointDelegateDict.Remove(redPointType);
                 delegateInfo.OnRecycle();
-                Pool<RedPointDelegateInfo>.Release(delegateInfo);
+                SimplePool<RedPointDelegateInfo>.Release(delegateInfo);
             }
 
             return result;

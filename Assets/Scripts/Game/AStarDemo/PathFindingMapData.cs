@@ -5,22 +5,22 @@ using System;
 
 namespace SthGame
 {
-    public class AStarMapData
+    public class PathFindingMapData
     {
         public int EdgeLen { get; private set; }
         public int MapWidth { get; private set; }
         public int MapHeight { get; private set; }
         public int GridCount { get { return MapWidth * MapHeight; } }
 
-        int[] blockArray;
+        int[] gridArray;
         public int[] showArray;
 
-        public AStarMapData(int width, int height, int edge = 50)
+        public PathFindingMapData(int width, int height, int edge = 50)
         {
             MapWidth = width;
             MapHeight = height;
             EdgeLen = edge;
-            blockArray = new int[width * height];
+            gridArray = new int[width * height];
             ClearShowArray();
         }
 
@@ -33,19 +33,19 @@ namespace SthGame
         {
             get
             {
-                return blockArray[index];
+                return gridArray[index];
             }
             set
             {
                 if (index < 0 || index >= MapHeight * MapWidth) return;
-                blockArray[index] = value;
+                gridArray[index] = value;
             }
         }
 
         public bool IsBlock(int index)
         {
             if (index < 0 || index >= GridCount) return false;
-            return blockArray[index] != 0;
+            return gridArray[index] != 0;
         }
     }
 }

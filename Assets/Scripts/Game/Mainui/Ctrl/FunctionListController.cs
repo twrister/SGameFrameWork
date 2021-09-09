@@ -57,12 +57,9 @@ namespace SthGame
             {
                 Width = 250,
                 Height = 300,
-                Data = new FunctionListItemData("AStar", () =>
+                Data = new FunctionListItemData("Path Finding", () =>
                 {
-                    GUIManager.Instance.Open<AStarDemoController>();
-                    //UnityEngine.SceneManagement.SceneManager.LoadScene("AStarDemo");
-                    //GUIManager.Instance.CloseAllUI();
-                    //GameSceneManager.Instance.LoadScene("AStarDemo");
+                    GUIManager.Instance.Open<BFSPathFindingController>();
                 })
             };
 

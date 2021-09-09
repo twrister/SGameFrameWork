@@ -5,20 +5,14 @@ using UnityEngine.UI;
 
 namespace SthGame
 {
-    public enum EWayFindingGridType
-    {
-        Normal,
-        Block,
-        __Count,
-    }
-
-    public class AStarGridView : MonoBehaviour
+    public class PathFindingGridView : MonoBehaviour
     {
         public const int NORMAL = 0;
         public const int BLOCK = 1;
         public const int REACHED = 2;
         public const int FRONTIER = 3;
         public const int PATH = 4;
+        public const int NORMAL_5 = 5;
 
         public Button gridButton;
         public Image gridImage;
@@ -31,6 +25,7 @@ namespace SthGame
             { REACHED,  new Color(0.8f, 0.8f, 0.8f)},
             { FRONTIER, new Color(0.9f, 0.6f, 0.6f)},
             { PATH,     new Color(0.2f, 0.9f, 0.7f)},
+            { NORMAL_5, new Color(0.3f, 0.8f, 0.3f)},
         };
 
         public int posX { get; private set; }
@@ -70,7 +65,7 @@ namespace SthGame
 
         void CalcPos()
         {
-            AStarDemoController.SetLocalPosByGridPos(transform, posX, posY, GridEdge, MapWidth, MapHeight);
+            PathFindingBaseController.SetLocalPosByGridPos(transform, posX, posY, GridEdge, MapWidth, MapHeight);
         }
 
         private void OnEnable()
