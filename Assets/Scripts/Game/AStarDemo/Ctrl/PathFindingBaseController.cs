@@ -183,68 +183,17 @@ namespace SthGame
 
         protected PathFindingGridView GetOneGrid()
         {
-            PathFindingGridView grid = null;
-
-            if (gridStack.Count == 0)
-            {
-                view.gridPrefab.gameObject.SetActive(true);
-                grid = GameObject.Instantiate<PathFindingGridView>(view.gridPrefab, view.gridParent.transform);
-                view.gridPrefab.gameObject.SetActive(false);
-            }
-            else
-            {
-                grid = gridStack.Pop();
-            }
-
-            if (grid != null)
-            {
-                grid.gameObject.SetActive(true);
-            }
-
+            var grid = view.gridPrefab.Spawn(view.gridParent.transform);
+            grid.gameObject.SetActive(true);
+            grid.transform.localScale = Vector3.one;
             return grid;
         }
 
         protected void RecycleGrid(PathFindingGridView grid)
         {
-            if (grid != null)
-            {
-                grid.Reset();
-                gridStack.Push(grid);
-            }
+            grid.Recycle();
         }
         #endregion
-
-        Dictionary<int, Stack<PoolObject>> poolDict = new Dictionary<int, Stack<PoolObject>>();
-
-        protected T GetOneInPool<T>(T prefab, Transform trans) where T : UnityEngine.Object
-        {
-            T item = default(T);
-            int poolKey = prefab.GetInstanceID();
-            if (!poolDict.ContainsKey(poolKey))
-            {
-                poolDict[poolKey] = new Stack<PoolObject>();
-            }
-
-            if (poolDict[poolKey].Count == 0)
-            {
-                PoolObject poolObj = new PoolObject(poolKey);
-                poolObj.obj = GameObject.Instantiate<T>(prefab, trans);
-            }
-            else
-            {
-                item = poolDict[poolKey].Pop().obj as T;
-            }
-
-            return item;
-        }
-
-        protected void RecycleToPool(PoolObject obj)
-        {
-            if (poolDict.ContainsKey(obj.PoolKey))
-            {
-                poolDict[obj.PoolKey].Push(obj);
-            }
-        }
 
         protected virtual void UpdateGrids()
         {
@@ -252,17 +201,6 @@ namespace SthGame
             {
                 gridList[i].SetGridState(curMapData.showArray[i], curMapData.IsBlock(i));
             }
-        }
-    }
-
-    public class PoolObject
-    {
-        public int PoolKey { get; private set; }
-        public UnityEngine.Object obj;
-
-        public PoolObject(int key)
-        {
-            PoolKey = key;
         }
     }
 }

@@ -23,6 +23,15 @@ namespace SthGame
             view.arrowToggle.onValueChanged.AddListener(OnArrowToggleChanged);
             
             view.earlyExitToggle.onValueChanged.AddListener(OnEarlyExitToggleChanged);
+
+            view.arrowPrefab.CreatePool();
+        }
+
+        public override void ShutDown()
+        {
+            base.ShutDown();
+
+            view.arrowPrefab.DestroyPooled();
         }
 
         protected override void OpenCallBack()
@@ -113,34 +122,15 @@ namespace SthGame
 
         GameObject GetOneArrow()
         {
-            GameObject arrowGO = null;
-
-            if (arrowStack.Count == 0)
-            {
-                view.arrowPrefab.gameObject.SetActive(true);
-                arrowGO = GameObject.Instantiate<GameObject>(view.arrowPrefab, view.arrowParent.transform);
-                view.arrowPrefab.gameObject.SetActive(false);
-            }
-            else
-            {
-                arrowGO = arrowStack.Pop();
-            }
-
-            if (arrowGO != null)
-            {
-                arrowGO.gameObject.SetActive(true);
-            }
-
+            GameObject arrowGO = ObjectPool.Spawn(view.arrowPrefab, view.arrowParent.transform);
+            arrowGO.SetActive(true);
+            arrowGO.transform.localScale = Vector3.one;
             return arrowGO;
         }
 
         void RecycleArrow(GameObject arrow)
         {
-            if (arrow != null)
-            {
-                arrow.SetActive(false);
-                arrowStack.Push(arrow);
-            }
+            ObjectPool.Recycle(arrow);
         }
 
         #endregion

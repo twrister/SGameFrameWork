@@ -94,8 +94,7 @@ namespace SthGame
 
             var redDotDemo = new ListItemData()
             {
-                Width = 250,
-                Height = 300,
+                Width = 250, Height = 300,
                 Data = new FunctionListItemData("红点", () => {
                     GUIManager.Instance.Open<RedPointDemoController>();
                 },
@@ -109,10 +108,42 @@ namespace SthGame
             horDataList.Add(noticeTipsItem);
             horDataList.Add(floatTipsItem);
             horDataList.Add(timerItem);
+            horDataList.Add(timerItem);
+            horDataList.Add(timerItem);
             horDataList.Add(redDotDemo);
+
+            view.closeBtn.gameObject.CreatePool();
+
+            horDataList.Add(new ListItemData() {
+                Width = 250, Height = 300,
+                Data = new FunctionListItemData("spawn test", () => {
+                    objQueue.Enqueue(ObjectPool.Spawn(view.closeBtn.gameObject, this.view.transform, new Vector3(Random.Range(-100, 100), Random.Range(-100, 100))));
+                })
+            });
+
+            horDataList.Add(new ListItemData()
+            {
+                Width = 250, Height = 300,
+                Data = new FunctionListItemData("recycle test", () => {
+                    if (objQueue.Count > 0)
+                    {
+                        ObjectPool.Recycle(objQueue.Dequeue());
+                    }
+                })
+            });
+
+            horDataList.Add(new ListItemData()
+            {
+                Width = 250, Height = 300,
+                Data = new FunctionListItemData("debug pool info", () => {
+                    ObjectPool.DebugPoolInfo();
+                })
+            });
 
             horizontalListCtrl.SetListData(horDataList);
         }
+
+        Queue<GameObject> objQueue = new Queue<GameObject>();
 
         Timer timer = null;
         private void OnClickTimerDemo()
@@ -140,6 +171,7 @@ namespace SthGame
         {
             base.ShutDown();
 
+            view.closeBtn.gameObject.DestroyPooled();
         }
     }
 }

@@ -106,10 +106,11 @@ namespace CircularScrollView
                 int cellSize = IsHorizontal ? dataList[i].Width : dataList[i].Height;
                 cellMaxSize = Mathf.Max(cellMaxSize, cellSize);
                 tmpCellLength += IsHorizontal ? dataList[i].Height : dataList[i].Width;
-                if (i % columns == columns - 1) // 行中末item
+                maxCellLength = Mathf.Max(maxCellLength, tmpCellLength);
+
+                if (i % columns == columns - 1 || i == dataList.Count - 1) // 行中末item
                 {
                     totalSize += cellMaxSize;
-                    maxCellLength = Mathf.Max(maxCellLength, tmpCellLength);
                     cellMaxSize = 0;
                     tmpCellLength = 0;
                 }
