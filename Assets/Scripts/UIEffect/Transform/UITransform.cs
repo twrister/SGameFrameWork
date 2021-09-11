@@ -10,9 +10,9 @@ namespace SthGame
         [Range(0, 2)]
         float _Scale = 1;
 
-        [SerializeField]
-        [Range(-180, 180)]
-        float _Rotate = 0;
+        //[SerializeField]
+        //[Range(-180, 180)]
+        //float _Rotate = 0;
 
         public float scale
         {

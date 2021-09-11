@@ -66,7 +66,7 @@ namespace SthGame
             GlobalEventSystem.Instance.UnBindAll(EventId.aStarOnClickGrid);
         }
 
-        protected void InitGrids()
+        protected virtual void InitGrids()
         {
             if (mapWidth < 1 || mapHeight < 1) return;
 

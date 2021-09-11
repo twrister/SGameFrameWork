@@ -12,7 +12,7 @@ namespace EmojiText.Taurus
         #region 属性
         //默认shader
         private const string _defaultShader = "Sth/UI/Emoji";
-        private Material _defaultMater = null;
+        //private Material _defaultMater = null;
 
         public SpriteAsset m_spriteAsset;
 

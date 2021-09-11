@@ -30,7 +30,7 @@ namespace SthGame
             {
                 Width = 250,
                 Height = 300,
-                Data = new FunctionListItemData("listview示例", () =>
+                Data = new FunctionListItemData("listview demo", () =>
                 {
                     GUIManager.Instance.Open<ExampleListShowController>();
                 })
@@ -40,7 +40,7 @@ namespace SthGame
             {
                 Width = 250,
                 Height = 300,
-                Data = new FunctionListItemData("shader示例", () =>
+                Data = new FunctionListItemData("shader demo", () =>
                 {
                     GUIManager.Instance.Open<ShaderDemoController>();
                 })
@@ -50,7 +50,7 @@ namespace SthGame
             {
                 Width = 250,
                 Height = 300,
-                Data = new FunctionListItemData("颜料板", null, EFunctionItemType.colorPlate)
+                Data = new FunctionListItemData("color plate", null, EFunctionItemType.colorPlate)
             };
 
             var aStarItem = new ListItemData()
@@ -67,7 +67,7 @@ namespace SthGame
             {
                 Width = 250,
                 Height = 300,
-                Data = new FunctionListItemData("普通弹窗", () =>
+                Data = new FunctionListItemData("common tips", () =>
                 {
                     GUIManager.Instance.OpenTipsView("普通弹窗的文字");
                 })
@@ -77,7 +77,7 @@ namespace SthGame
             {
                 Width = 250,
                 Height = 300,
-                Data = new FunctionListItemData("上漂提示", () =>
+                Data = new FunctionListItemData("float tips", () =>
                 {
                     float duration = Random.Range(0.5f, 1.5f);
                     string content = string.Format("上漂提示文字,持续{0:0.00}秒", duration);
@@ -95,7 +95,7 @@ namespace SthGame
             var redDotDemo = new ListItemData()
             {
                 Width = 250, Height = 300,
-                Data = new FunctionListItemData("红点", () => {
+                Data = new FunctionListItemData("red point demo", () => {
                     GUIManager.Instance.Open<RedPointDemoController>();
                 },
                 redPoint: ERedPointType.RedPointDemo)
@@ -103,12 +103,10 @@ namespace SthGame
 
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
-            horDataList.Add(colorPlate);
             horDataList.Add(aStarItem);
             horDataList.Add(noticeTipsItem);
+            horDataList.Add(colorPlate);
             horDataList.Add(floatTipsItem);
-            horDataList.Add(timerItem);
-            horDataList.Add(timerItem);
             horDataList.Add(timerItem);
             horDataList.Add(redDotDemo);
 

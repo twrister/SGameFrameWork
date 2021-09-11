@@ -8,7 +8,7 @@ namespace SthGame
     public class ChatMemberItemController : UIChildController
     {
         ChatMemberItemView view;
-        int headFrameIdx = -1;
+        //int headFrameIdx = -1;
 
         protected override string GetResourcePath()
         {

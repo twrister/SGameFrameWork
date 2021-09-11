@@ -254,7 +254,8 @@ namespace SthGame
 
         public static void DebugPoolInfo()
         {
-            Logger.Log("total spawned count = {0}", CountAllPooled());
+            Logger.Log("pool count = {0}, spawned count = {1}", 
+                instance.pooledObjects.Count.ToString(), CountAllPooled().ToString());
             foreach (var item in instance.pooledObjects)
             {
                 Logger.Log("pool {0}'s count = {1} ", 

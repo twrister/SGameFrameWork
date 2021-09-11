@@ -24,7 +24,10 @@ namespace SthGame
             
             view.earlyExitToggle.onValueChanged.AddListener(OnEarlyExitToggleChanged);
 
+            view.movementCostToggle.onValueChanged.AddListener(OnMovementCostToggleChanged);
+
             view.arrowPrefab.CreatePool();
+            view.pathPrefab.CreatePool();
         }
 
         public override void ShutDown()
@@ -32,6 +35,7 @@ namespace SthGame
             base.ShutDown();
 
             view.arrowPrefab.DestroyPooled();
+            view.pathPrefab.DestroyPooled();
         }
 
         protected override void OpenCallBack()
@@ -39,8 +43,8 @@ namespace SthGame
             base.OpenCallBack();
 
             curMapData = new PathFindingMapData(20, 12);
-            InitGrids();
 
+            InitGrids();
         }
 
         protected override void HideCallBack()
@@ -52,7 +56,17 @@ namespace SthGame
         {
             base.UpdateGrids();
 
+            UpdateMapNum();
             UpdateArrows();
+            UpdatePaths();
+        }
+
+        void UpdateMapNum()
+        {
+            for (int i = 0; i < gridList.Count; i++)
+            {
+                gridList[i].indexText.text = costSoFarDict.ContainsKey(i) ? costSoFarDict[i].ToString() : "";
+            }
         }
 
         #region arrow display
@@ -81,9 +95,9 @@ namespace SthGame
             if (ShowArrow)
             {
                 int arrowCount = 0;
-                for (int i = 0; i < cameFromArray.Length; i++)
+                for (int i = 0; i < gridList.Count; i++)
                 {
-                    if (cameFromArray[i] > 0)
+                    if (cameFromDict.ContainsKey(i))
                     {
                         arrowCount++;
                         while (arrowList.Count < arrowCount)
@@ -91,7 +105,7 @@ namespace SthGame
                             arrowList.Add(GetOneArrow());
                         }
                         arrowList[arrowCount - 1].transform.position = gridList[i].transform.position;
-                        float angle = GetArrowAngle(i, cameFromArray[i] - 1);   // came from 赋值时+1了，读取时-1
+                        float angle = GetArrowAngle(i, cameFromDict[i]);
                         arrowList[arrowCount - 1].transform.localRotation = Quaternion.Euler(0, 0, angle);
                     }
                 }
@@ -100,6 +114,41 @@ namespace SthGame
                 {
                     RecycleArrow(arrowList[arrowList.Count - 1]);
                     arrowList.RemoveAt(arrowList.Count - 1);
+                }
+            }
+        }
+
+        List<GameObject> pathGOList = new List<GameObject>();
+        void UpdatePaths()
+        {
+            if (view == null) return;
+
+            while (pathGOList.Count > pathList.Count)
+            {
+                pathGOList[pathGOList.Count - 1].Recycle();
+                pathGOList.RemoveAt(pathGOList.Count - 1);
+            }
+
+            while (pathGOList.Count < pathList.Count)
+            {
+                GameObject path = view.pathPrefab.Spawn(view.pathParent.transform);
+                path.SetActive(true);
+                path.transform.localScale = Vector3.one;
+                pathGOList.Add(path);
+            }
+
+            if (pathList.Count > 0)
+            {
+                pathList.Add(view.player.Index);
+                for (int i = 0; i < pathList.Count - 1; i++)
+                {
+                    int curGrid = pathList[i];
+                    int cameFrom = pathList[i + 1];
+                    //int gridIdx = pathList[i];
+                    pathGOList[i].transform.position = gridList[curGrid].transform.position;
+                    float angle = GetArrowAngle(curGrid, cameFrom);
+                    pathGOList[i].name = curGrid.ToString();
+                    pathGOList[i].transform.localRotation = Quaternion.Euler(0, 0, angle);
                 }
             }
         }
@@ -153,6 +202,22 @@ namespace SthGame
             EarlyExit = isOn;
         }
 
+        bool _hasMovementCost = true;
+        bool HasMovementCost
+        {
+            get { return _hasMovementCost; }
+            set
+            {
+                _hasMovementCost = value;
+                DoSearch();
+            }
+        }
+
+        void OnMovementCostToggleChanged(bool isOn)
+        {
+            HasMovementCost = isOn;
+        }
+
         protected override void PathFindingOnClickGrid(object[] ps)
         {
             int index = (int)ps[0];
@@ -173,32 +238,45 @@ namespace SthGame
         }
 
         #region BFS
-        Queue<int> frontierQueue = new Queue<int>();    // 储存探索边界
+        SimplePriorityQueue<int> frontierPriorityQueue = new SimplePriorityQueue<int>();    // 储存探索边界的优先队列
+        //Queue<int> frontierQueue = new Queue<int>();    // 储存探索边界
         int[] neighborArray = new int[4];               // 储存临时的探索边界
-        int[] cameFromArray = new int[0];               // 储存所有格子的came from
+        //int[] cameFromArray = new int[0];               // 储存所有格子的came from
         int[] costSoFar = new int[0];                   // 储存所有格子的到起点的最少花费
         List<int> pathList = new List<int>();           // 储存路径
+
+        Dictionary<int, int> cameFromDict = new Dictionary<int, int>();
+        Dictionary<int, int> costSoFarDict = new Dictionary<int, int>();
 
         void DoBFS()
         {
             if (mapWidth == 0 || mapHeight == 0) return;
             if (view.player.Index >= gridCount) return;
 
+            // 储存边界的优先队列
+            frontierPriorityQueue.Clear();
+            frontierPriorityQueue.Enqueue(view.player.Index, 0);
+
             // 储存边界的队列
-            frontierQueue.Clear();
-            frontierQueue.Enqueue(view.player.Index);
+            //frontierQueue.Clear();
+            //frontierQueue.Enqueue(view.player.Index);
 
             // cameFromArray记录每个grid的来向，-1表示当前为block
-            cameFromArray = new int[mapWidth * mapHeight];
-            cameFromArray[view.player.Index] = -1;
+            //cameFromArray = new int[mapWidth * mapHeight];
+            //cameFromArray[view.player.Index] = -1;
+            cameFromDict.Clear();
 
-            // ShowStep 显示步数的开关
+            costSoFarDict.Clear();
+            costSoFarDict[view.player.Index] = 0;
+
             int curStep = 0;
+            int next = 0;
+            int newCost = 0;
             while (!ShowStep || curStep < Step)
             {
-                if (frontierQueue.Count > 0)
+                if (frontierPriorityQueue.Count > 0)
                 {
-                    int curIndex = frontierQueue.Dequeue();
+                    int curIndex = frontierPriorityQueue.Dequeue();
 
                     // 边界到达目标点，提前结束
                     if (EarlyExit && curIndex == view.target.Index) break;
@@ -206,18 +284,17 @@ namespace SthGame
                     CalcNeighborIndexs(ref neighborArray, curIndex);
                     for (int i = 0; i < neighborArray.Length; i++)
                     {
-                        // 找到邻边有效的,并且没被标记的grid
-                        if (neighborArray[i] >= 0 && cameFromArray[neighborArray[i]] == 0)
+                        next = neighborArray[i];
+                        if (next == -1) continue;   // 四周
+                        if (curMapData.IsBlock(next)) continue; // 墙
+
+                        newCost = costSoFarDict[curIndex] + 1;
+                        if (!costSoFarDict.ContainsKey(next) || newCost < costSoFarDict[next])  // 没被探索
                         {
-                            if (curMapData.IsBlock(neighborArray[i]))
-                            {
-                                cameFromArray[neighborArray[i]] = -1;               // 临边是block，came from也标为-1
-                            }
-                            else
-                            {
-                                frontierQueue.Enqueue(neighborArray[i]);
-                                cameFromArray[neighborArray[i]] = curIndex + 1;         // 标记来自哪个grid，记录Index +1，避免默认指向第一个格子的情况
-                            }
+                            costSoFarDict[next] = newCost;
+                            frontierPriorityQueue.Enqueue(next, newCost);       // 步数少的优先探索
+                            //cameFromArray[next] = curIndex + 1;
+                            cameFromDict[next] = curIndex;
                         }
                     }
                 }
@@ -231,31 +308,26 @@ namespace SthGame
             // 通过cameFromArray，找出路径
             pathList.Clear();
             int current = view.target.Index;
-            if (cameFromArray[current] > 0)   // 说明已探索到target
+            if (cameFromDict.ContainsKey(current))   // 说明已探索到target
             {
                 while (current != view.player.Index)
                 {
                     pathList.Add(current);
-                    current = cameFromArray[current] - 1;   // 前面记录的时候 +1了，这里读取时 -1
+                    current = cameFromDict[current];
                 }
             }
 
             // 标记已探索
             curMapData.ClearShowArray();
-            for (int i = 0; i < cameFromArray.Length; i++)
+            for (int i = 0; i < curMapData.showArray.Length; i++)
             {
-                curMapData.showArray[i] = cameFromArray[i] != 0 ? PathFindingGridView.REACHED : curMapData.showArray[i];
+                curMapData.showArray[i] = cameFromDict.ContainsKey(i) ? PathFindingGridView.REACHED : curMapData.showArray[i];
             }
             // 标记边界
-            while (frontierQueue.Count > 0)
+            while (frontierPriorityQueue.Count > 0)
             {
-                int index = frontierQueue.Dequeue();
+                int index = frontierPriorityQueue.Dequeue();
                 curMapData.showArray[index] = PathFindingGridView.FRONTIER;
-            }
-            // 标记路线
-            for (int i = 0; i < pathList.Count; i++)
-            {
-                curMapData.showArray[pathList[i]] = PathFindingGridView.PATH;
             }
         }
 
