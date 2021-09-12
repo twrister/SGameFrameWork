@@ -9,10 +9,10 @@ namespace SthGame
     {
         public const int NORMAL = 0;
         public const int BLOCK = 1;
-        public const int REACHED = 2;
+        public const int NORMAL_5 = 2;
         public const int FRONTIER = 3;
         public const int PATH = 4;
-        public const int NORMAL_5 = 5;
+        public const int REACHED = 5;
 
         public Button gridButton;
         public Image gridImage;
@@ -22,10 +22,10 @@ namespace SthGame
         {
             { NORMAL,   Color.white},
             { BLOCK,    new Color(0.4f, 0.4f, 0.4f)},
-            { REACHED,  new Color(0.8f, 0.8f, 0.8f)},
+            { NORMAL_5, new Color(0.3f, 0.8f, 0.3f)},
             { FRONTIER, new Color(0.9f, 0.6f, 0.6f)},
             { PATH,     new Color(0.2f, 0.9f, 0.7f)},
-            { NORMAL_5, new Color(0.3f, 0.8f, 0.3f)},
+            { REACHED,  new Color(0.8f, 0.8f, 0.8f)},
         };
 
         public int posX { get; private set; }
@@ -43,7 +43,6 @@ namespace SthGame
 
         public void Reset()
         {
-            indexText.text = "";
             this.transform.localPosition = Vector3.zero;
             this.gameObject.SetActive(false);
         }
@@ -59,7 +58,6 @@ namespace SthGame
             GridEdge = inEdge;
             MapWidth = tX;
             MapHeight = tY;
-            indexText.text = Index.ToString();
             CalcPos();
         }
 

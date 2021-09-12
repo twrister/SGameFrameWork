@@ -9,11 +9,14 @@ namespace SthGame
     {
         public Button closeButton;
 
-        public GameObject gridParent;
+        public Transform gridParent;
         public PathFindingGridView gridPrefab;
 
-        public GameObject pathParent;
+        public Transform pathParent;
         public GameObject pathPrefab;
+
+        public Transform gridTextParent;
+        public Text gridTextPrefab;
 
         public PathFindingMovableItem player;
         public PathFindingMovableItem target;

@@ -45,7 +45,7 @@ namespace SthGame
         public bool IsBlock(int index)
         {
             if (index < 0 || index >= GridCount) return false;
-            return gridArray[index] != 0;
+            return gridArray[index] == PathFindingGridView.BLOCK;
         }
     }
 }

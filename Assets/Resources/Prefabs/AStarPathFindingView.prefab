@@ -1981,9 +1981,9 @@ GameObject:
   m_Component:
   - component: {fileID: 161303987113752043}
   - component: {fileID: 7972663843931057479}
-  - component: {fileID: 543256227007390920}
+  - component: {fileID: 114075737879344538}
   m_Layer: 5
-  m_Name: BFSPathFindingView
+  m_Name: AStarPathFindingView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2024,7 +2024,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7735768459210714633}
   m_CullTransparentMesh: 0
---- !u!114 &543256227007390920
+--- !u!114 &114075737879344538
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2033,7 +2033,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7735768459210714633}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7210356e82d96b943a369a157299a22e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f69405a4227c0b419ad99ef42ba3000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   closeButton: {fileID: 8129010386262615004}
@@ -2047,11 +2047,6 @@ MonoBehaviour:
   target: {fileID: 8564532926032601620}
   stepToggle: {fileID: 7824406040018116156}
   stepSlider: {fileID: 7668265342472024205}
-  arrowPrefab: {fileID: 834451294639389379}
-  arrowParent: {fileID: 2801531337200166778}
-  arrowToggle: {fileID: 3846053636268953876}
-  earlyExitToggle: {fileID: 2024569822557236962}
-  movementCostToggle: {fileID: 252034365538266171}
 --- !u!1 &7833007363126631611
 GameObject:
   m_ObjectHideFlags: 0

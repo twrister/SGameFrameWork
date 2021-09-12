@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 namespace SthGame
 {
@@ -39,11 +40,6 @@ namespace SthGame
             }
         }
 
-        protected override string GetResourcePath()
-        {
-            return "";
-        }
-
         public override void Init()
         {
             base.Init();
@@ -57,6 +53,12 @@ namespace SthGame
             view.stepToggle.onValueChanged.AddListener(OnStepToggleChanged);
 
             GlobalEventSystem.Instance.Bind(EventId.aStarOnClickGrid, PathFindingOnClickGrid);
+
+            view.gridTextPrefab.CreatePool();
+            view.gridTextPrefab.gameObject.SetActive(false);
+
+            view.pathPrefab.CreatePool();
+            view.pathPrefab.SetActive(false);
         }
 
         public override void ShutDown()
@@ -64,6 +66,9 @@ namespace SthGame
             base.ShutDown();
 
             GlobalEventSystem.Instance.UnBindAll(EventId.aStarOnClickGrid);
+
+            view.gridTextPrefab.DestroyPooled();
+            view.pathPrefab.DestroyPooled();
         }
 
         protected virtual void InitGrids()
@@ -95,9 +100,9 @@ namespace SthGame
 
             // 初始起点、终点位置
             Vector2Int playerPos = new Vector2Int(Mathf.Min(4, mapWidth - 1), Mathf.Min(4, mapHeight - 1));
-            view.player.InitMovableItem(playerPos, gridEdge, mapWidth, mapHeight, view.gridParent.transform, OnPlayerPosChanged);
+            view.player.InitMovableItem(playerPos, gridEdge, mapWidth, mapHeight, view.gridParent, OnPlayerPosChanged);
             Vector2Int targetPos = new Vector2Int(Mathf.Max(0, mapWidth - 4), Mathf.Max(0, mapHeight - 4));
-            view.target.InitMovableItem(targetPos, gridEdge, mapWidth, mapHeight, view.gridParent.transform, OnTargetPosChanged);
+            view.target.InitMovableItem(targetPos, gridEdge, mapWidth, mapHeight, view.gridParent, OnTargetPosChanged);
 
             view.stepSlider.maxValue = (float)gridCount;
 
@@ -124,14 +129,17 @@ namespace SthGame
             ShowStep = isOn;
         }
 
-        protected virtual void PathFindingOnClickGrid(object[] ps)
+        void PathFindingOnClickGrid(object[] ps)
         {
+            OnClickGrid((int)ps[0]);
+        }
 
+        protected virtual void OnClickGrid(int gridIndex)
+        {
         }
 
         protected virtual void DoSearch()
         {
-
         }
 
         #region Common Logic
@@ -175,6 +183,31 @@ namespace SthGame
             if (index < 0 || index >= mapWidth * mapHeight || mapHeight == 0 || index % mapHeight == (mapHeight - 1)) return -1;
             return index + 1;
         }
+
+        protected float GetArrowAngle(int curGrid, int cameFromGrid)
+        {
+            int delta = cameFromGrid - curGrid;
+            if (delta == mapHeight)
+                return 0f;
+            else if (delta == -mapHeight)
+                return 180f;
+            else if (delta == 1)
+                return 90f;
+            else
+                return 270f;
+        }
+
+        protected void CalcNeighborIndexs(ref int[] neighbors, int curIndex)
+        {
+            // 错开求邻，single为true则顺时求邻，false则逆时
+            int x = curIndex / mapHeight;
+            int y = curIndex % mapHeight;
+            bool single = (x + y) % 2 == 1;
+            neighbors[single ? 0 : 3] = GetRightwardGridIndex(curIndex);
+            neighbors[single ? 1 : 2] = GetDownwardGridIndex(curIndex);
+            neighbors[single ? 2 : 1] = GetLefttwardGridIndex(curIndex);
+            neighbors[single ? 3 : 0] = GetUpwardGridIndex(curIndex);
+        }
         #endregion
 
         #region Grid pool
@@ -183,7 +216,7 @@ namespace SthGame
 
         protected PathFindingGridView GetOneGrid()
         {
-            var grid = view.gridPrefab.Spawn(view.gridParent.transform);
+            var grid = view.gridPrefab.Spawn(view.gridParent);
             grid.gameObject.SetActive(true);
             grid.transform.localScale = Vector3.one;
             return grid;
@@ -201,6 +234,54 @@ namespace SthGame
             {
                 gridList[i].SetGridState(curMapData.showArray[i], curMapData.IsBlock(i));
             }
+
+            UpdateGridTexts();
         }
+
+        protected List<Text> gridTextList = new List<Text>();
+        protected virtual void UpdateGridTexts() 
+        {
+            
+        }
+
+        #region path
+
+        protected List<int> pathList = new List<int>();           // 储存路径
+
+        List<GameObject> pathGOList = new List<GameObject>();
+        protected void UpdatePaths()
+        {
+            if (view == null) return;
+
+            while (pathGOList.Count > pathList.Count)
+            {
+                pathGOList[pathGOList.Count - 1].Recycle();
+                pathGOList.RemoveAt(pathGOList.Count - 1);
+            }
+
+            while (pathGOList.Count < pathList.Count)
+            {
+                GameObject path = view.pathPrefab.Spawn(view.pathParent);
+                path.SetActive(true);
+                path.transform.localScale = Vector3.one;
+                pathGOList.Add(path);
+            }
+
+            if (pathList.Count > 0)
+            {
+                pathList.Add(view.player.Index);
+                for (int i = 0; i < pathList.Count - 1; i++)
+                {
+                    int curGrid = pathList[i];
+                    int cameFrom = pathList[i + 1];
+                    pathGOList[i].transform.position = gridList[curGrid].transform.position;
+                    float angle = GetArrowAngle(curGrid, cameFrom);
+                    pathGOList[i].name = curGrid.ToString();
+                    pathGOList[i].transform.localRotation = Quaternion.Euler(0, 0, angle);
+                }
+            }
+        }
+
+        #endregion
     }
 }

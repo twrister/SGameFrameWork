@@ -9,10 +9,9 @@ namespace SthGame
     {
         public GameObject arrowPrefab;
         public GameObject arrowParent;
+
         public Toggle arrowToggle;
-
         public Toggle earlyExitToggle;
-
         public Toggle movementCostToggle;
     }
 }

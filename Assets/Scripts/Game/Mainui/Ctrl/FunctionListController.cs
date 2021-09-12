@@ -20,6 +20,7 @@ namespace SthGame
             view = UINode as FunctionListView;
 
             view.closeBtn.onClick.AddListener(OnClickClose);
+            view.closeBtn.gameObject.CreatePool();          // 临时用作对象池示例
 
             // Horizontal
             horizontalListCtrl = CreateChildController<CircularListController>(parent: view.horScrollRect.viewport.gameObject);
@@ -53,13 +54,23 @@ namespace SthGame
                 Data = new FunctionListItemData("color plate", null, EFunctionItemType.colorPlate)
             };
 
+            var bfsItem = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("BFS Path Finding", () =>
+                {
+                    GUIManager.Instance.Open<BFSPathFindingController>();
+                })
+            };
+
             var aStarItem = new ListItemData()
             {
                 Width = 250,
                 Height = 300,
-                Data = new FunctionListItemData("Path Finding", () =>
+                Data = new FunctionListItemData("AStar Path Finding", () =>
                 {
-                    GUIManager.Instance.Open<BFSPathFindingController>();
+                    GUIManager.Instance.Open<AStarPathFindingController>();
                 })
             };
 
@@ -101,42 +112,49 @@ namespace SthGame
                 redPoint: ERedPointType.RedPointDemo)
             };
 
+            var spawnTest = new ListItemData()
+            {
+                Width = 250, Height = 300,
+                Data = new FunctionListItemData("pool spawn test", () =>
+                {
+                    objQueue.Enqueue(ObjectPool.Spawn(view.closeBtn.gameObject, this.view.transform, new Vector3(Random.Range(-100, 100), Random.Range(-100, 100))));
+                })
+            };
+
+            var recycleTest = new ListItemData()
+            {
+                Width = 250, Height = 300,
+                Data = new FunctionListItemData("pool recycle test", () =>
+                {
+                    if (objQueue.Count > 0)
+                    {
+                        ObjectPool.Recycle(objQueue.Dequeue());
+                    }
+                })
+            };
+
+            var poolInfo = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("debug pool info", () =>
+                {
+                    ObjectPool.DebugPoolInfo();
+                })
+            };
+
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
+            horDataList.Add(bfsItem);
             horDataList.Add(aStarItem);
             horDataList.Add(noticeTipsItem);
             horDataList.Add(colorPlate);
             horDataList.Add(floatTipsItem);
             horDataList.Add(timerItem);
             horDataList.Add(redDotDemo);
-
-            view.closeBtn.gameObject.CreatePool();
-
-            horDataList.Add(new ListItemData() {
-                Width = 250, Height = 300,
-                Data = new FunctionListItemData("spawn test", () => {
-                    objQueue.Enqueue(ObjectPool.Spawn(view.closeBtn.gameObject, this.view.transform, new Vector3(Random.Range(-100, 100), Random.Range(-100, 100))));
-                })
-            });
-
-            horDataList.Add(new ListItemData()
-            {
-                Width = 250, Height = 300,
-                Data = new FunctionListItemData("recycle test", () => {
-                    if (objQueue.Count > 0)
-                    {
-                        ObjectPool.Recycle(objQueue.Dequeue());
-                    }
-                })
-            });
-
-            horDataList.Add(new ListItemData()
-            {
-                Width = 250, Height = 300,
-                Data = new FunctionListItemData("debug pool info", () => {
-                    ObjectPool.DebugPoolInfo();
-                })
-            });
+            horDataList.Add(spawnTest);
+            horDataList.Add(recycleTest);
+            horDataList.Add(poolInfo);
 
             horizontalListCtrl.SetListData(horDataList);
         }
