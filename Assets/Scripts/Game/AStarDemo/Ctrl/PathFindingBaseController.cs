@@ -40,6 +40,22 @@ namespace SthGame
             }
         }
 
+        bool _earlyExit = true;
+        protected bool EarlyExit
+        {
+            get { return _earlyExit; }
+            set
+            {
+                _earlyExit = value;
+                DoSearch();
+            }
+        }
+
+        void OnEarlyExitToggleChanged(bool isOn)
+        {
+            EarlyExit = isOn;
+        }
+
         public override void Init()
         {
             base.Init();
@@ -51,6 +67,7 @@ namespace SthGame
             view.stepSlider.value = 10f;
 
             view.stepToggle.onValueChanged.AddListener(OnStepToggleChanged);
+            view.earlyExitToggle.onValueChanged.AddListener(OnEarlyExitToggleChanged);
 
             GlobalEventSystem.Instance.Bind(EventId.aStarOnClickGrid, PathFindingOnClickGrid);
 
@@ -208,6 +225,30 @@ namespace SthGame
             neighbors[single ? 2 : 1] = GetLefttwardGridIndex(curIndex);
             neighbors[single ? 3 : 0] = GetUpwardGridIndex(curIndex);
         }
+
+        protected int Heuristic(int aIdx, int bIdx)
+        {
+            int aX = aIdx / mapHeight;
+            int aY = aIdx % mapHeight;
+            int bX = bIdx / mapHeight;
+            int bY = bIdx % mapHeight;
+            return Mathf.Abs(aX - bX) + Mathf.Abs(aY - bY);
+        }
+
+        protected int Cross(int curIdx, int targetIdx, int startIdx)
+        {
+            int curX = curIdx / mapHeight;
+            int curY = curIdx % mapHeight;
+            int targetX = targetIdx / mapHeight;
+            int targetY = targetIdx % mapHeight;
+            int startX = startIdx / mapHeight;
+            int startY = startIdx % mapHeight;
+            int x1 = curX - targetX;
+            int y1 = curY - targetY;
+            int x2 = startX - targetX;
+            int y2 = startY - targetY;
+            return Mathf.Abs(x1 * y2 - x2 * y1);
+        }
         #endregion
 
         #region Grid pool
@@ -236,12 +277,40 @@ namespace SthGame
             }
 
             UpdateGridTexts();
+            UpdatePaths();
         }
 
         protected List<Text> gridTextList = new List<Text>();
         protected virtual void UpdateGridTexts() 
         {
             
+        }
+
+        protected void ShowGridTexts(Dictionary<int, int> textDict)
+        {
+            int gridTextCount = 0;
+            for (int i = 0; i < gridList.Count; i++)
+            {
+                if (textDict.ContainsKey(i))
+                {
+                    gridTextCount++;
+                    if (gridTextList.Count < gridTextCount)
+                    {
+                        Text text = view.gridTextPrefab.Spawn(view.gridTextParent);
+                        text.gameObject.SetActive(true);
+                        text.transform.localScale = Vector3.one;
+                        gridTextList.Add(text);
+                    }
+                    gridTextList[gridTextCount - 1].transform.position = gridList[i].transform.position;
+                    gridTextList[gridTextCount - 1].text = textDict[i].ToString();
+                }
+            }
+
+            while (gridTextCount < gridTextList.Count)
+            {
+                gridTextList[gridTextList.Count - 1].Recycle();
+                gridTextList.RemoveAt(gridTextList.Count - 1);
+            }
         }
 
         #region path

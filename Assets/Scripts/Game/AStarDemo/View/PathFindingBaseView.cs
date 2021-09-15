@@ -23,5 +23,6 @@ namespace SthGame
 
         public Toggle stepToggle;
         public Slider stepSlider;
+        public Toggle earlyExitToggle;
     }
 }

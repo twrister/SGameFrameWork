@@ -22,9 +22,6 @@ namespace SthGame
             view = UINode as BFSPathFindingView;
 
             view.arrowToggle.onValueChanged.AddListener(OnArrowToggleChanged);
-            
-            view.earlyExitToggle.onValueChanged.AddListener(OnEarlyExitToggleChanged);
-
             view.movementCostToggle.onValueChanged.AddListener(OnMovementCostToggleChanged);
 
             view.arrowPrefab.CreatePool();
@@ -57,7 +54,6 @@ namespace SthGame
             base.UpdateGrids();
 
             UpdateArrows();
-            UpdatePaths();
         }
 
         #region arrow display
@@ -114,50 +110,12 @@ namespace SthGame
 
         protected override void UpdateGridTexts()
         {
-            int gridTextCount = 0;
-            for (int i = 0; i < gridList.Count; i++)
-            {
-                if (costSoFarDict.ContainsKey(i))
-                {
-                    gridTextCount++;
-                    if (gridTextList.Count < gridTextCount)
-                    {
-                        Text text = view.gridTextPrefab.Spawn(view.gridTextParent);
-                        text.gameObject.SetActive(true);
-                        text.transform.localScale = Vector3.one;
-                        gridTextList.Add(text);
-                    }
-                    gridTextList[gridTextCount - 1].transform.position = gridList[i].transform.position;
-                    gridTextList[gridTextCount - 1].text = costSoFarDict[i].ToString();
-                }
-            }
-
-            while (gridTextCount < gridTextList.Count)
-            {
-                gridTextList[gridTextList.Count - 1].Recycle();
-                gridTextList.RemoveAt(gridTextList.Count - 1);
-            }
+            ShowGridTexts(costSoFarDict);
         }
 
         #endregion
 
         #region UI Logic
-
-        bool _earlyExit = true;
-        bool EarlyExit
-        {
-            get { return _earlyExit; }
-            set
-            {
-                _earlyExit = value;
-                DoSearch();
-            }
-        }
-
-        void OnEarlyExitToggleChanged(bool isOn)
-        {
-            EarlyExit = isOn;
-        }
 
         bool _hasMovementCost = false;
         bool HasMovementCost

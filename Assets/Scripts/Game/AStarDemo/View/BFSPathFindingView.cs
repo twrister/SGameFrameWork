@@ -11,7 +11,6 @@ namespace SthGame
         public GameObject arrowParent;
 
         public Toggle arrowToggle;
-        public Toggle earlyExitToggle;
         public Toggle movementCostToggle;
     }
 }

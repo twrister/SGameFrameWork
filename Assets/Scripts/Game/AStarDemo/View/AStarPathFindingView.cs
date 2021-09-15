@@ -7,6 +7,6 @@ namespace SthGame
 {
     public class AStarPathFindingView : PathFindingBaseView
     {
-
+        public Toggle greedyToggle;
     }
 }
