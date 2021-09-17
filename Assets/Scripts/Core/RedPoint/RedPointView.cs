@@ -22,23 +22,21 @@ namespace SthGame
 
         void Awake()
         {
-            InitRedPoint();
+            UpdateRedPoint();
         }
 
-        private void InitRedPoint()
+        private void UpdateRedPoint()
         {
             if (redPointGO != null) redPointGO.SetActive(false);
+
             RedPointManager.Instance.RegisterRedPointDelegate(type, this);
             RedPointManager.Instance.SendRedPointNotify(type);
         }
 
         public void InitRedPointType(ERedPointType inType)
         {
-            if (inType != ERedPointType.None)
-            {
-                type = inType;
-                InitRedPoint();
-            }
+            type = inType;
+            UpdateRedPoint();
         }
 
         void Destroy()

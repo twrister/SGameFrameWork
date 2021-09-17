@@ -148,6 +148,8 @@ namespace SthGame
 
         public void SendRedPointNotify(ERedPointType redPointType)
         {
+            if (redPointType == ERedPointType.None) return;
+
             RedPointDelegateInfo delegateInfo = GetRedPointDelegate(redPointType);
             if (delegateInfo != null)
             {
