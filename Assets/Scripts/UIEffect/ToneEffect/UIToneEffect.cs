@@ -29,12 +29,12 @@ namespace SthGame
         [Range(0, 1)]
         float m_EffectFactor = 1;
 
-        protected override void OnValidate()
-        {
-            if (!isActiveAndEnabled) return;
+        //protected override void OnValidate()
+        //{
+        //    if (!isActiveAndEnabled) return;
 
-            SetParams();
-        }
+        //    SetParams();
+        //}
 
         protected void SetParams()
         {

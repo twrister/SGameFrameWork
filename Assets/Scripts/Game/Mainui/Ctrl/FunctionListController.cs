@@ -27,6 +27,18 @@ namespace SthGame
             horizontalListCtrl.InitList<FunctionListItemController>(view.horScrollRect, EDirection.Horizontal, 2);
             List<ListItemData> horDataList = new List<ListItemData>();
 
+            var copyBufferDemo = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("copyBUffer demo", () =>
+                {
+                    string copyBuffer = UnityEngine.GUIUtility.systemCopyBuffer;
+                    GUIManager.Instance.ShowFloatTips(copyBuffer);
+                    Logger.Log("copyBuffer = {0}", copyBuffer);
+                })
+            };
+
             var exampleList = new ListItemData()
             {
                 Width = 250,
@@ -143,6 +155,7 @@ namespace SthGame
                 })
             };
 
+            horDataList.Add(copyBufferDemo);
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
             horDataList.Add(bfsItem);

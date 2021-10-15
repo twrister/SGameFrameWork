@@ -21,8 +21,8 @@ namespace SthGame
 
         public override void OnInspectorGUI()
         {
-            using (new MaterialDirtyScope(targets))
-                EditorGUILayout.PropertyField(_spEffectMode);
+            //using (new MaterialDirtyScope(targets))
+            //    EditorGUILayout.PropertyField(_spEffectMode);
 
             if (_spEffectMode.intValue != (int)UIToneEffectMode.None)
             {

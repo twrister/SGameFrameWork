@@ -97,12 +97,12 @@ namespace SthGame
             }
         }
 
-        protected override void OnValidate()
-        {
-            if (!isActiveAndEnabled) return;
+        //protected override void OnValidate()
+        //{
+        //    if (!isActiveAndEnabled) return;
 
-            SetParams();
-        }
+        //    SetParams();
+        //}
 
         protected void SetParams()
         {

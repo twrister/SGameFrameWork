@@ -49,12 +49,12 @@ namespace SthGame
             SetVerticesDirty();
         }
 
-        protected override void OnValidate()
-        {
-            if (!isActiveAndEnabled) return;
+        //protected override void OnValidate()
+        //{
+        //    if (!isActiveAndEnabled) return;
 
-            UpdateParams();
-        }
+        //    UpdateParams();
+        //}
 
         protected void SetMaterialDirty()
         {

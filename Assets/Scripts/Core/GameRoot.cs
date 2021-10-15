@@ -25,6 +25,13 @@ namespace SthGame
             IsDoAwake = true;
 
             guiStyle = new GUIStyle() { stretchWidth = true, stretchHeight = true, wordWrap = false, normal = new GUIStyleState() { textColor = Color.blue } };
+
+            // 设置屏幕作为横屏的自动旋转
+            Screen.orientation = ScreenOrientation.AutoRotation;
+            Screen.autorotateToLandscapeLeft = true;
+            Screen.autorotateToLandscapeRight = true;
+            Screen.autorotateToPortrait = false;
+            Screen.autorotateToPortraitUpsideDown = false;
         }
 
         void OnDestroy()
