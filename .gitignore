@@ -10,3 +10,8 @@ Cache/*
 ProjectSettings/ProjectVersion.txt
 SimpleGameFrame.v12.suo
 .vsconfig
+ProjectSettings/ProjectVersion.txt
+ProjectSettings/ProjectSettings.asset
+ProjectSettings/GraphicsSettings.asset
+ProjectSettings/EditorBuildSettings.asset
+Assets/Resources/DOTweenSettings.asset
