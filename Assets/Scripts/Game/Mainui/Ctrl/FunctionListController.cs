@@ -155,6 +155,19 @@ namespace SthGame
                 })
             };
 
+            var openQQ = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("call QQ", () =>
+                {
+                    Application.OpenURL("mqq://");
+                    //var androidClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                    //var androidObj = androidClass.GetStatic<AndroidJavaObject>("currentActivity");
+                    //androidObj.Call("DoActivieApp", "com.tencent.mobileqq");
+                })
+            };
+
             horDataList.Add(copyBufferDemo);
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
@@ -168,6 +181,7 @@ namespace SthGame
             horDataList.Add(spawnTest);
             horDataList.Add(recycleTest);
             horDataList.Add(poolInfo);
+            horDataList.Add(openQQ);
 
             horizontalListCtrl.SetListData(horDataList);
         }

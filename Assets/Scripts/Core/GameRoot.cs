@@ -140,6 +140,13 @@ namespace SthGame
                 GUI.Label(new Rect(110, 5, 400, 20), deviceInfoSb.ToString(), guiStyle);
             }   
         }
+
+        void OnApplicationPause(bool pauseStatus)
+        {
+            string log = string.Format("OnApplicationPause - {0}", pauseStatus.ToString());
+            if (GUIManager.Instance != null) GUIManager.Instance.ShowFloatTips(log);
+            Logger.Log(log);
+        }
         #endregion
     }
 }
