@@ -168,6 +168,16 @@ namespace SthGame
                 })
             };
 
+            var mahjongChess = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("Mahjong Chess", () =>
+                {
+                    GUIManager.Instance.Open<MahjongChessController>();
+                })
+            };
+
             horDataList.Add(copyBufferDemo);
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
@@ -182,6 +192,7 @@ namespace SthGame
             horDataList.Add(recycleTest);
             horDataList.Add(poolInfo);
             horDataList.Add(openQQ);
+            horDataList.Add(mahjongChess);
 
             horizontalListCtrl.SetListData(horDataList);
         }

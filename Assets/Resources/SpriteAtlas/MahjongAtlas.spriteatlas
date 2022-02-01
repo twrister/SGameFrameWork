@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MahjongAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+    totalSpriteSurfaceArea: 385560
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300040, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300042, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300044, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300046, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300066, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300048, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300064, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300050, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300062, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300052, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300060, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300054, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300056, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300058, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300038, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300036, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300022, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300020, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300026, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300024, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300030, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300028, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300034, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300032, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300004, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300006, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300000, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300002, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300012, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300014, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300008, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300010, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300016, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  - {fileID: 21300018, guid: 9703f3b5e0be3eb4cafe22463e9b6f2c, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - mahjong_20
+  - mahjong_21
+  - mahjong_22
+  - mahjong_23
+  - mahjong_33
+  - mahjong_24
+  - mahjong_32
+  - mahjong_25
+  - mahjong_31
+  - mahjong_26
+  - mahjong_30
+  - mahjong_27
+  - mahjong_28
+  - mahjong_29
+  - mahjong_19
+  - mahjong_18
+  - mahjong_11
+  - mahjong_10
+  - mahjong_13
+  - mahjong_12
+  - mahjong_15
+  - mahjong_14
+  - mahjong_17
+  - mahjong_16
+  - mahjong_2
+  - mahjong_3
+  - mahjong_0
+  - mahjong_1
+  - mahjong_6
+  - mahjong_7
+  - mahjong_4
+  - mahjong_5
+  - mahjong_8
+  - mahjong_9
+  m_Tag: MahjongAtlas
+  m_IsVariant: 0

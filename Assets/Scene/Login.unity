@@ -365,6 +365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64ea40e42e29f8e4884eca810e6f4340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UICamera: {fileID: 521869259}
   showDebugInfo: 1
 --- !u!4 &599160179
 Transform:

@@ -16,5 +16,8 @@
         onPacManTryToEatBean,
 
         aStarOnClickGrid,
+
+        OnMahjongPointerDown,
+        OnMahjongPointerUp,
     }
 }

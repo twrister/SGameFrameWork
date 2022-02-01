@@ -8,6 +8,8 @@ namespace SthGame
 {
     public class GameRoot : MonoBehaviour
     {
+        public Camera m_UICamera;
+
         public bool showDebugInfo = true;
         public static GameRoot Instance { get; private set; }
 

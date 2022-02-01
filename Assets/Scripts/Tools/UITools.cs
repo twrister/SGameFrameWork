@@ -18,8 +18,10 @@ namespace SthGame
 
     public class UITools
     {
-        //public static UIBuilder Instance = new UIBuilder();
+        public const int FixedCanvasWidth = 1280;
+        public const int FixedCanvasHeight = 720;
 
+        public static float ScreenScale => FixedCanvasHeight / (float)Screen.height;
         private static Transform UIRoot = GameObject.Find("GameRoot/UIRoot").transform;
         private static UIRoot Root = UIRoot.GetComponent<UIRoot>();
 
