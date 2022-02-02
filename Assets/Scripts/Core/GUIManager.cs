@@ -149,7 +149,7 @@ namespace SthGame
             colorPlate.Open();
         }
 
-        public void ShowFloatTips(string content, float duration = 1.5f)
+        public void ShowFloatTips(string content, float duration = 1f)
         {
             if (floatTipsController == null)
             {

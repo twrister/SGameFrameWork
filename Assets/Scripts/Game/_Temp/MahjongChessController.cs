@@ -18,6 +18,7 @@ namespace SthGame
         int[] m_OriMahjongArray = new int[MAHJONG_TOTAL_COUNT];
         int[] m_MahjongArray = new int[MAHJONG_TOTAL_COUNT];      // 存放当前的麻将ID
         float m_MahjongScale = 0.6f;
+        Coroutine m_TestCoroutine;
 
         protected override string GetResourcePath()
         {
@@ -29,12 +30,13 @@ namespace SthGame
             base.Init();
             m_View = UINode as MahjongChessView;
 
-            m_View.RegistLateUpdate(LateUpdateCallback);
+            m_View.RegistUpdateCallback(UpdateCallback);
             m_View.m_CloseBtn.onClick.AddListener(OnClickClose);
             m_View.m_RandomBtn.onClick.AddListener(OnClickRandomBtn);
             m_View.m_ResetBtn.onClick.AddListener(OnClickResetBtn);
             m_View.m_RoolbackBtn.onClick.AddListener(OnClickRoolbackBtn);
             m_View.m_TipsBtn.onClick.AddListener(OnClickTipsBtn);
+            m_View.m_SuperTipsBtn.onClick.AddListener(OnClickSuperTipsBtn);
             m_View.m_ViolenceTestBtn.onClick.AddListener(OnClickViolenceTestBtn);
 
             GlobalEventSystem.Instance.Bind(EventId.OnMahjongPointerDown, OnMahjongPointerDown);
@@ -44,6 +46,12 @@ namespace SthGame
         public override void ShutDown()
         {
             base.ShutDown();
+
+            if (m_TestCoroutine != null) 
+            {
+                GameRoot.Instance.StopCoroutine(m_TestCoroutine);
+                m_TestCoroutine = null;
+            }
 
             GlobalEventSystem.Instance.UnBind(EventId.OnMahjongPointerDown, OnMahjongPointerDown);
             GlobalEventSystem.Instance.UnBind(EventId.OnMahjongPointerUp, OnMahjongPointerUp);
@@ -70,7 +78,7 @@ namespace SthGame
                 m_ItemList.Add(item);
             }
 
-            CopyMahjongList(ref m_MahjongArray, ref m_OriMahjongArray);
+            CopyMahjongList(m_MahjongArray, m_OriMahjongArray);
 
             m_View.m_ItemPrefab.gameObject.SetActive(false);
 
@@ -112,7 +120,7 @@ namespace SthGame
                 m_MahjongArray[i] = temp;
             }
 
-            CopyMahjongList(ref m_MahjongArray, ref m_OriMahjongArray);
+            CopyMahjongList(m_MahjongArray, m_OriMahjongArray);
 
             SelectIndexOne = -1;
 
@@ -121,7 +129,7 @@ namespace SthGame
 
         void OnClickResetBtn()
         {
-            CopyMahjongList(ref m_OriMahjongArray, ref m_MahjongArray);
+            CopyMahjongList(m_OriMahjongArray, m_MahjongArray);
 
             SelectIndexOne = -1;
             UpdateShow(true);
@@ -160,6 +168,7 @@ namespace SthGame
             yield return null;
         }
 
+        // 用来存放遍历移动一次后的位置结果
         int[] m_TempArray = new int[MAHJONG_TOTAL_COUNT];
 
         void OnClickTipsBtn()
@@ -170,43 +179,109 @@ namespace SthGame
             }
             else
             {
-                //for (int i = 0; i < m_MahjongArray.Length; i++)
-                //{
-                //    if (m_MahjongArray[i] == -1)
-                //    {
-                //        CopyMahjongList(ref m_MahjongArray, ref m_TempArray);
-
-                //        if (GetNearMahjangGridIdx(m_TempArray, -1, i, out int targetGridIdx, out int offset))
-                //        { 
-                //        }
-
-                //        FindRemovableMahjong(m_TempArray, out int farResultGridA, out int farResultGridB);
-
-                //    }
-                //}
+                GUIManager.Instance.ShowFloatTips("找不到相邻的");
             }
         }
 
-        // offset : gridIdx 相对 target的位置
-        bool GetNearMahjangGridIdx(int[] mahjongArray, int unitOffset, int gridIdx, out int targetGridIdx, out int offset)
+        int[] m_UnitOffsets = new int[] { -1, 1, -17, 17 };
+
+        void OnClickSuperTipsBtn()
         {
-            targetGridIdx = 0;
-            offset = 0;
-
-            //int row = gridIdx / 17;
-            //int column = gridIdx % 17;
-
-            if (Mathf.Abs(unitOffset) == 1) // hor
+            if (FindRemovableMahjong(m_MahjongArray, out int resultGridA, out int resultGridB))
             {
+                ShowTips(m_MahjongArray[resultGridA], m_MahjongArray[resultGridB]);
+            }
+            else
+            {
+                // 遍历所有的空格，再尝试上下左右方向的相邻麻将移到该空格
+                for (int gridIdx = 0; gridIdx < m_MahjongArray.Length; gridIdx++)
+                {
+                    if (m_MahjongArray[gridIdx] == -1)
+                    {
+                        // 遍历四个方向 向每一个空格移动
+                        for (int ii = 0; ii < m_UnitOffsets.Length; ii++)
+                        {
+                            CopyMahjongList(m_MahjongArray, m_TempArray);
 
+                            int unitOffset = m_UnitOffsets[ii];
+                            if (GetNearMahjangGridIdx(m_TempArray, unitOffset, gridIdx))
+                            {
+                                if (FindRemovableMahjong(m_TempArray, out int farResultGridA, out int farResultGridB))
+                                {
+                                    int mahjongIdA = m_TempArray[farResultGridA];
+                                    int mahjongIdB = m_TempArray[farResultGridB];
+                                    int mahjongA = GetGridIdxByMahjongId(m_MahjongArray, mahjongIdA);
+                                    int gridIdxB = GetGridIdxByMahjongId(m_MahjongArray, mahjongIdB);
+                                    ShowTips(m_MahjongArray[farResultGridA], m_MahjongArray[farResultGridB]);
+                                    return;
+                                } 
+                            }
+                        }
+                    }
+                }
+
+                GUIManager.Instance.ShowFloatTips("玩不下去了");
+            }
+        }
+
+
+        List<int> m_TempNeighbourMahjongGridIdxList = new List<int>();
+        // gridIdx : 传入一个空格位置
+        // 尝试对于一个空格位置的各个方向，找到最近的麻将
+        // 并且把找到的麻将移动到当前空格
+        bool GetNearMahjangGridIdx(int[] mahjongArray, int unitOffset, int gridIdx)
+        {
+            if (mahjongArray[gridIdx] != -1) return false;
+            
+            int offset = 0;
+
+            bool isHorizontal = Mathf.Abs(unitOffset) == 1;
+
+            if (isHorizontal)
+            {
+                int oriColumn = gridIdx % 17;
+                gridIdx += unitOffset;
+                offset += unitOffset;
+                int column = gridIdx % 17;
+                while (oriColumn == column && mahjongArray[gridIdx] != -1)
+                {
+                    gridIdx += unitOffset;
+                    offset += unitOffset;
+                    column = gridIdx % 17;
+                }
+            }
+            else
+            {
+                int oriRow = gridIdx / 17;
+                gridIdx += unitOffset;
+                offset += unitOffset;
+                int row = gridIdx / 17;
+                while (gridIdx >= 0 && oriRow == row && mahjongArray[gridIdx] != -1)
+                {
+                    gridIdx += unitOffset;
+                    offset += unitOffset;
+                    row = gridIdx / 17;
+                }
             }
 
-            return false;
+            bool isFind = gridIdx >= 0 && gridIdx < MAHJONG_TOTAL_COUNT && mahjongArray[gridIdx] >= 0;
+
+            if (isFind)
+            {
+                int idxOffset = unitOffset > 0 ? 1 : -1;
+                CalcNeighbourMahjongGridIdx(gridIdx, m_IsHorizontalMove, m_TempNeighbourMahjongGridIdxList);
+                CalcNeighbouringMahjongGrids(mahjongArray, idxOffset, isHorizontal, m_TempNeighbourMahjongGridIdxList);
+            }
+
+            return isFind;
         }
 
         void OnClickViolenceTestBtn()
         {
-            GameRoot.Instance.StartCoroutine(ViolenceTest());
+            if (m_TestCoroutine == null)
+            {
+                m_TestCoroutine = GameRoot.Instance.StartCoroutine(ViolenceTest());
+            }
         }
 
         void OnClickMahjongItem(int mahjongId)
@@ -242,11 +317,11 @@ namespace SthGame
             UpdateShow();
         }
 
-        int GetGridIdxByMahjongId(int mahjongId)
+        int GetGridIdxByMahjongId(int[] mahjongArray, int mahjongId)
         {
-            for(int i = 0; i < m_MahjongArray.Length; i++)
+            for(int i = 0; i < mahjongArray.Length; i++)
             {
-                if (m_MahjongArray[i] == mahjongId)
+                if (mahjongArray[i] == mahjongId)
                 {
                     return i;
                 }
@@ -256,7 +331,7 @@ namespace SthGame
 
         void DisableMahjongGrid(int mahjongId)
         {
-            int gridId = GetGridIdxByMahjongId(mahjongId);
+            int gridId = GetGridIdxByMahjongId(m_MahjongArray, mahjongId);
             if (gridId != -1) m_MahjongArray[gridId] = -1;
         }
 
@@ -277,8 +352,8 @@ namespace SthGame
         {
             if (!IsSameType(mahjongA, mahjongB)) return false;
 
-            int gridIdxA = GetGridIdxByMahjongId(mahjongA);
-            int gridIdxB = GetGridIdxByMahjongId(mahjongB);
+            int gridIdxA = GetGridIdxByMahjongId(m_MahjongArray, mahjongA);
+            int gridIdxB = GetGridIdxByMahjongId(m_MahjongArray, mahjongB);
             int rowA = gridIdxA / 17;
             int columnA = gridIdxA % 17;
             int rowB = gridIdxB / 17;
@@ -328,7 +403,7 @@ namespace SthGame
             return GetMahjongGridPos(row, column);
         }
 
-        void CopyMahjongList(ref int[] copyFromArray, ref int[] copyToArray)
+        void CopyMahjongList(int[] copyFromArray, int[] copyToArray)
         {
             if (copyFromArray.Length != copyToArray.Length)
             {
@@ -339,6 +414,7 @@ namespace SthGame
             copyFromArray.CopyTo(copyToArray, 0);
         }
 
+        // 找到可以消除的两麻将
         bool FindRemovableMahjong(int[] mahjongArray, out int resultGridA, out int resultGridB)
         {
             int gridIdxA = -1;
@@ -352,7 +428,7 @@ namespace SthGame
                 gridIdxA = i * 17;
                 while (gridIdxA < (i + 1) * 17)
                 {
-                    while (mahjongArray[gridIdxA] == -1) gridIdxA++;
+                    while (gridIdxA < (i + 1) * 17 && mahjongArray[gridIdxA] == -1) gridIdxA++;
 
                     gridIdxNext = gridIdxA + 1;
                     while (gridIdxNext < (i + 1) * 17 && mahjongArray[gridIdxNext] == -1) gridIdxNext++;
@@ -376,7 +452,7 @@ namespace SthGame
                     gridIdxA = i;
                     while (gridIdxA < 8 * 17 + i)
                     {
-                        while (mahjongArray[gridIdxA] == -1) gridIdxA += 17;
+                        while (gridIdxA < 8 * 17 + i && mahjongArray[gridIdxA] == -1) gridIdxA += 17;
 
                         gridIdxNext = gridIdxA + 17;
                         while (gridIdxNext < 8 * 17 + i && mahjongArray[gridIdxNext] == -1) gridIdxNext += 17;
@@ -421,76 +497,95 @@ namespace SthGame
             m_IsPressing = false;
             m_IsFirstPress = true;
             m_CanDoMove = false;
-            m_TempMahjongDict.Clear();
 
             // 求出新的位置
             Vector2 mousePos = Input.mousePosition;
             Vector3 offset = (mousePos - m_FirstPressPos) * UITools.ScreenScale / m_MahjongScale;
+
+            int idxOffset = 0;
             if (m_IsHorizontalMove)
             {
                 float horizontalMin = -m_LeftEmptyCount * ITEM_WIDTH;
                 float horizontalMax = m_RightEmptyCount * ITEM_WIDTH;
-                int idxOffset = Mathf.FloorToInt(Mathf.Clamp(offset.x, horizontalMin, horizontalMax) / ITEM_WIDTH + 0.5f);
-
-                if (idxOffset < 0)
-                {
-                    for (int i = 0; i < m_MovableMahjongGridIdxList.Count; i++) // 记录
-                    {
-                        m_TempMahjongDict[m_MovableMahjongGridIdxList[i] + idxOffset] = m_MahjongArray[m_MovableMahjongGridIdxList[i]];
-                    }
-                    for (int i = 0; i < m_MovableMahjongGridIdxList.Count; i++) // 清空
-                    {
-                        m_MahjongArray[m_MovableMahjongGridIdxList[i]] = -1;
-                    }
-                }
-                else if (idxOffset > 0)
-                {
-                    for (int i = m_MovableMahjongGridIdxList.Count - 1; i >= 0 ; i--) // 记录
-                    {
-                        m_TempMahjongDict[m_MovableMahjongGridIdxList[i] + idxOffset] = m_MahjongArray[m_MovableMahjongGridIdxList[i]];
-                    }
-                    for (int i = 0; i < m_MovableMahjongGridIdxList.Count; i++) // 清空
-                    {
-                        m_MahjongArray[m_MovableMahjongGridIdxList[i]] = -1;
-                    }
-                }
+                idxOffset = Mathf.FloorToInt(Mathf.Clamp(offset.x, horizontalMin, horizontalMax) / ITEM_WIDTH + 0.5f);
             }
             else
             {
                 float verticalMin = -m_DownEmptyCount * ITEM_HEIGHT;
                 float verticalMax = m_UpEmptyCount * ITEM_HEIGHT;
-                int idxOffset = Mathf.FloorToInt(Mathf.Clamp(offset.y, verticalMin, verticalMax) / ITEM_HEIGHT + 0.5f);
+                idxOffset = Mathf.FloorToInt(Mathf.Clamp(offset.y, verticalMin, verticalMax) / ITEM_HEIGHT + 0.5f);
+            }
 
+            if (idxOffset != 0)
+            {
+                CalcNeighbouringMahjongGrids(m_MahjongArray, idxOffset, m_IsHorizontalMove, m_MovableMahjongGridIdxList);
+            }
+
+            UpdateShow(true);
+        }
+
+        void CalcNeighbouringMahjongGrids(int[] mahjongArray, int idxOffset, bool isHorizontalMove, List<int> neighbouringMahjongGrids)
+        {
+            if (idxOffset == 0) return;
+            if (neighbouringMahjongGrids.Count == 0) return;
+
+            m_TempMahjongDict.Clear();
+            if (isHorizontalMove)
+            {
                 if (idxOffset < 0)
                 {
-                    for (int i = 0; i < m_MovableMahjongGridIdxList.Count; i++) // 记录
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // 记录
                     {
-                        m_TempMahjongDict[m_MovableMahjongGridIdxList[i] + idxOffset * 17] = m_MahjongArray[m_MovableMahjongGridIdxList[i]];
+                        m_TempMahjongDict[neighbouringMahjongGrids[i] + idxOffset] = mahjongArray[neighbouringMahjongGrids[i]];
                     }
-                    for (int i = 0; i < m_MovableMahjongGridIdxList.Count; i++) // 清空
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // 清空
                     {
-                        m_MahjongArray[m_MovableMahjongGridIdxList[i]] = -1;
+                        mahjongArray[neighbouringMahjongGrids[i]] = -1;
                     }
                 }
                 else if (idxOffset > 0)
                 {
-                    for (int i = m_MovableMahjongGridIdxList.Count - 1; i >= 0; i--)
+                    for (int i = neighbouringMahjongGrids.Count - 1; i >= 0; i--) // 记录
                     {
-                        m_TempMahjongDict[m_MovableMahjongGridIdxList[i] + idxOffset * 17] = m_MahjongArray[m_MovableMahjongGridIdxList[i]];
+                        m_TempMahjongDict[neighbouringMahjongGrids[i] + idxOffset] = mahjongArray[neighbouringMahjongGrids[i]];
                     }
-                    for (int i = 0; i < m_MovableMahjongGridIdxList.Count; i++) // 清空
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // 清空
                     {
-                        m_MahjongArray[m_MovableMahjongGridIdxList[i]] = -1;
+                        mahjongArray[neighbouringMahjongGrids[i]] = -1;
                     }
                 }
             }
+            else
+            {
+                if (idxOffset < 0)
+                {
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // 记录
+                    {
+                        m_TempMahjongDict[neighbouringMahjongGrids[i] + idxOffset * 17] = mahjongArray[neighbouringMahjongGrids[i]];
+                    }
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // 清空
+                    {
+                        mahjongArray[neighbouringMahjongGrids[i]] = -1;
+                    }
+                }
+                else if (idxOffset > 0)
+                {
+                    for (int i = neighbouringMahjongGrids.Count - 1; i >= 0; i--)
+                    {
+                        m_TempMahjongDict[neighbouringMahjongGrids[i] + idxOffset * 17] = mahjongArray[neighbouringMahjongGrids[i]];
+                    }
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // 清空
+                    {
+                        mahjongArray[neighbouringMahjongGrids[i]] = -1;
+                    }
+                }
+            }
+
             // 赋值
             foreach (var item in m_TempMahjongDict)
             {
-                m_MahjongArray[item.Key] = item.Value;
+                mahjongArray[item.Key] = item.Value;
             }
-
-            UpdateShow(true);
         }
 
         bool m_IsPressing;
@@ -501,7 +596,7 @@ namespace SthGame
         bool m_IsHorizontalMove;
         List<int> m_MovableMahjongGridIdxList = new List<int>();
         
-        void LateUpdateCallback()
+        void UpdateCallback()
         {
             if (m_IsPressing)
             {
@@ -541,17 +636,17 @@ namespace SthGame
                 {
                     m_CanDoMove = true;
                     m_IsHorizontalMove = Mathf.Abs(offset.x) > Mathf.Abs(offset.y);
-                    CalcConnectMahjongId(m_DragMahjongGridIdx, m_IsHorizontalMove);
+                    CalcNeighbourMahjongGridIdx(m_DragMahjongGridIdx, m_IsHorizontalMove, m_MovableMahjongGridIdxList);
                 }
             }
         }
 
         int m_LeftEmptyCount, m_RightEmptyCount, m_UpEmptyCount, m_DownEmptyCount = 0;
 
-        void CalcConnectMahjongId(int gridIdx, bool isHorizontal)
+        void CalcNeighbourMahjongGridIdx(int gridIdx, bool isHorizontal, List<int> neighboursList)
         {
-            m_MovableMahjongGridIdxList.Clear();
-            m_MovableMahjongGridIdxList.Add(gridIdx);
+            neighboursList.Clear();
+            neighboursList.Add(gridIdx);
 
             m_LeftEmptyCount = 0;
             m_RightEmptyCount = 0;
@@ -573,7 +668,7 @@ namespace SthGame
                     if (m_MahjongArray[nextIdx] >= 0)
                     {
                         if (findEmpty) break;
-                        else m_MovableMahjongGridIdxList.Add(nextIdx);
+                        else neighboursList.Add(nextIdx);
                     }
                     else
                     {
@@ -590,7 +685,7 @@ namespace SthGame
                     if (m_MahjongArray[nextIdx] >= 0)
                     {
                         if (findEmpty) break;
-                        else m_MovableMahjongGridIdxList.Add(nextIdx);
+                        else neighboursList.Add(nextIdx);
                     }
                     else
                     {
@@ -610,7 +705,7 @@ namespace SthGame
                     if (m_MahjongArray[nextIdx] >= 0)
                     {
                         if (findEmpty) break;
-                        else m_MovableMahjongGridIdxList.Add(nextIdx);
+                        else neighboursList.Add(nextIdx);
                     }
                     else
                     {
@@ -628,7 +723,7 @@ namespace SthGame
                     if (m_MahjongArray[nextIdx] >= 0)
                     {
                         if (findEmpty) break;
-                        else m_MovableMahjongGridIdxList.Add(nextIdx);
+                        else neighboursList.Add(nextIdx);
                     }
                     else
                     {
