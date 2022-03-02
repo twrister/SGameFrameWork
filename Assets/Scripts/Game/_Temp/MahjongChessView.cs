@@ -15,18 +15,19 @@ namespace SthGame
         public Button m_ResetBtn;
         public Button m_RoolbackBtn;
         public Button m_TipsBtn;
+        public Button m_SuperTipsBtn;
         public Button m_ViolenceTestBtn;
 
-        UnityAction m_LateUpdate;
+        UnityAction m_UpdateCallback;
 
-        private void LateUpdate()
+        private void Update()
         {
-            if (m_LateUpdate != null) m_LateUpdate();
+            if (m_UpdateCallback != null) m_UpdateCallback();
         }
 
-        public void RegistLateUpdate(UnityAction lateUpdate)
+        public void RegistUpdateCallback(UnityAction updateCallback)
         {
-            m_LateUpdate = lateUpdate;
+            m_UpdateCallback = updateCallback;
         }
     }
 }
