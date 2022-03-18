@@ -178,6 +178,16 @@ namespace SthGame
                 })
             };
 
+            ListItemData horseLamp = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("Horse Lamp", () =>
+                {
+                    GUIManager.Instance.ShowHorseLampTips("1--------------2--------------3--------------4--------------5--------------6--------------7--------------8--------------9");
+                })
+            };
+
             horDataList.Add(copyBufferDemo);
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
@@ -193,6 +203,7 @@ namespace SthGame
             horDataList.Add(poolInfo);
             horDataList.Add(openQQ);
             horDataList.Add(mahjongChess);
+            horDataList.Add(horseLamp);
 
             horizontalListCtrl.SetListData(horDataList);
         }

@@ -11,6 +11,7 @@ namespace SthGame
 
         private List<UIBaseController> uiControllerList = new List<UIBaseController>();
         FloatTipsController floatTipsController;
+        HorseLampTipsController m_HorseLampTipsController;
 
         public override void Init()
         {
@@ -160,6 +161,16 @@ namespace SthGame
             {
                 floatTipsController.ShowFloatTips(content, duration);
             }
+        }
+
+        public void ShowHorseLampTips(string content)
+        {
+            if (m_HorseLampTipsController == null)
+            {
+                m_HorseLampTipsController = Open<HorseLampTipsController>(uiLayer: UILayer.Notice);
+            }
+
+            m_HorseLampTipsController?.ShowTips(content);
         }
 
         #endregion
