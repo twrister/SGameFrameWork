@@ -162,9 +162,6 @@ namespace SthGame
                 Data = new FunctionListItemData("call QQ", () =>
                 {
                     Application.OpenURL("mqq://");
-                    //var androidClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-                    //var androidObj = androidClass.GetStatic<AndroidJavaObject>("currentActivity");
-                    //androidObj.Call("DoActivieApp", "com.tencent.mobileqq");
                 })
             };
 
@@ -188,6 +185,16 @@ namespace SthGame
                 })
             };
 
+            var mangWenPic = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("MangWen Pic", () =>
+                {
+                    GUIManager.Instance.Open<MangWenPicController>();
+                })
+            };
+
             horDataList.Add(copyBufferDemo);
             horDataList.Add(exampleList);
             horDataList.Add(shaderSample);
@@ -204,6 +211,7 @@ namespace SthGame
             horDataList.Add(openQQ);
             horDataList.Add(mahjongChess);
             horDataList.Add(horseLamp);
+            horDataList.Add(mangWenPic);
 
             horizontalListCtrl.SetListData(horDataList);
         }
