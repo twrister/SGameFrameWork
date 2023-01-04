@@ -63,6 +63,7 @@ MonoBehaviour:
   m_TranferRawImg: {fileID: 6736093179641046471}
   m_PicTxt: {fileID: 2793816945967043923}
   m_RefreshBtn: {fileID: 1524472627258141770}
+  m_CloseBtn: {fileID: 1284608183022446662}
   m_PixelSize: 4
   m_Threshold: 0.5
 --- !u!1 &1691669070972334840

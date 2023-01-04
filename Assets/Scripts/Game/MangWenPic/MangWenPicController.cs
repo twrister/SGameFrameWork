@@ -25,6 +25,7 @@ namespace SthGame
             m_View = UINode as MangWenPicView;
 
             m_View.m_RefreshBtn.onClick.AddListener(OnClickRefreshBtn);
+            m_View.m_CloseBtn.onClick.AddListener(OnClickCloseBtn);
         }
 
         protected override void OpenCallBack()
@@ -37,6 +38,11 @@ namespace SthGame
         void OnClickRefreshBtn()
         {
             GenerateMangWenPicTxt();
+        }
+
+        private void OnClickCloseBtn()
+        {
+            Close();
         }
 
         void GenerateMangWenPicTxt()
