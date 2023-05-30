@@ -218,19 +218,20 @@ namespace SthGame
 
         Queue<GameObject> objQueue = new Queue<GameObject>();
 
-        Timer timer = null;
+        private uint m_TimerId = 0u;
         private void OnClickTimerDemo()
         {
-            if (timer != null)
+            if (m_TimerId != 0u)
             {
-                GlobalTimerManager.Instance.ClearTimer(timer);
-                Logger.Log("clear timer : {0}", timer.ToString());
+                GlobalTimerManager.Instance.ClearTimer(m_TimerId);
+                Logger.Log("clear timer : {0}", m_TimerId);
+                m_TimerId = 0u;
             }
             else
             {
                 Logger.Log("start timer");
-                timer = GlobalTimerManager.Instance.StartTimer(1, true, () => {
-                    Logger.Log("timer : {0}", timer.ToString());
+                m_TimerId = GlobalTimerManager.Instance.StartTimer(0.1f, true, () => {
+                    Logger.Log("timer : {0}", m_TimerId);
                 });
             }
         }
