@@ -4,6 +4,7 @@ Packages/*
 Temp/*
 obj/*
 Cache/*
+.idea/*
 .vs/*
 *.csproj
 *.sln
