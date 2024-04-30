@@ -11,8 +11,11 @@ namespace SthGame
         FloatTipsView view;
         Queue<Tuple<string, float>> contentQueue = new Queue<Tuple<string, float>>();
         
-
         bool isPlaying = false;
+
+        private List<SingleFloatTips> m_TipsList = new List<SingleFloatTips>();
+
+        private bool m_FloatImmediately = true;
 
         protected override string GetResourcePath()
         {
@@ -41,7 +44,7 @@ namespace SthGame
 
         private void TryPopOneTips()
         {
-            if (isPlaying) return;
+            if (m_FloatImmediately && isPlaying) return;
 
             PopOneTips();
         }
@@ -59,7 +62,14 @@ namespace SthGame
             string content = tuple.Item1;
             float duration = tuple.Item2;
             var Tips = GetOneFloatTips();
+
+            for (int i = 0; i < m_TipsList.Count; i++)
+            {
+                m_TipsList[i].MoveToEndImmediately();
+            }
+            
             Tips.Show(content, duration, PopOneTips, RecycleFloatTips);
+            m_TipsList.Add(Tips);
         }
 
         #region simple pool
@@ -94,6 +104,7 @@ namespace SthGame
         {
             if (tips != null)
             {
+                m_TipsList.Remove(tips);
                 tips.Reset();
                 tipsStack.Push(tips);
             }
