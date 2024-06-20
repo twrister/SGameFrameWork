@@ -194,6 +194,16 @@ namespace SthGame
                     GUIManager.Instance.Open<MangWenPicController>();
                 })
             };
+            
+            var knapsackGame = new ListItemData()
+            {
+                Width = 250,
+                Height = 300,
+                Data = new FunctionListItemData("KnapsackGame", () =>
+                {
+                    GUIManager.Instance.Open<KnapsackGameController>();
+                })
+            };
 
             horDataList.Add(copyBufferDemo);
             horDataList.Add(exampleList);
@@ -212,6 +222,7 @@ namespace SthGame
             horDataList.Add(mahjongChess);
             horDataList.Add(horseLamp);
             horDataList.Add(mangWenPic);
+            horDataList.Add(knapsackGame);
 
             horizontalListCtrl.SetListData(horDataList);
         }
