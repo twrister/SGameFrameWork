@@ -16,7 +16,7 @@ namespace SthGame
         MahjongChessView m_View;
         List<MahjongChessItem> m_ItemList;
         int[] m_OriMahjongArray = new int[MAHJONG_TOTAL_COUNT];
-        int[] m_MahjongArray = new int[MAHJONG_TOTAL_COUNT];      // ´æ·Åµ±Ç°µÄÂé½«ID
+        int[] m_MahjongArray = new int[MAHJONG_TOTAL_COUNT];      // å­˜æ”¾å½“å‰çš„éº»å°†ID
         float m_MahjongScale = 0.6f;
         Coroutine m_TestCoroutine;
 
@@ -168,7 +168,7 @@ namespace SthGame
             yield return null;
         }
 
-        // ÓÃÀ´´æ·Å±éÀúÒÆ¶¯Ò»´ÎºóµÄÎ»ÖÃ½á¹û
+        // ç”¨æ¥å­˜æ”¾éå†ç§»åŠ¨ä¸€æ¬¡åçš„ä½ç½®ç»“æœ
         int[] m_TempArray = new int[MAHJONG_TOTAL_COUNT];
 
         void OnClickTipsBtn()
@@ -179,7 +179,7 @@ namespace SthGame
             }
             else
             {
-                GUIManager.Instance.ShowFloatTips("ÕÒ²»µ½ÏàÁÚµÄ");
+                GUIManager.Instance.ShowFloatTips("æ‰¾ä¸åˆ°ç›¸é‚»çš„");
             }
         }
 
@@ -193,12 +193,12 @@ namespace SthGame
             }
             else
             {
-                // ±éÀúËùÓĞµÄ¿Õ¸ñ£¬ÔÙ³¢ÊÔÉÏÏÂ×óÓÒ·½ÏòµÄÏàÁÚÂé½«ÒÆµ½¸Ã¿Õ¸ñ
+                // éå†æ‰€æœ‰çš„ç©ºæ ¼ï¼Œå†å°è¯•ä¸Šä¸‹å·¦å³æ–¹å‘çš„ç›¸é‚»éº»å°†ç§»åˆ°è¯¥ç©ºæ ¼
                 for (int gridIdx = 0; gridIdx < m_MahjongArray.Length; gridIdx++)
                 {
                     if (m_MahjongArray[gridIdx] == -1)
                     {
-                        // ±éÀúËÄ¸ö·½Ïò ÏòÃ¿Ò»¸ö¿Õ¸ñÒÆ¶¯
+                        // éå†å››ä¸ªæ–¹å‘ å‘æ¯ä¸€ä¸ªç©ºæ ¼ç§»åŠ¨
                         for (int ii = 0; ii < m_UnitOffsets.Length; ii++)
                         {
                             CopyMahjongList(m_MahjongArray, m_TempArray);
@@ -220,15 +220,15 @@ namespace SthGame
                     }
                 }
 
-                GUIManager.Instance.ShowFloatTips("Íæ²»ÏÂÈ¥ÁË");
+                GUIManager.Instance.ShowFloatTips("ç©ä¸ä¸‹å»äº†");
             }
         }
 
 
         List<int> m_TempNeighbourMahjongGridIdxList = new List<int>();
-        // gridIdx : ´«ÈëÒ»¸ö¿Õ¸ñÎ»ÖÃ
-        // ³¢ÊÔ¶ÔÓÚÒ»¸ö¿Õ¸ñÎ»ÖÃµÄ¸÷¸ö·½Ïò£¬ÕÒµ½×î½üµÄÂé½«
-        // ²¢ÇÒ°ÑÕÒµ½µÄÂé½«ÒÆ¶¯µ½µ±Ç°¿Õ¸ñ
+        // gridIdx : ä¼ å…¥ä¸€ä¸ªç©ºæ ¼ä½ç½®
+        // å°è¯•å¯¹äºä¸€ä¸ªç©ºæ ¼ä½ç½®çš„å„ä¸ªæ–¹å‘ï¼Œæ‰¾åˆ°æœ€è¿‘çš„éº»å°†
+        // å¹¶ä¸”æŠŠæ‰¾åˆ°çš„éº»å°†ç§»åŠ¨åˆ°å½“å‰ç©ºæ ¼
         bool GetNearMahjangGridIdx(int[] mahjongArray, int unitOffset, int gridIdx)
         {
             if (mahjongArray[gridIdx] != -1) return false;
@@ -286,7 +286,7 @@ namespace SthGame
 
         void OnClickMahjongItem(int mahjongId)
         {
-            // µã¸ßÁÁµÄÈ¡ÏûÑ¡Ôñ
+            // ç‚¹é«˜äº®çš„å–æ¶ˆé€‰æ‹©
             if (mahjongId == SelectIndexOne)
             {
                 SelectIndexOne = -1;
@@ -347,7 +347,7 @@ namespace SthGame
             return -1;
         }
 
-        // ÏàÍ¬µÄÅÆ ²¢ÇÒ ÏàÁÚ»ò¿É¶ÔÍû ¿ÉÒÔÏû³ı
+        // ç›¸åŒçš„ç‰Œ å¹¶ä¸” ç›¸é‚»æˆ–å¯å¯¹æœ› å¯ä»¥æ¶ˆé™¤
         bool IsCanRemove(int mahjongA, int mahjongB)
         {
             if (!IsSameType(mahjongA, mahjongB)) return false;
@@ -414,7 +414,7 @@ namespace SthGame
             copyFromArray.CopyTo(copyToArray, 0);
         }
 
-        // ÕÒµ½¿ÉÒÔÏû³ıµÄÁ½Âé½«
+        // æ‰¾åˆ°å¯ä»¥æ¶ˆé™¤çš„ä¸¤éº»å°†
         bool FindRemovableMahjong(int[] mahjongArray, out int resultGridA, out int resultGridB)
         {
             int gridIdxA = -1;
@@ -491,14 +491,14 @@ namespace SthGame
         {
             int idx = (int)ps[0];
 
-            // µã»÷Ì§ÆğÊ±²»ÊÇÍÏ¶¯¾ÍÊÇµã»÷
+            // ç‚¹å‡»æŠ¬èµ·æ—¶ä¸æ˜¯æ‹–åŠ¨å°±æ˜¯ç‚¹å‡»
             if (!m_CanDoMove) OnClickMahjongItem(idx);
 
             m_IsPressing = false;
             m_IsFirstPress = true;
             m_CanDoMove = false;
 
-            // Çó³öĞÂµÄÎ»ÖÃ
+            // æ±‚å‡ºæ–°çš„ä½ç½®
             Vector2 mousePos = Input.mousePosition;
             Vector3 offset = (mousePos - m_FirstPressPos) * UITools.ScreenScale / m_MahjongScale;
 
@@ -534,22 +534,22 @@ namespace SthGame
             {
                 if (idxOffset < 0)
                 {
-                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // ¼ÇÂ¼
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // è®°å½•
                     {
                         m_TempMahjongDict[neighbouringMahjongGrids[i] + idxOffset] = mahjongArray[neighbouringMahjongGrids[i]];
                     }
-                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // Çå¿Õ
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // æ¸…ç©º
                     {
                         mahjongArray[neighbouringMahjongGrids[i]] = -1;
                     }
                 }
                 else if (idxOffset > 0)
                 {
-                    for (int i = neighbouringMahjongGrids.Count - 1; i >= 0; i--) // ¼ÇÂ¼
+                    for (int i = neighbouringMahjongGrids.Count - 1; i >= 0; i--) // è®°å½•
                     {
                         m_TempMahjongDict[neighbouringMahjongGrids[i] + idxOffset] = mahjongArray[neighbouringMahjongGrids[i]];
                     }
-                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // Çå¿Õ
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // æ¸…ç©º
                     {
                         mahjongArray[neighbouringMahjongGrids[i]] = -1;
                     }
@@ -559,11 +559,11 @@ namespace SthGame
             {
                 if (idxOffset < 0)
                 {
-                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // ¼ÇÂ¼
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // è®°å½•
                     {
                         m_TempMahjongDict[neighbouringMahjongGrids[i] + idxOffset * 17] = mahjongArray[neighbouringMahjongGrids[i]];
                     }
-                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // Çå¿Õ
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // æ¸…ç©º
                     {
                         mahjongArray[neighbouringMahjongGrids[i]] = -1;
                     }
@@ -574,14 +574,14 @@ namespace SthGame
                     {
                         m_TempMahjongDict[neighbouringMahjongGrids[i] + idxOffset * 17] = mahjongArray[neighbouringMahjongGrids[i]];
                     }
-                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // Çå¿Õ
+                    for (int i = 0; i < neighbouringMahjongGrids.Count; i++) // æ¸…ç©º
                     {
                         mahjongArray[neighbouringMahjongGrids[i]] = -1;
                     }
                 }
             }
 
-            // ¸³Öµ
+            // èµ‹å€¼
             foreach (var item in m_TempMahjongDict)
             {
                 mahjongArray[item.Key] = item.Value;
@@ -632,7 +632,7 @@ namespace SthGame
                         //m_ItemList[m_MovableMahjongList[i]].transform.localPosition = gridPosV3 + (m_IsHorizontalMove ? Vector3.right * offset.x : Vector3.up * offset.y);
                     }
                 }
-                else if (offset.magnitude > 20) // ÍÏ×§³¬¹ıãĞÖµ£¬¿ªÊ¼ÒÆ¶¯
+                else if (offset.magnitude > 20) // æ‹–æ‹½è¶…è¿‡é˜ˆå€¼ï¼Œå¼€å§‹ç§»åŠ¨
                 {
                     m_CanDoMove = true;
                     m_IsHorizontalMove = Mathf.Abs(offset.x) > Mathf.Abs(offset.y);
@@ -660,7 +660,7 @@ namespace SthGame
 
             if (isHorizontal)
             {
-                // ×ó²à
+                // å·¦ä¾§
                 int leftCount = column;
                 for (int i = 1; i <= leftCount; i++)
                 {
@@ -676,7 +676,7 @@ namespace SthGame
                         m_LeftEmptyCount++;
                     }
                 }
-                // ÓÒ²à
+                // å³ä¾§
                 findEmpty = false;
                 int rightCount = 16 - column;
                 for (int i = 1; i <= rightCount; i++)
@@ -696,7 +696,7 @@ namespace SthGame
             }
             else
             {
-                // ÉÏ²à
+                // ä¸Šä¾§
                 int upCount = 7 - row;
                 findEmpty = false;
                 for (int i = 1; i <= upCount; i++)
@@ -714,7 +714,7 @@ namespace SthGame
                     }
                 }
 
-                // ÏÂ²à
+                // ä¸‹ä¾§
                 int downCount = row;
                 findEmpty = false;
                 for (int i = 1; i <= downCount; i++)

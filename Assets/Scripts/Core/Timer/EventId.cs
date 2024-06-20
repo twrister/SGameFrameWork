@@ -19,5 +19,8 @@
 
         OnMahjongPointerDown,
         OnMahjongPointerUp,
+        
+        OnKnapsackPointerDown,
+        OnKnapsackPointerUp,
     }
 }
