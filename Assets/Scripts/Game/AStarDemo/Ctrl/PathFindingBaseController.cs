@@ -160,7 +160,7 @@ namespace SthGame
         }
 
         #region Common Logic
-        public static void SetLocalPosByGridPos(Transform trans, int gridX, int gridY, int edge, int tX, int tY)
+        public static void SetLocalPosByGridPos(Transform trans, int gridX, int gridY, float edge, int tX, int tY)
         {
             float localPosX = (gridX - (tX - 1) / 2f) * edge;
             float localPosY = (gridY - (tY - 1) / 2f) * edge;
