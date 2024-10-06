@@ -39,8 +39,12 @@ namespace SthGame
         public override void Init()
         {
             m_View = UINode as KnapsackGameView;
-            
-            m_View.m_CloseButton.onClick.AddListener(Close);
+
+            if (m_View.m_CloseButton != null)
+            {
+                m_View.m_CloseButton.onClick.AddListener(Close);
+            }
+
             m_View.RegistUpdateCallback(UpdateCallback);
             
             GlobalEventSystem.Instance.Bind(EventId.OnKnapsackPointerDown, OnKnapsackPointerDown);
@@ -58,8 +62,6 @@ namespace SthGame
 
         private void OnKnapsackPointerDown(object[] ps)
         {
-            Logger.Log("OnPointerDown");
-
             m_CurSelectData = (KnapsackGridData)ps[0];
             m_FirstPos = m_CurSelectData.m_RectTrans.anchoredPosition;
             m_IsPressing = true;
@@ -67,8 +69,6 @@ namespace SthGame
             
         private void OnKnapsackPointerUp(object[] ps)
         {
-            Logger.Log("OnPointerUp");
-
             m_CurSelectData.m_RectTrans.anchoredPosition = m_FirstPos;
             m_IsPressing = false;
             m_CanDoMove = false;

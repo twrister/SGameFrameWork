@@ -105,7 +105,7 @@ TextureImporter:
       213: 21300066
     second: mahjong_33
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -126,6 +126,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -164,6 +165,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -179,6 +181,30 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -916,6 +942,41 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      mahjong_24: 21300048
+      mahjong_28: 21300056
+      mahjong_31: 21300062
+      mahjong_10: 21300020
+      mahjong_21: 21300042
+      mahjong_18: 21300036
+      mahjong_14: 21300028
+      mahjong_9: 21300018
+      mahjong_0: 21300000
+      mahjong_8: 21300016
+      mahjong_22: 21300044
+      mahjong_27: 21300054
+      mahjong_5: 21300010
+      mahjong_26: 21300052
+      mahjong_13: 21300026
+      mahjong_6: 21300012
+      mahjong_15: 21300030
+      mahjong_3: 21300006
+      mahjong_11: 21300022
+      mahjong_16: 21300032
+      mahjong_30: 21300060
+      mahjong_23: 21300046
+      mahjong_12: 21300024
+      mahjong_4: 21300008
+      mahjong_1: 21300002
+      mahjong_17: 21300034
+      mahjong_19: 21300038
+      mahjong_29: 21300058
+      mahjong_33: 21300066
+      mahjong_7: 21300014
+      mahjong_20: 21300040
+      mahjong_2: 21300004
+      mahjong_32: 21300064
+      mahjong_25: 21300050
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

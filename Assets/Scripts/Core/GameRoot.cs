@@ -60,8 +60,8 @@ namespace SthGame
             systemList.Add(new RedPointManager());
 
             // Game Logic Module
-            systemList.Add(new UserInfoSystem()); 
-            systemList.Add(new ChatSystem());
+            // systemList.Add(new UserInfoSystem()); 
+            // systemList.Add(new ChatSystem());
 
             StartCoroutine(StartGame());
         }
@@ -73,10 +73,15 @@ namespace SthGame
             Logger.Log("StartGame");
 
             //NetworkSystem.Instance.InitClientPeer();
+            OnStartGame();
+        }
 
+        protected virtual void OnStartGame()
+        {
             RedPointManager.Instance.SetRedPointNum(ERedPointType.RedPointDemoSub1, 1);
             RedPointManager.Instance.SetRedPointNum(ERedPointType.RedPointDemoSub2, 1);
             RedPointManager.Instance.SetRedPointNum(ERedPointType.RedPointDemoSub3, 1);
+            
             GUIManager.Instance.Open<MainuiController>();
         }
 
