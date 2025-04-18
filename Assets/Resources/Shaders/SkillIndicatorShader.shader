@@ -1,9 +1,10 @@
-Shader "Unlit/SkillIndicator"
+Shader "Unlit/RingSkillIndicator"
 {
     Properties
     {
         _Color            ("Fill Color",        Color)       = (1,1,1,1)
-        _Radius           ("Radius",            Range(0,1))  = 0.5
+        _InnerRadius      ("Inner Radius",      Range(0,1))  = 0.2
+        _OuterRadius      ("Outer Radius",      Range(0,1))  = 0.5
         _Angle            ("Angle (°)",         Range(0,360))= 90
         _Direction        ("Direction (°)",     Range(0,360))= 0
         _BorderColor      ("Border Color",      Color)       = (0,0,0,1)
@@ -24,7 +25,8 @@ Shader "Unlit/SkillIndicator"
             #include "UnityCG.cginc"
 
             fixed4 _Color;
-            float _Radius;
+            float _InnerRadius;
+            float _OuterRadius;
             float _Angle;
             float _Direction;
             fixed4 _BorderColor;
@@ -46,43 +48,40 @@ Shader "Unlit/SkillIndicator"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-                // UV 从 [0,1] 映射到中心为 (0,0) 的 [-1,1]
-                o.uv = v.uv * 2 - 1;
+                o.uv  = v.uv * 2 - 1;
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 p = i.uv;
-                float r = length(p);
+                float r  = length(p);
 
-                // 1) 半径裁剪
-                if (r > _Radius)
+                // 1) 半径裁剪：丢弃在内圆以内或在外圆以外的像素
+                if (r < _InnerRadius || r > _OuterRadius)
                     discard;
 
                 // 2) 角度裁剪
-                // atan2 返回弧度，degrees() 转为度
                 float ang = degrees(atan2(p.y, p.x));
-                // 调整方向偏移
                 ang -= _Direction;
-                // 归一化到 [-180,180]
                 ang = (ang > 180) ? ang - 360 : (ang < -180 ? ang + 360 : ang);
 
                 float halfA = _Angle * 0.5;
                 if (abs(ang) > halfA)
                     discard;
 
-                // 3) 描边逻辑
-                // 判断是否在外弧描边区域
-                bool isArcBorder = (r >= _Radius - _BorderThickness);
+                // 3) 边框逻辑
+                // 外圆边框
+                bool isOuterArcBorder = (r >= _OuterRadius - _BorderThickness);
+                // 内圆边框
+                bool isInnerArcBorder = (r <= _InnerRadius + _BorderThickness);
 
-                // 判断是否在两条径向边界线附近
-                // 计算像素到径向边界线的距离：d = r * sin(Δθ)
-                float deltaA = abs(abs(ang) - halfA);
+                // 径向边框（同原理）
+                float deltaA  = abs(abs(ang) - halfA);
                 float dRadial = r * sin(radians(deltaA));
                 bool isRadialBorder = (dRadial <= _BorderThickness);
 
-                if (isArcBorder || isRadialBorder)
+                if (isOuterArcBorder || isInnerArcBorder || isRadialBorder)
                 {
                     return _BorderColor;
                 }
