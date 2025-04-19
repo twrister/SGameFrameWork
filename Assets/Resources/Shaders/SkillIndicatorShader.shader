@@ -50,7 +50,7 @@ Shader "Unlit/RingSkillIndicatorSimpleFade"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-                o.uv  = v.uv * 2 - 1;    // UV 从 [0,1] 转到 [-1,1]
+                o.uv  = v.uv * 2 - 1;    // UV from [0,1] to [-1,1]
                 return o;
             }
 
@@ -59,11 +59,11 @@ Shader "Unlit/RingSkillIndicatorSimpleFade"
                 float2 p = i.uv;
                 float r  = length(p);
 
-                // 1) 半径裁剪：只保留环带内
+                // 1) Radius discard: keep only within ring
                 if (r < _InnerRadius || r > _OuterRadius)
                     discard;
 
-                // 2) 角度裁剪：只保留扇形区域
+                // 2) Angle discard: keep only within sector
                 float ang = degrees(atan2(p.y, p.x)) - _Direction;
                 if (ang > 180) ang -= 360;
                 if (ang < -180) ang += 360;
@@ -71,30 +71,31 @@ Shader "Unlit/RingSkillIndicatorSimpleFade"
                 if (abs(ang) > halfA)
                     discard;
 
-                // 3) 边框判断：内外圆弧或径向边界
+                // 3) Compute border conditions
                 float deltaA  = abs(abs(ang) - halfA);
                 float dRadial = r * sin(radians(deltaA));
                 bool isOuterArc  = (r >= _OuterRadius - _BorderThickness);
                 bool isInnerArc  = (r <= _InnerRadius + _BorderThickness);
                 bool isRadial    = (dRadial <= _BorderThickness);
+
+                fixed4 result;
+
                 if (isOuterArc || isInnerArc || isRadial)
                 {
-                    return _BorderColor;
+                    result = _BorderColor;
+                }
+                else
+                {
+                    // 4) Fill fade: lerp from border to fill
+                    float dInner = r - (_InnerRadius + _BorderThickness);
+                    float dOuter = (_OuterRadius - _BorderThickness) - r;
+                    float dRad   = dRadial - _BorderThickness;
+                    float dMin   = min(min(dInner, dOuter), dRad);
+                    float t = saturate(dMin / _FadeDistance);
+                    result = lerp(_BorderColor, _Color, t);
                 }
 
-                // 4) 填充渐变：直接从 BorderColor 过渡到 Fill Color
-                // 计算到边框的最小距离
-                float dInner = r - (_InnerRadius + _BorderThickness);
-                float dOuter = (_OuterRadius - _BorderThickness) - r;
-                float dRad   = dRadial - _BorderThickness;
-                float dMin   = min(min(dInner, dOuter), dRad);
-
-                // 归一化到 [0,1]
-                float t = saturate(dMin / _FadeDistance);
-
-                // 单次线性插值
-                fixed4 col = lerp(_BorderColor, _Color, t);
-                return col;
+                return result;
             }
             ENDCG
         }
