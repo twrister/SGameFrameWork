@@ -1,4 +1,4 @@
-Shader "Unlit/RingSkillIndicator"
+Shader "Unlit/RingSkillIndicatorSimpleFade"
 {
     Properties
     {
@@ -9,6 +9,7 @@ Shader "Unlit/RingSkillIndicator"
         _Direction        ("Direction (°)",     Range(0,360))= 0
         _BorderColor      ("Border Color",      Color)       = (0,0,0,1)
         _BorderThickness  ("Border Thickness",  Range(0,0.2))= 0.02
+        _FadeDistance     ("Fade Distance",     Range(0,0.2))= 0.05
     }
     SubShader
     {
@@ -31,6 +32,7 @@ Shader "Unlit/RingSkillIndicator"
             float _Direction;
             fixed4 _BorderColor;
             float _BorderThickness;
+            float _FadeDistance;
 
             struct appdata
             {
@@ -48,7 +50,7 @@ Shader "Unlit/RingSkillIndicator"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-                o.uv  = v.uv * 2 - 1;
+                o.uv  = v.uv * 2 - 1;    // UV 从 [0,1] 转到 [-1,1]
                 return o;
             }
 
@@ -57,37 +59,42 @@ Shader "Unlit/RingSkillIndicator"
                 float2 p = i.uv;
                 float r  = length(p);
 
-                // 1) 半径裁剪：丢弃在内圆以内或在外圆以外的像素
+                // 1) 半径裁剪：只保留环带内
                 if (r < _InnerRadius || r > _OuterRadius)
                     discard;
 
-                // 2) 角度裁剪
-                float ang = degrees(atan2(p.y, p.x));
-                ang -= _Direction;
-                ang = (ang > 180) ? ang - 360 : (ang < -180 ? ang + 360 : ang);
-
+                // 2) 角度裁剪：只保留扇形区域
+                float ang = degrees(atan2(p.y, p.x)) - _Direction;
+                if (ang > 180) ang -= 360;
+                if (ang < -180) ang += 360;
                 float halfA = _Angle * 0.5;
                 if (abs(ang) > halfA)
                     discard;
 
-                // 3) 边框逻辑
-                // 外圆边框
-                bool isOuterArcBorder = (r >= _OuterRadius - _BorderThickness);
-                // 内圆边框
-                bool isInnerArcBorder = (r <= _InnerRadius + _BorderThickness);
-
-                // 径向边框（同原理）
+                // 3) 边框判断：内外圆弧或径向边界
                 float deltaA  = abs(abs(ang) - halfA);
                 float dRadial = r * sin(radians(deltaA));
-                bool isRadialBorder = (dRadial <= _BorderThickness);
-
-                if (isOuterArcBorder || isInnerArcBorder || isRadialBorder)
+                bool isOuterArc  = (r >= _OuterRadius - _BorderThickness);
+                bool isInnerArc  = (r <= _InnerRadius + _BorderThickness);
+                bool isRadial    = (dRadial <= _BorderThickness);
+                if (isOuterArc || isInnerArc || isRadial)
                 {
                     return _BorderColor;
                 }
 
-                // 4) 内部填充
-                return _Color;
+                // 4) 填充渐变：直接从 BorderColor 过渡到 Fill Color
+                // 计算到边框的最小距离
+                float dInner = r - (_InnerRadius + _BorderThickness);
+                float dOuter = (_OuterRadius - _BorderThickness) - r;
+                float dRad   = dRadial - _BorderThickness;
+                float dMin   = min(min(dInner, dOuter), dRad);
+
+                // 归一化到 [0,1]
+                float t = saturate(dMin / _FadeDistance);
+
+                // 单次线性插值
+                fixed4 col = lerp(_BorderColor, _Color, t);
+                return col;
             }
             ENDCG
         }
