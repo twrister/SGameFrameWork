@@ -8,13 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SkillIndicatorShader
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: bdbd70bedd8c0144ebcb5008d8c21677, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -58,23 +58,42 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Angle: 46
+    - _BorderThickness: 0
     - _BumpScale: 1
+    - _CenterFadeDistance: 0.67
+    - _CenterFadeEnd: 0.862
+    - _CenterFadeEndRatio: 0.826
+    - _CenterFadeStart: 0.679
+    - _CustomTime: 0
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _Direction: 90
     - _DstBlend: 0
+    - _FadeDistance: 0.091
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _HasOuterBorder: -2.13
+    - _InnerRadius: 0.193
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OuterRadius: 1
+    - _OutlineThickness: 0.016
     - _Parallax: 0.02
+    - _Radius: 0.963
+    - _RingWidth: 0.001
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _Speed: 1.54
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BorderColor: {r: 0, g: 1, b: 0.97254896, a: 1}
+    - _Color: {r: 0, g: 1, b: 0.99010324, a: 0.039215688}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TransitionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

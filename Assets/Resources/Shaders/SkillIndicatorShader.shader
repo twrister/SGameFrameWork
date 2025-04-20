@@ -3,11 +3,13 @@ Shader "Unlit/RingSkillIndicatorSimpleFade"
     Properties
     {
         _Color                   ("Fill Color",        Color)        = (1,1,1,1)
+        _FadeStartRate           ("Fade Start Rate",   Range(0,1))   = 0.5
+        _FadeEndRate             ("Fade End Rate",     Range(0,1))   = 0.2
         _InnerRadius             ("Inner Radius",      Range(0,1))   = 0.2
         _OuterRadius             ("Outer Radius",      Range(0,1))   = 0.5
         _Angle                   ("Angle (°)",         Range(0,360)) = 90
-        _Direction               ("Direction (°)",     Range(0,360)) = 0
-        _BorderColor             ("Border Color",      Color)        = (0,0,0,1)
+        _Direction               ("Direction (°)",     Range(0,360)) = 90
+        //_BorderColor             ("Border Color",      Color)        = (0,0,0,1)
         _BorderThickness         ("Border Thickness",  Range(0,0.2)) = 0.02
         _FadeDistance            ("Fade Distance",     Range(0,0.2)) = 0.05
         _CenterFadeDistance      ("Center Fade Distance", Range(0,1))  = 0.1
@@ -28,15 +30,18 @@ Shader "Unlit/RingSkillIndicatorSimpleFade"
             #include "UnityCG.cginc"
 
             fixed4 _Color;
+            float _FadeStartRate;
+            float _FadeEndRate;
             float _InnerRadius;
             float _OuterRadius;
             float _Angle;
             float _Direction;
-            fixed4 _BorderColor;
+            //fixed4 _BorderColor;
             float _BorderThickness;
             float _FadeDistance;
             float _CenterFadeDistance;
             float _CenterFadeEndRatio;
+            
 
             struct appdata
             {
@@ -81,17 +86,21 @@ Shader "Unlit/RingSkillIndicatorSimpleFade"
                 fixed4 result;
                 if (isOuterArc || isInnerArc || isRadial)
                 {
-                    result = _BorderColor;
+                    result = _Color;
                 }
                 else
                 {
+                    fixed4 fadeStartColor = _Color;
+                    fixed4 fadeEndColor = _Color;
+                    fadeStartColor.a *= _FadeStartRate;
+                    fadeEndColor.a *= _FadeEndRate;
                     // 填充渐变
                     float dInner = r - (_InnerRadius + _BorderThickness);
                     float dOuter = (_OuterRadius - _BorderThickness) - r;
                     float dRad   = dRadial - _BorderThickness;
                     float dMin   = min(min(dInner, dOuter), dRad);
                     float t      = saturate(dMin / _FadeDistance);
-                    result = lerp(_BorderColor, _Color, t);
+                    result = lerp(fadeStartColor, fadeEndColor, t);
                 }
 
                 // 3) 中心向外在指定距离内渐隐，并在 OuterRadius 的比例位置结束渐隐
